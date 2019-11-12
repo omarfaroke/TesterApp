@@ -12,13 +12,19 @@ public class Constants {
     public static final String USER_ID_PREFERENCES = "USER_ID";
     public static final String USER_TYPE_PREFERENCES="USER_TYPE";
     public static final String USER_EMAIL="email";
-    public static final String USER_PASS="pass";
+    public static final String USER_PASS="password";
+    public static final String USER_F_NAME="first_name";
+    public static final String USER_L_NAME="last_name";
+    public static final String ADDRESS="address";
+    public static final String PHONE="phone";
+    public static final String IMAGE_URI="image";
 
 
 
     //web
     public static final String BASE_URL = "";
     public static final String LOGIN="login.php";
+    public static final String REGESTER="regester.php";
 
 
 
