@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             default:
                 break;
-            case R.id.login_button:
+            case 6: //R.id.login_button:
                 String email = null;
                 String pass = null;
 
