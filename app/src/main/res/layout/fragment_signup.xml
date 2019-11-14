@@ -14,42 +14,71 @@
             android:layout_width="300dp"
             android:layout_height="56dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
-            android:hint="@string/email"
+            android:hint="@string/first_name"
             android:inputType="text"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
             android:textColor="#ffffff"
-            android:textColorHint="#8effffff" />
-
+            android:textColorHint="#8effffff"
+            android:layout_marginBottom="30dp"
+            />
         <EditText
             android:layout_width="300dp"
             android:layout_height="56dp"
+            android:paddingLeft="30dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="32dp"
+            android:hint="@string/last_name"
+            android:inputType="text"
             android:textColor="#ffffff"
-            android:paddingEnd="32dp"
             android:textColorHint="#8effffff" />
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="110dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#ffffff"
 
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bubble"
-            android:gravity="center_vertical"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:paddingEnd="32dp"
-            android:paddingStart="32dp"
-            android:textColor="#ffffff"
-            android:textColorHint="#8effffff" />
+            ></TextView>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="90dp"
+            android:gravity="center"
+
+            >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="male"
+                android:textColor="#ffffff"
+                ></RadioButton>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="female"
+                android:textColor="#ffffff"
+                ></RadioButton>
+
+        </RadioGroup>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="Next"
+            android:layout_marginLeft="40dp"
+           android:id="@+id/next_btn"
+            android:background="@drawable/bubble2"
+            ></Button>
     </LinearLayout>
 </FrameLayout>

@@ -5,11 +5,24 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="password">Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
+    <string name="Next">Next</string>
+    <string name="Previous">Previous</string>
     <string name="sign_up">Sign up</string>
     <string name="or">or</string>
+
+    <string-array name="type_array">
+        <item>Talent</item>
+        <item>Recuiter</item>
+        <item>Examiner</item>
+
+    </string-array>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
