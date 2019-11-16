@@ -40,4 +40,5 @@
         android:gravity="center"
         android:text="@string/forgot_password"
         android:textColor="#ffffff" />
+
 </LinearLayout>

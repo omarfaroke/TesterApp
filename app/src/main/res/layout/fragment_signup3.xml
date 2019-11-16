@@ -28,13 +28,7 @@
                 android:layout_marginBottom="8dp"
                 app:srcCompat="@drawable/userphoto" />
 
-        <Spinner
-            android:id="@+id/planets_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="50dp"
-            android:background="@android:color/white"
-            />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

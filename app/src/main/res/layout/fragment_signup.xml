@@ -2,83 +2,233 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context="com.codingacademy.testerapp.login.SignUpFragment">
-
     <LinearLayout
+
+        android:id="@+id/frame1"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="15dp"
+            >
+
+            <EditText
+                android:id="@+id/first_name"
+                android:layout_width="145dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+
+                android:background="@drawable/bubble"
+                android:gravity="center_vertical"
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:paddingLeft="20dp"
+                android:paddingRight="12dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#8effffff" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="20dp" />
+            <EditText
+                android:id="@+id/last_name"
+
+                android:layout_width="145dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:paddingRight="12dp"
+                android:background="@drawable/bubble"
+                android:gravity="center_vertical"
+                android:hint="@string/last_name"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#8effffff" />
+
+        </LinearLayout>
+
+
         <EditText
+            android:id="@+id/email"
             android:layout_width="300dp"
             android:layout_height="56dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
-            android:hint="@string/first_name"
+            android:hint="@string/email"
             android:inputType="text"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:textColor="#ffffff"
-            android:textColorHint="#8effffff"
-            android:layout_marginBottom="30dp"
-            />
+            android:textColorHint="#8effffff" />
         <EditText
+            android:id="@+id/pass"
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:paddingLeft="30dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
-            android:hint="@string/last_name"
-            android:inputType="text"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingEnd="32dp"
+            android:paddingStart="32dp"
             android:textColor="#ffffff"
             android:textColorHint="#8effffff" />
-        <TextView
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="110dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gender"
-            android:textSize="20sp"
-            android:gravity="center"
+        <EditText
+            android:id="@+id/conf_pass"
+
+            android:layout_width="300dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bubble"
+            android:gravity="center_vertical"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingEnd="32dp"
+            android:paddingStart="32dp"
             android:textColor="#ffffff"
+            android:textColorHint="#8effffff" />
 
-            ></TextView>
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="90dp"
-            android:gravity="center"
 
-            >
+    </LinearLayout>
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="male"
-                android:textColor="#ffffff"
-                ></RadioButton>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="female"
-                android:textColor="#ffffff"
-                ></RadioButton>
 
-        </RadioGroup>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Next"
-            android:layout_marginLeft="40dp"
-           android:id="@+id/next_btn"
+    <LinearLayout
+        android:id="@+id/frame2"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:translationX="-1000dp"
+        android:orientation="vertical">
+        <Spinner
+            android:id="@+id/planets_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+
             android:background="@drawable/bubble2"
+
+            />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bubble"
+            android:gravity="center_vertical"
+            android:hint="@string/phone_number"
+            android:inputType="text"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:textColor="#ffffff"
+            android:textColorHint="#8effffff" />
+
+        <EditText
+            android:id="@+id/adress"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bubble"
+            android:gravity="center_vertical"
+            android:hint="@string/adress"
+            android:paddingStart="32dp"
+            android:textColor="#ffffff"
+            android:paddingEnd="32dp"
+            android:textColorHint="#8effffff" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:translationX="-1000dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:id="@+id/frame3">
+    <ImageView
+        android:id="@+id/login_photo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:srcCompat="@drawable/userphoto" />
+
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="@string/tack_photo"
+        android:textColor="@color/text"
+        android:id="@+id/image_button"
+        android:background="@drawable/bubble2"
+        ></Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/prev_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Previous"
+            android:layout_weight="1"
+            android:background="@drawable/bubble2"
+            android:textColor="@color/text_two"
+
+            ></Button>
+        <View
+            android:layout_width="110dp"
+            android:layout_weight="4"
+
+            android:layout_height="50dp"/>
+        <Button
+
+            android:layout_weight="1"
+            android:textColor="@color/text_two"
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Next"
+            android:background="@drawable/bubble2"
+
+            ></Button>
+        <Button
+android:visibility="gone"
+            android:layout_weight="1"
+            android:textColor="@color/text"
+            android:id="@+id/reg_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Register"
+            android:background="@drawable/bubble2"
+
             ></Button>
     </LinearLayout>
+
 </FrameLayout>

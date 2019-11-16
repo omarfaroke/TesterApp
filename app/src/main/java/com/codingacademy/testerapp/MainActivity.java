@@ -9,86 +9,77 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-import com.codingacademy.testerapp.databinding.ActivityMainBinding;
+
 import com.codingacademy.testerapp.login.LoginFragment;
 import com.codingacademy.testerapp.login.SignUpFragment;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static com.codingacademy.testerapp.FlexibleFrameLayout.ORDER_LOGIN_STATE;
-import static com.codingacademy.testerapp.FlexibleFrameLayout.ORDER_SIGN_UP_STATE;
-
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private ActivityMainBinding binding;
+    FrameLayout frameLayout1,frameLayout2;
+    LinearLayout linearLayout;
     private boolean isLogin = true;
-
+    int w;
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+       setContentView( R.layout.activity_main);
+frameLayout1=findViewById(R.id.login_fragment);
+frameLayout2=findViewById(R.id.sign_up_fragment);
+button=findViewById(R.id.button);
 
         LoginFragment topLoginFragment = new LoginFragment();
         SignUpFragment topSignUpFragment = new SignUpFragment();
-
+ w=frameLayout1.getWidth();
+ w=1000;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.login_fragment, topLoginFragment)
                 .replace(R.id.sign_up_fragment, topSignUpFragment)
+                .replace(R.id.login_fragment, topLoginFragment)
+
                 .commit();
 
-        binding.loginFragment.setRotation(-90);
+        frame();
 
-        binding.button.setOnSignUpListener(topSignUpFragment);
-        binding.button.setOnLoginListener(topLoginFragment);
-
-        binding.button.setOnButtonSwitched(isLogin -> {
-            binding.getRoot()
-                    .setBackgroundColor(ContextCompat.getColor(
-                            this,
-                            isLogin ? R.color.colorPrimary : R.color.secondPage));
-        });
-
-        binding.loginFragment.setVisibility(INVISIBLE);
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        binding.loginFragment.setPivotX(binding.loginFragment.getWidth() / 2);
-        binding.loginFragment.setPivotY(binding.loginFragment.getHeight());
-        binding.signUpFragment.setPivotX(binding.signUpFragment.getWidth() / 2);
-        binding.signUpFragment.setPivotY(binding.signUpFragment.getHeight());
-    }
 
+void frame(){
+    frameLayout1.animate().translationY(0);
+    frameLayout2.setVisibility(INVISIBLE);
+    frameLayout2.setTranslationY(-w);
+    button.setBackground(getResources().getDrawable(R.drawable.bubble));
+    button.setText("or Sign up");
+}
     public void switchFragment(View v) {
-        if (isLogin) {
-            binding.loginFragment.setVisibility(VISIBLE);
-            binding.loginFragment.animate().rotation(0).setListener(new AnimatorListenerAdapter () {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    binding.signUpFragment.setVisibility(INVISIBLE);
-                    binding.signUpFragment.setRotation(90);
-                    binding.wrapper.setDrawOrder(ORDER_LOGIN_STATE);
-                }
-            });
-        } else {
-            binding.signUpFragment.setVisibility(VISIBLE);
-            binding.signUpFragment.animate().rotation(0).setListener(new AnimatorListenerAdapter () {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    binding.loginFragment.setVisibility(INVISIBLE);
-                    binding.loginFragment.setRotation(-90);
-                    binding.wrapper.setDrawOrder(ORDER_SIGN_UP_STATE);
-                }
-            });
-        }
 
-        isLogin = !isLogin;
-        binding.button.startAnimation();
+
+        Button button=(Button) v;
+        if (isLogin) {
+            frameLayout1.setVisibility(VISIBLE);
+            frame();
+                }
+
+         else {
+            frameLayout2.setVisibility(VISIBLE);
+            frameLayout2.animate().translationY(0);
+                    frameLayout1.setVisibility(INVISIBLE);
+                    frameLayout1.setTranslationY(-w);
+            v.setBackground(getResources().getDrawable(R.drawable.bubble2));
+            button.setText("or Sign in");
+
+        }
+     isLogin = !isLogin;
+
     }
 
 }

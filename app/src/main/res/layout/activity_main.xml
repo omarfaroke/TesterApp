@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/rootViwe"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#131A56"
+        android:orientation="vertical"
         android:fitsSystemWindows="true"
-        tools:context="com.codingacademy.testerapp.login.MainActivity">
+        tools:context="com.codingacademy.testerapp.MainActivity">
 
-        <com.codingacademy.testerapp.FlexibleFrameLayout
+        <FrameLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="5"
             android:id="@+id/wrapper"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <FrameLayout
+                android:background="@color/colorPrimary"
                 android:id="@+id/sign_up_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <com.codingacademy.testerapp.login.LoginButton
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="switchFragment" />
-
             <FrameLayout
+                android:background="@color/secondPage"
                 android:id="@+id/login_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </com.codingacademy.testerapp.FlexibleFrameLayout>
+        </FrameLayout>
+
+        <Button
+android:textColor="@color/text"
+android:background="@drawable/bubble"
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="50dp"
+            android:onClick="switchFragment" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
