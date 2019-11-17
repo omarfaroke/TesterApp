@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-android:id="@+id/rootViwe"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootViwe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.codingacademy.testerapp.MainActivity">
+
+    <FrameLayout
+
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:fitsSystemWindows="true"
-        tools:context="com.codingacademy.testerapp.MainActivity">
+        android:layout_weight="5"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
-
+            android:id="@+id/sign_up_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:id="@+id/wrapper"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:background="@color/colorPrimary" />
 
-            <FrameLayout
-                android:background="@color/colorPrimary"
-                android:id="@+id/sign_up_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <FrameLayout
+            android:id="@+id/login_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/secondPage" />
+    </FrameLayout>
 
-            <FrameLayout
-                android:background="@color/secondPage"
-                android:id="@+id/login_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </FrameLayout>
-
-        <Button
-android:textColor="@color/text"
-android:background="@drawable/bubble"
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="50dp"
-            android:onClick="switchFragment" />
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/bubble"
+        android:onClick="switchFragment"
+        android:textColor="@color/text" />
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
