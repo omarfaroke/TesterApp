@@ -8,6 +8,7 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>

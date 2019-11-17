@@ -19,12 +19,17 @@ public class Constants {
     public static final String PHONE="phone";
     public static final String IMAGE_URI="image";
 
+    public static final String CATEGORY_ID="Category_id";
+    public static final String CATEGORY_NAME="Category_name";
+    public static final String CATEGORY_PARENT="parent";
+
 
 
     //web
-    public static final String BASE_URL = "http://10.0.2.2:89/testerapp";
+    public static final String BASE_URL = "http://192.168.1.103/testerapp";
     public static final String LOGIN=BASE_URL + "/login.php";
     public static final String REGISTER =BASE_URL + "/register.php";
+    public static final String CATEGORY =BASE_URL + "/get_category.php";
 
 
 
