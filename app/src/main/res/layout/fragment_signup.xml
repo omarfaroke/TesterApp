@@ -1,23 +1,23 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.codingacademy.testerapp.login.SignUpFragment">
+
     <LinearLayout
 
         android:id="@+id/frame1"
         android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="15dp"
-            >
+            android:layout_marginTop="15dp">
 
             <EditText
                 android:id="@+id/first_name"
@@ -37,18 +37,19 @@
             <View
                 android:layout_width="10dp"
                 android:layout_height="20dp" />
+
             <EditText
                 android:id="@+id/last_name"
 
                 android:layout_width="145dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center_horizontal"
-                android:paddingRight="12dp"
                 android:background="@drawable/bubble"
                 android:gravity="center_vertical"
                 android:hint="@string/last_name"
                 android:inputType="text"
                 android:paddingLeft="30dp"
+                android:paddingRight="12dp"
                 android:textColor="#ffffff"
                 android:textColorHint="#8effffff" />
 
@@ -69,33 +70,35 @@
             android:paddingEnd="32dp"
             android:textColor="#ffffff"
             android:textColorHint="#8effffff" />
+
         <EditText
             android:id="@+id/pass"
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:paddingEnd="32dp"
             android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:textColor="#ffffff"
             android:textColorHint="#8effffff" />
+
         <EditText
             android:id="@+id/conf_pass"
 
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:paddingEnd="32dp"
             android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:textColor="#ffffff"
             android:textColorHint="#8effffff" />
 
@@ -106,10 +109,11 @@
     <LinearLayout
         android:id="@+id/frame2"
         android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:translationX="-1000dp"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:translationX="-1000dp">
+
         <Spinner
             android:id="@+id/planets_spinner"
             android:layout_width="fill_parent"
@@ -124,8 +128,8 @@
             android:id="@+id/phone"
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
             android:hint="@string/phone_number"
@@ -139,96 +143,102 @@
             android:id="@+id/adress"
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bubble"
             android:gravity="center_vertical"
             android:hint="@string/adress"
             android:paddingStart="32dp"
-            android:textColor="#ffffff"
             android:paddingEnd="32dp"
+            android:textColor="#ffffff"
             android:textColorHint="#8effffff" />
 
 
     </LinearLayout>
 
     <LinearLayout
-        android:translationX="-1000dp"
+        android:id="@+id/frame3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center"
-        android:id="@+id/frame3">
-    <ImageView
-        android:id="@+id/login_photo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:srcCompat="@drawable/userphoto" />
+        android:orientation="vertical"
+        android:translationX="-1000dp">
+
+        <ImageView
+            android:id="@+id/login_photo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:srcCompat="@drawable/userphoto" />
 
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="@string/tack_photo"
-        android:textColor="@color/text"
-        android:id="@+id/image_button"
-        android:background="@drawable/bubble2"
-        ></Button>
+        <Button
+            android:id="@+id/image_button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bubble2"
+            android:text="@string/tack_photo"
+            android:textColor="@color/text"></Button>
     </LinearLayout>
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="150dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
+        android:orientation="horizontal">
+
         <Button
-            android:visibility="invisible"
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Previous"
             android:layout_weight="1"
             android:background="@drawable/bubble2"
+            android:text="@string/Previous"
             android:textColor="@color/text_two"
+            android:visibility="invisible"
 
-            ></Button>
+            />
+
         <View
             android:layout_width="110dp"
-            android:layout_weight="4"
+            android:layout_height="50dp"
 
-            android:layout_height="50dp"/>
+            android:layout_weight="4" />
+
         <Button
 
-            android:layout_weight="1"
-            android:textColor="@color/text_two"
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Next"
-            android:background="@drawable/bubble2"
-
-            ></Button>
-        <Button
-android:visibility="gone"
             android:layout_weight="1"
-            android:textColor="@color/text"
+            android:background="@drawable/bubble2"
+            android:text="@string/Next"
+            android:textColor="@color/text_two"
+
+            />
+
+        <Button
             android:id="@+id/reg_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Register"
+            android:layout_weight="1"
             android:background="@drawable/bubble2"
+            android:text="@string/Register"
+            android:textColor="@color/text"
+            android:visibility="gone"
+            tools:visibility="visible"
 
-            ></Button>
+            />
+
     </LinearLayout>
 
 </FrameLayout>
