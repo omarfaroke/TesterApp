@@ -24,6 +24,16 @@ public class UserProfile {
 
     private int status;
 
+    public UserProfile(Integer userId, String fristName,  String lastName,String email, String password, String address, String phone) {
+        UserId = userId;
+        this.fristName = fristName;
+        this.email = email;
+        this.password = password;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+    }
+
 
     public Integer getUserId() {
         return UserId;

@@ -22,9 +22,9 @@ public class Constants {
 
 
     //web
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "192.168.1.104/exp";
     public static final String LOGIN="login.php";
-    public static final String REGESTER="regester.php";
+    public static final String REGESTER="register.php";
 
 
 
