@@ -2,17 +2,18 @@ package com.codingacademy.testerapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-
 import android.view.View;
 
 import com.codingacademy.testerapp.databinding.ActivityMainBinding;
 import com.codingacademy.testerapp.login.LoginFragment;
 import com.codingacademy.testerapp.login.SignUpFragment;
+
+import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -22,6 +23,11 @@ import static com.codingacademy.testerapp.FlexibleFrameLayout.ORDER_SIGN_UP_STAT
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
+    //vars
+    private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<String> mImageUrls = new ArrayList<>();
+    private static final String TAG2 = "MainActivity";
     private ActivityMainBinding binding;
     private boolean isLogin = true;
 
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.loginFragment.setVisibility(INVISIBLE);
+
+
     }
 
     @Override
@@ -90,5 +98,9 @@ public class MainActivity extends AppCompatActivity {
         isLogin = !isLogin;
         binding.button.startAnimation();
     }
+
+
+
+
 
 }
