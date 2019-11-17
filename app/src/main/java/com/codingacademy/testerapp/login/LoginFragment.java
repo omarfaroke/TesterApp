@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.codingacademy.testerapp.R;
 
 
-public class LoginFragment extends Fragment implements OnLoginListener {
+public class LoginFragment extends Fragment  {
     private static final String TAG="LoginFragment";
 
     public LoginFragment() {
@@ -32,8 +32,5 @@ public class LoginFragment extends Fragment implements OnLoginListener {
         return inflate;
     }
 
-    @Override
-    public void login() {
-        Toast.makeText ( getContext (), "Login", Toast.LENGTH_SHORT ).show ();
-    }
+
 }
