@@ -1,20 +1,13 @@
 package com.codingacademy.testerapp;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
+
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -22,8 +15,6 @@ import android.widget.LinearLayout;
 
 import com.codingacademy.testerapp.adapter.Adapter;
 import com.codingacademy.testerapp.fragment.PagerFragment1;
-import com.codingacademy.testerapp.fragment.PagerFragment2;
-import com.codingacademy.testerapp.fragment.PagerFragment3;
 import com.codingacademy.testerapp.login.LoginFragment;
 import com.codingacademy.testerapp.login.SignUpFragment;
 

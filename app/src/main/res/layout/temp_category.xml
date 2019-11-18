@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+
     app:cardBackgroundColor="@color/secondPage"
     app:cardCornerRadius="3dp"
     app:cardElevation="2dp">
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 android:gravity="center"
@@ -20,7 +22,7 @@ android:gravity="center"
 
 
 
-            android:src="@drawable/c">
+            android:src="@drawable/p">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
