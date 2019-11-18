@@ -27,8 +27,8 @@ public class LoginFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflate=inflater.inflate ( R.layout.fragment_login, container, false );
-        inflate.findViewById ( R.id.forgot_password ).setOnClickListener ( v ->
-                Toast.makeText ( getContext (), "Forgot password clicked", Toast.LENGTH_SHORT ).show () );
+//        inflate.findViewById ( R.id.forgot_password ).setOnClickListener ( v ->
+//                Toast.makeText ( getContext (), "Forgot password clicked", Toast.LENGTH_SHORT ).show () );
         return inflate;
     }
 

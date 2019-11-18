@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         app:cardCornerRadius="4dp"
         app:cardMaxElevation="2dp"
         app:cardElevation="1dp"
@@ -35,6 +35,21 @@
                 android:text="Canada"
                 android:layout_below="@+id/image_view"
                 android:id="@+id/name"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:textColor="#000"
+                android:layout_marginBottom="5dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="JAVA"
+                android:layout_below="@+id/name"
+                android:id="@+id/majar"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:layout_marginTop="5dp"

@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="2"
     tools:context=".DrawerContentActivity"
 
     >
-    <LinearLayout
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpajer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/exam"
-        >
-    </LinearLayout>
+        android:layout_height="150dp" >
+    </androidx.viewpager.widget.ViewPager>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
         android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
         android:layout_weight="0.5"
         android:orientation="horizontal"
-        tools:listitem="@layout/layout_listitem"
-        >
+        tools:listitem="@layout/layout_listitem">
 
     </androidx.recyclerview.widget.RecyclerView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_weight="1.5"
-        >
+        android:orientation="vertical">
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -49,7 +49,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/spacing_middle">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
@@ -108,7 +108,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/spacing_middle">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
@@ -159,7 +159,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/secondPage"  />
+                    android:background="@color/secondPage" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -167,7 +167,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/spacing_middle">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
@@ -201,7 +201,7 @@
                             android:layout_marginTop="@dimen/spacing_medium"
                             android:text="02 Mar 2016"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/secondPage"  />
+                            android:textColor="@color/secondPage" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -210,7 +210,7 @@
                             android:maxLines="2"
                             android:text="@string/middle_lorem_ipsum"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/secondPage"  />
+                            android:textColor="@color/secondPage" />
 
                     </LinearLayout>
 
@@ -219,7 +219,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/secondPage"  />
+                    android:background="@color/secondPage" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -227,35 +227,33 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/spacing_middle">
 
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/secondPage"  />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/spacing_middle">
-
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_5" />
 
                     <View
-                        android:layout_width="@dimen/spacing_large"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/secondPage" />
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/spacing_middle">
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/image_5" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-
 
 
     </LinearLayout>

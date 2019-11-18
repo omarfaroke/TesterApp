@@ -5,98 +5,94 @@
     tools:context="com.codingacademy.testerapp.login.SignUpFragment">
 
     <LinearLayout
+        android:id="@+id/frame2"
         android:layout_width="wrap_content"
         android:layout_gravity="center"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#131A56"
+        android:gravity="center_vertical"
+        android:padding="50dp"
+        >
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="Complete the registration"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <EditText
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bubble"
-            android:gravity="center_vertical"
-            android:hint="@string/email"
-            android:inputType="text"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:textColor="#ffffff"
-            android:textColorHint="#8effffff" />
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/bubble"
-            android:gravity="center_vertical"
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
             android:hint="@string/phone_number"
+            android:inputType="textPersonName"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/adress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
+            android:hint="@string/adress"
             android:inputType="text"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:textColor="#ffffff"
-            android:textColorHint="#8effffff" />
+            android:padding="10dp" />
+
+
 
         <EditText
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/bubble"
-            android:gravity="center_vertical"
-            android:hint="@string/password"
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
+            android:hint="password"
             android:inputType="textPassword"
-            android:paddingStart="32dp"
-            android:textColor="#ffffff"
-            android:paddingEnd="32dp"
-            android:textColorHint="#8effffff" />
+            android:padding="10dp" />
 
         <EditText
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/bubble"
-            android:gravity="center_vertical"
+            android:id="@+id/conf_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:paddingEnd="32dp"
-            android:paddingStart="32dp"
-            android:textColor="#ffffff"
-            android:textColorHint="#8effffff" />
-        <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/prev_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:background="#00838F"
+            android:text="@string/Register"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:layout_marginLeft="15dp"
-            >
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="previous"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="20dp"
-                android:padding="10dp"
-                android:background="@drawable/bubble2"
-                ></Button>
+            android:text="Already Having an Account?"
+            android:textColor="#ccc" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Next"
-                android:layout_marginLeft="30dp"
-                android:padding="10dp"
-                android:background="@drawable/bubble2"
-
-                ></Button>
-
-
-        </LinearLayout>
+        <Button
+          android:id="@+id/reg_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#aaa"
+            android:text="@string/Previous"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 </FrameLayout>

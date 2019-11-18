@@ -2,45 +2,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#131A56"
+    android:gravity="center_vertical"
+    android:padding="50dp"
     android:orientation="vertical"
     tools:context="com.codingacademy.testerapp.login.SignUpFragment">
 
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imageView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="70dp"
+        android:src="@drawable/p"
+
+        />
+
     <EditText
-        android:layout_width="300dp"
-        android:layout_height="56dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="92dp"
-        android:textColorHint="#8effffff"
-        android:paddingEnd="32dp"
-        android:background="@drawable/bubble"
-        android:gravity="center_vertical"
-        android:paddingStart="32dp"
+        android:id="@+id/etLoginUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/white"
         android:hint="@string/email"
-        android:textColor="#ffffff" />
+        android:inputType="textPersonName"
+        android:padding="10dp" />
+
 
     <EditText
-        android:layout_width="300dp"
-        android:layout_height="56dp"
-        android:paddingEnd="32dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bubble"
-        android:textColorHint="#8effffff"
-        android:gravity="center_vertical"
-        android:paddingStart="32dp"
+        android:id="@+id/etLoginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/white"
         android:hint="@string/password"
-        android:textColor="#ffffff" />
-
+        android:inputType="textPassword"
+        android:padding="10dp" />
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="#00838F"
+        android:text="@string/login"
+        android:textColor="@android:color/white" />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/forgot_password"
-        android:layout_marginTop="64dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/forgot_password"
-        android:textColor="#ffffff" />
+        android:layout_marginTop="20dp"
+        android:text="Not Having an Account?"
+        android:textColor="#ccc" />
 
-
+    <Button
+        android:id="@+id/btnLoginRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="#aaa"
+        android:text="@string/Register"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
