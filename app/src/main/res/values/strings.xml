@@ -9,7 +9,12 @@
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
-
+    <string name="question1">what is android?</string>
+    <string name="answer1">It is android</string>
+    <string name="answer2">It is android</string>
+    <string name="answer3">wt is android</string>
+    <string name="question2">what is php?</string>
+    <string name="question3">what is Java?</string>
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>

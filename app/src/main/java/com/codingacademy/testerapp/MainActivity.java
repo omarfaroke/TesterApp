@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -17,13 +20,23 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
+import com.codingacademy.testerapp.adapter.Adapter;
+import com.codingacademy.testerapp.fragment.PagerFragment1;
+import com.codingacademy.testerapp.fragment.PagerFragment2;
+import com.codingacademy.testerapp.fragment.PagerFragment3;
 import com.codingacademy.testerapp.login.LoginFragment;
 import com.codingacademy.testerapp.login.SignUpFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class MainActivity extends AppCompatActivity {
+    private ViewPager pager;
+    private PagerAdapter adapter;
+    private List<Fragment> list= new ArrayList<>();
     private static final String TAG = "MainActivity";
     FrameLayout frameLayout1,frameLayout2;
     LinearLayout linearLayout;
@@ -34,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_main);
+        list.add(new PagerFragment1());
+        list.add(new PagerFragment2());
+        list.add(new PagerFragment3());
+        init();
 frameLayout1=findViewById(R.id.login_fragment);
 frameLayout2=findViewById(R.id.sign_up_fragment);
 button=findViewById(R.id.button);
@@ -52,8 +69,14 @@ button=findViewById(R.id.button);
 
     }
 
+    public void init() {
+        pager=findViewById(R.id.pager);
+        adapter= new Adapter(getSupportFragmentManager(),list);
+        pager.setAdapter(adapter);
+    }
 
-void frame(){
+
+    void frame(){
     frameLayout1.animate().translationY(0);
     frameLayout2.setVisibility(INVISIBLE);
     frameLayout2.setTranslationY(-w);
