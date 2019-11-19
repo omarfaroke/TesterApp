@@ -2,7 +2,6 @@ package com.codingacademy.testerapp;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,10 +13,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,54 +23,57 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.codingacademy.testerapp.model.Category;
-import com.codingacademy.testerapp.requests.VolleyCallback;
-import com.codingacademy.testerapp.requests.VolleyController;
-import com.google.android.material.snackbar.Snackbar;
+import com.codingacademy.testerapp.model.UserProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CategoryActivity extends AppCompatActivity {
     private View parent_view;
 int parent=0;
-    private RecyclerView recyclerView;
-    private AdapterGridShopCategory mAdapter;
-
+    private RecyclerView recyclerCategory,recyclerPro;
+    private CategoryAdapter mAdapter;
+    private ProAdapter mProAdapter;
 List<Category> arrCategory,subCategory;
+    List<UserProfile> proArr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getCategory();
+       // getCategory();
+        initComponent();
         setContentView(R.layout.activity_category);
-        ViewPager viewPager =findViewById ( R.id.viewpajer );
-        ImageAdapter imageAdapter = new ImageAdapter ( this );
-        viewPager.setAdapter ( imageAdapter );
         parent_view = findViewById(R.id.parent_view);
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerCategory = findViewById(R.id.recyclerCat);
+        recyclerPro = findViewById(R.id.recyclerPro);
+        recyclerPro.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerCategory.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(this, 8), true));
+        recyclerCategory.setHasFixedSize(true);
+        recyclerCategory.setNestedScrollingEnabled(false);
+        upDateList();
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.addItemDecoration(new SpacingItemDecoration(2, dpToPx(this, 8), true));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setNestedScrollingEnabled(false);
 
     }
     void upDateList()
     {
-        Toast.makeText(this, subCategory.size()+" "+arrCategory.size()+" "+parent, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
         if (mAdapter == null){
-            mAdapter = new AdapterGridShopCategory(this, subCategory);
-
+            mAdapter = new CategoryAdapter(this, subCategory);
+            recyclerCategory.setAdapter(mAdapter);
         }
-        recyclerView.setAdapter(mAdapter);
+        if (mProAdapter == null){
+
+            mProAdapter = new ProAdapter(this, proArr);
+recyclerPro.setAdapter(mProAdapter);
+        }
+
         mAdapter.notifyDataSetChanged();
+        mProAdapter.notifyDataSetChanged();
 
     }
 
@@ -144,18 +145,16 @@ mAdapter.getSupCat(0);    }
 
     private void initComponent() {
 
-
-        List<Category> items = new ArrayList<>();
-        items.add(new Category(1,2,"Java"));
-
-        //set data and list adapter
-
-
-
-
+       subCategory = new ArrayList<>();
+       proArr=new ArrayList<>();
+       proArr.add(new UserProfile(null,null,"sss","ddd",null,null,null,null));
+        subCategory.add(new Category(1,2,"Java"));
+        subCategory.add(new Category(1,2,"Java"));
+        subCategory.add(new Category(1,2,"Java"));
+        subCategory.add(new Category(1,2,"Java"));
     }
 
-    private class AdapterGridShopCategory extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<Category> items = new ArrayList<>();
 
@@ -173,7 +172,7 @@ mAdapter.getSupCat(0);    }
         }
 
 
-        public AdapterGridShopCategory(Context context, List<Category> items) {
+        public CategoryAdapter(Context context, List<Category> items) {
             this.items = items;
             ctx = context;
         }
@@ -223,6 +222,65 @@ mAdapter.getSupCat(0);    }
         @Override
         public int getItemCount() {
             return items.size();
+        }
+
+    }
+    private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private List<UserProfile> items = new ArrayList<>();
+
+        private Context ctx;
+
+
+
+        public ProAdapter(Context context, List<UserProfile> items) {
+            this.items = items;
+            ctx = context;
+        }
+
+        public class OriginalViewHolder extends RecyclerView.ViewHolder {
+            public ImageView image;
+            public TextView name;
+
+
+            public OriginalViewHolder(View v) {
+                super(v);
+                image =  v.findViewById(R.id.top_pro_photo);
+                name =  v.findViewById(R.id.top_pro_name);
+
+            }
+
+
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder vh;
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_top_pro, parent, false);
+            vh = new OriginalViewHolder(v);
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            if (holder instanceof OriginalViewHolder) {
+                OriginalViewHolder view = (OriginalViewHolder) holder;
+
+               // UserProfile user = items.get(position);
+                view.name.setText(" Ziad");
+                view.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+
+                    }
+                });
+
+            }}
+        @Override
+        public int getItemCount() {
+            return 5;//items.size();
         }
 
     }
