@@ -6,28 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/text_two"
-    android:orientation="vertical"
-    tools:context=".CategoryActivity">
-
-
+    android:orientation="vertical">
 
 
         <LinearLayout
-            android:weightSum="7"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_weight="1.7"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="180dp"
 
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"
@@ -44,57 +38,20 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="-20dp"
-                android:id="@+id/recyclerPro"
-                android:layout_weight="1.6"
-                android:orientation="horizontal"
-                tools:listitem="@layout/temp_top_pro"
-                >
-
-            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
 
 <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerCat"
+    android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-    android:layout_weight="4"
-    android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-30dp"
                 android:paddingLeft="@dimen/spacing_middle"
                 android:paddingRight="@dimen/spacing_middle"
                 android:scrollbars="vertical"
-                android:scrollingCache="true"
-                tools:listitem="@layout/temp_category"/>
-            <LinearLayout
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/add_cat"
-                android:orientation="horizontal">
-            <EditText
-                android:id="@+id/edit_cat"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:src="@drawable/c"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_cat_btn"/>
+                android:scrollingCache="true" />
 
 
-</LinearLayout>
 
-        </LinearLayout>
-
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:layout_width="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="20dp"
-    android:background="@color/colorPrimary"
-    android:src="@drawable/bubble2"
-    android:layout_height="wrap_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
