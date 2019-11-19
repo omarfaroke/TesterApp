@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_main);
         list.add(new PagerFragment1());
-        list.add(new PagerFragment2());
-        list.add(new PagerFragment3());
+//        list.add(new PagerFragment2());
+//        list.add(new PagerFragment3());
         init();
 frameLayout1=findViewById(R.id.login_fragment);
 frameLayout2=findViewById(R.id.sign_up_fragment);
