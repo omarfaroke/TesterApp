@@ -32,6 +32,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+public class SignUpFragment{
+    
+}
+/*
 public class SignUpFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "SignUpFragment";
     EditText firstName,
@@ -245,3 +249,4 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     }
 }
+*/

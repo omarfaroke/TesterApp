@@ -51,6 +51,7 @@
                 android:id="@+id/recyclerPro"
                 android:layout_weight="1.6"
                 android:orientation="horizontal"
+
                 tools:listitem="@layout/temp_top_pro"
                 >
 
@@ -88,13 +89,7 @@
 
         </LinearLayout>
 
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:layout_width="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="20dp"
-    android:background="@color/colorPrimary"
-    android:src="@drawable/bubble2"
-    android:layout_height="wrap_content"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -34,42 +34,46 @@ import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
     private View parent_view;
-int parent=0;
-    private RecyclerView recyclerCategory,recyclerPro;
+    int parent = 0;
+    private RecyclerView recyclerCategory, recyclerPro;
     private CategoryAdapter mAdapter;
     private ProAdapter mProAdapter;
-List<Category> arrCategory,subCategory;
+    List<Category> arrCategory, subCategory;
     List<UserProfile> proArr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-       // getCategory();
-        initComponent();
         setContentView(R.layout.activity_category);
+       intViews();
+        getCategory();
+
+
+
+
+    }
+
+    private void intViews() {
         parent_view = findViewById(R.id.parent_view);
         recyclerCategory = findViewById(R.id.recyclerCat);
         recyclerPro = findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerPro.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerCategory.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(this, 8), true));
         recyclerCategory.setHasFixedSize(true);
         recyclerCategory.setNestedScrollingEnabled(false);
-        upDateList();
-
-
     }
-    void upDateList()
-    {
+
+    void upDateList() {
 //        Toast.makeText(this, subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
-        if (mAdapter == null){
+        if (mAdapter == null) {
             mAdapter = new CategoryAdapter(this, subCategory);
             recyclerCategory.setAdapter(mAdapter);
         }
-        if (mProAdapter == null){
+        if (mProAdapter == null) {
 
             mProAdapter = new ProAdapter(this, proArr);
-recyclerPro.setAdapter(mProAdapter);
+            recyclerPro.setAdapter(mProAdapter);
         }
 
         mAdapter.notifyDataSetChanged();
@@ -81,45 +85,50 @@ recyclerPro.setAdapter(mProAdapter);
     public void onBackPressed() {
 
         getSupCat(parent);
-mAdapter.getSupCat(0);    }
+        mAdapter.getSupCat(0);
+    }
 
-    void getSupCat(int parentid){
-        Toast.makeText(this, ""+parentid, Toast.LENGTH_SHORT).show();
-        subCategory=new ArrayList<>();
+    void getSupCat(int parentid) {
+        Toast.makeText(this, "" + parentid, Toast.LENGTH_SHORT).show();
+        subCategory = new ArrayList<>();
         subCategory.clear();
-        for(Category c:arrCategory)
-            if(c.getParentId()==0)
+        for (Category c : arrCategory)
+            if (c.getParentId() == parentid)
                 subCategory.add(c);
             upDateList();
+
     }
 
     public static int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-    void getCategory(){
-        arrCategory=new ArrayList<>();
-        StringRequest request=new StringRequest(Request.Method.POST,
+
+    void getCategory() {
+        arrCategory = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.GET,
                 Constants.CATEGORY,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) { Toast.makeText(CategoryActivity.this, response, Toast.LENGTH_SHORT).show();
+                    public void onResponse(String response) {
+                       // Toast.makeText(CategoryActivity.this, response, Toast.LENGTH_SHORT).show();
 
                         if (response.equals("null"))
                             Toast.makeText(CategoryActivity.this, "There is no category", Toast.LENGTH_SHORT).show();
                         else
                             try {
                                 JSONArray jsonArray = new JSONArray(response);
-                                int size=jsonArray.length();
+                                int size = jsonArray.length();
 
                                 for (int i = 0; i < size; i++) {
                                     JSONObject jsonCat = jsonArray.getJSONObject(i);
                                     arrCategory.add(new Category(jsonCat));
 
                                 }
+
                                 getSupCat(0);
-                                  } catch (JSONException e) {
-                                Toast.makeText(CategoryActivity.this, e.getMessage()+"  jason", Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                Toast.makeText(CategoryActivity.this, e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
 
                                 e.printStackTrace();
 
@@ -137,7 +146,7 @@ mAdapter.getSupCat(0);    }
                     }
                 });
 
-        RequestQueue queue= Volley.newRequestQueue(CategoryActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(CategoryActivity.this);
         queue.add(request);
 
 
@@ -145,13 +154,13 @@ mAdapter.getSupCat(0);    }
 
     private void initComponent() {
 
-       subCategory = new ArrayList<>();
-       proArr=new ArrayList<>();
-       proArr.add(new UserProfile(null,null,"sss","ddd",null,null,null,null));
-        subCategory.add(new Category(1,2,"Java"));
-        subCategory.add(new Category(1,2,"Java"));
-        subCategory.add(new Category(1,2,"Java"));
-        subCategory.add(new Category(1,2,"Java"));
+        subCategory = new ArrayList<>();
+        proArr = new ArrayList<>();
+        proArr.add(new UserProfile(null, null, "sss", "ddd", null, null, null, null));
+        subCategory.add(new Category(1, 2, "Java"));
+        subCategory.add(new Category(1, 2, "Java"));
+        subCategory.add(new Category(1, 2, "Java"));
+        subCategory.add(new Category(1, 2, "Java"));
     }
 
     private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -161,12 +170,12 @@ mAdapter.getSupCat(0);    }
         private Context ctx;
 
 
-        void getSupCat(int parentid){
-          //  Toast.makeText(this, ""+parentid, Toast.LENGTH_SHORT).show();
+        void getSupCat(int parentid) {
+            //  Toast.makeText(this, ""+parentid, Toast.LENGTH_SHORT).show();
 
             items.clear();
-            for(Category c:arrCategory)
-                if(c.getParentId()==parentid)
+            for (Category c : arrCategory)
+                if (c.getParentId() == parentid)
                     items.add(c);
             notifyDataSetChanged();
         }
@@ -184,8 +193,8 @@ mAdapter.getSupCat(0);    }
 
             public OriginalViewHolder(View v) {
                 super(v);
-                image =  v.findViewById(R.id.mImageCat);
-                title =  v.findViewById(R.id.mTextCat);
+                image = v.findViewById(R.id.mImageCat);
+                title = v.findViewById(R.id.mTextCat);
 
             }
 
@@ -212,25 +221,27 @@ mAdapter.getSupCat(0);    }
                     @Override
                     public void onClick(View view) {
                         getSupCat(p.getCatId());
-                        parent=p.getParentId();
+                        parent = p.getParentId();
 
                     }
                 });
-             //   view.image.setImageDrawable(getResources(R.drawable.image_1));
+                //   view.image.setImageDrawable(getResources(R.drawable.image_1));
 
-        }}
+            }
+        }
+
         @Override
         public int getItemCount() {
             return items.size();
         }
 
     }
+
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<UserProfile> items = new ArrayList<>();
 
         private Context ctx;
-
 
 
         public ProAdapter(Context context, List<UserProfile> items) {
@@ -245,8 +256,8 @@ mAdapter.getSupCat(0);    }
 
             public OriginalViewHolder(View v) {
                 super(v);
-                image =  v.findViewById(R.id.top_pro_photo);
-                name =  v.findViewById(R.id.top_pro_name);
+                image = v.findViewById(R.id.top_pro_photo);
+                name = v.findViewById(R.id.top_pro_name);
 
             }
 
@@ -267,7 +278,7 @@ mAdapter.getSupCat(0);    }
             if (holder instanceof OriginalViewHolder) {
                 OriginalViewHolder view = (OriginalViewHolder) holder;
 
-               // UserProfile user = items.get(position);
+                // UserProfile user = items.get(position);
                 view.name.setText(" Ziad");
                 view.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -277,7 +288,9 @@ mAdapter.getSupCat(0);    }
                     }
                 });
 
-            }}
+            }
+        }
+
         @Override
         public int getItemCount() {
             return 5;//items.size();

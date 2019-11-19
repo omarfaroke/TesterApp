@@ -26,7 +26,7 @@ public class Constants {
 
 
     //web
-    public static final String BASE_URL = "http://192.168.1.103/testerapp";
+    public static final String BASE_URL = "http://testerapp.aba.cx";
     public static final String LOGIN=BASE_URL + "/login.php";
     public static final String REGISTER =BASE_URL + "/register.php";
     public static final String CATEGORY =BASE_URL + "/get_category.php";

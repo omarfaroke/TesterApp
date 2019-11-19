@@ -28,8 +28,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <!-- dummy content list of new -->
-        <include layout="@layout/include_drawer_content" />
+        
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
