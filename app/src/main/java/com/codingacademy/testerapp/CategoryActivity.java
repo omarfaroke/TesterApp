@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,6 +44,7 @@ public class CategoryActivity extends AppCompatActivity {
 int parent=0;
     private RecyclerView recyclerView;
     private AdapterGridShopCategory mAdapter;
+
 List<Category> arrCategory,subCategory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,12 @@ List<Category> arrCategory,subCategory;
 
         getCategory();
         setContentView(R.layout.activity_category);
+        ViewPager viewPager =findViewById ( R.id.viewpajer );
+        ImageAdapter imageAdapter = new ImageAdapter ( this );
+        viewPager.setAdapter ( imageAdapter );
         parent_view = findViewById(R.id.parent_view);
         recyclerView = findViewById(R.id.recyclerView);
+
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addItemDecoration(new SpacingItemDecoration(2, dpToPx(this, 8), true));
         recyclerView.setHasFixedSize(true);
