@@ -48,4 +48,9 @@
     <string name="Register">Register</string>
 
 
+
+
+    rahma
+    <string name="btn_addcatogry">AddCatogry</string>
+    <string name="ed_addcatogry">AddCatogry</string>
 </resources>
