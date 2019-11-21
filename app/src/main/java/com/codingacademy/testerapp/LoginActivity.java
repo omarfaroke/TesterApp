@@ -40,28 +40,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void checkLoginInfo(final String mEmail, final String mPass, final VolleyCallback mCallback) {
         String url = Constants.BASE_URL + "/" + Constants.LOGIN;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    mCallback.onSuccess(jsonObject);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                mCallback.onSuccess(jsonObject);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    mCallback.onError(error.getMessage());
+        }, error -> {
+            try {
+                mCallback.onError(error.getMessage());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }) {
             @Override

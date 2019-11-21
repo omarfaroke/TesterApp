@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryFragment extends Fragment {
     private View parent_view;
     int parent = 0;
     private RecyclerView recyclerCategory, recyclerPro;
@@ -40,39 +42,47 @@ public class CategoryActivity extends AppCompatActivity {
     private ProAdapter mProAdapter;
     List<Category> arrCategory, subCategory;
     List<UserProfile> proArr;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
-       intViews();
-        getCategory();
-
-
 
 
     }
 
-    private void intViews() {
-        parent_view = findViewById(R.id.parent_view);
-        recyclerCategory = findViewById(R.id.recyclerCat);
-        recyclerPro = findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerCategory.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(this, 8), true));
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_category, container, false);
+        intViews(v);
+        return v;
+    }
+
+    private void intViews(View v) {
+         parent_view = v.findViewById(R.id.parent_view);
+
+        recyclerPro = v.findViewById(R.id.recyclerPro);
+        recyclerPro.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+
+
+        recyclerCategory = v.findViewById(R.id.recyclerCat);
+        recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));
         recyclerCategory.setHasFixedSize(true);
         recyclerCategory.setNestedScrollingEnabled(false);
+               getCategory();
+               subCategory=new ArrayList<>();
     }
-
     void upDateList() {
-//        Toast.makeText(this, subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
         if (mAdapter == null) {
-            mAdapter = new CategoryAdapter(this, subCategory);
+            mAdapter = new CategoryAdapter(getActivity(), subCategory);
             recyclerCategory.setAdapter(mAdapter);
         }
         if (mProAdapter == null) {
 
-            mProAdapter = new ProAdapter(this, proArr);
+            mProAdapter = new ProAdapter(getActivity(), proArr);
             recyclerPro.setAdapter(mProAdapter);
         }
 
@@ -81,88 +91,74 @@ public class CategoryActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
 
-        getSupCat(parent);
-        mAdapter.getSupCat(0);
-    }
+
 
     void getSupCat(int parentid) {
-        Toast.makeText(this, "" + parentid, Toast.LENGTH_SHORT).show();
-        subCategory = new ArrayList<>();
-        subCategory.clear();
+       // Toast.makeText(getActivity(), "" + parentid, Toast.LENGTH_SHORT).show();
+        //     subCategory.clear();
         for (Category c : arrCategory)
-            if (c.getParentId() == parentid)
+          if (c.getParentId() == parentid)
                 subCategory.add(c);
-            upDateList();
+            if(parentid==0)
+                 upDateList();
+            else
+        ((MenuDrawerNews)getActivity()).showExam(0);
+
+
+
 
     }
+    private void getCategory() {
 
-    public static int dpToPx(Context c, int dp) {
-        Resources r = c.getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-    void getCategory() {
-        arrCategory = new ArrayList<>();
         StringRequest request = new StringRequest(Request.Method.GET,
                 Constants.CATEGORY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       // Toast.makeText(CategoryActivity.this, response, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(CategoryActivity.this, response, Toast.LENGTH_SHORT).show();
 
                         if (response.equals("null"))
-                            Toast.makeText(CategoryActivity.this, "There is no category", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "There is no category", Toast.LENGTH_SHORT).show();
                         else
                             try {
-                                JSONArray jsonArray = new JSONArray(response);
-                                int size = jsonArray.length();
-
-                                for (int i = 0; i < size; i++) {
-                                    JSONObject jsonCat = jsonArray.getJSONObject(i);
-                                    arrCategory.add(new Category(jsonCat));
-
-                                }
-
-                                getSupCat(0);
-                            } catch (JSONException e) {
-                                Toast.makeText(CategoryActivity.this, e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
-
-                                e.printStackTrace();
-
-                                // Toast.makeText(getContext(),"catch  "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                            JSONArray jsonArray = new JSONArray(response);
+                            int size = jsonArray.length();
+                            arrCategory = new ArrayList<>();
+                            for (int i = 0; i < size; i++) {
+                                JSONObject jsonCat = jsonArray.getJSONObject(i);
+                                arrCategory.add(new Category(jsonCat));
 
                             }
+subCategory=new ArrayList<>();
+                            getSupCat(0);
+                        } catch (JSONException e) {
+                            Toast.makeText(getActivity(), e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
+
+                            e.printStackTrace();
+
+                            // Toast.makeText(getContext(),"catch  "+ e.getMessage(), Toast.LENGTH_LONG).show();
+
+                        }
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CategoryActivity.this, "Can not connect", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Can not connect", Toast.LENGTH_SHORT).show();
 
                     }
                 });
 
-        RequestQueue queue = Volley.newRequestQueue(CategoryActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(request);
-
-
     }
 
-    private void initComponent() {
-
-        subCategory = new ArrayList<>();
-        proArr = new ArrayList<>();
-        proArr.add(new UserProfile(null, null, "sss", "ddd", null, null, null, null));
-        subCategory.add(new Category(1, 2, "Java"));
-        subCategory.add(new Category(1, 2, "Java"));
-        subCategory.add(new Category(1, 2, "Java"));
-        subCategory.add(new Category(1, 2, "Java"));
+    public static int dpToPx(Context c, int dp) {
+        Resources r = c.getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-
     private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<Category> items = new ArrayList<>();
@@ -171,7 +167,7 @@ public class CategoryActivity extends AppCompatActivity {
 
 
         void getSupCat(int parentid) {
-            //  Toast.makeText(this, ""+parentid, Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getActivity(), ""+parentid, Toast.LENGTH_SHORT).show();
 
             items.clear();
             for (Category c : arrCategory)
@@ -205,15 +201,15 @@ public class CategoryActivity extends AppCompatActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_category, parent, false);
-            vh = new OriginalViewHolder(v);
+            vh = new CategoryAdapter.OriginalViewHolder(v);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof OriginalViewHolder) {
-                OriginalViewHolder view = (OriginalViewHolder) holder;
+            if (holder instanceof CategoryAdapter.OriginalViewHolder) {
+                CategoryAdapter.OriginalViewHolder view = (CategoryAdapter.OriginalViewHolder) holder;
 
                 Category p = items.get(position);
                 view.title.setText(p.name);
@@ -268,15 +264,15 @@ public class CategoryActivity extends AppCompatActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_top_pro, parent, false);
-            vh = new OriginalViewHolder(v);
+            vh = new ProAdapter.OriginalViewHolder(v);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof OriginalViewHolder) {
-                OriginalViewHolder view = (OriginalViewHolder) holder;
+            if (holder instanceof ProAdapter.OriginalViewHolder) {
+                ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
 
                 // UserProfile user = items.get(position);
                 view.name.setText(" Ziad");

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
 
-    app:cardBackgroundColor="@color/secondPage"
+    app:cardBackgroundColor="@color/text"
     app:cardCornerRadius="3dp"
     app:cardElevation="2dp">
     <LinearLayout
@@ -27,11 +27,12 @@ android:gravity="center"
         </de.hdodenhof.circleimageview.CircleImageView>
 
         <TextView
+            android:text="Java"
             android:id="@+id/mTextCat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-android:textColor="@color/text"
+android:textColor="@color/secondPage"
 
 
 

@@ -33,8 +33,15 @@ public class Exam {
     @SerializedName("exam_time")
     private Integer examTime;
 
-    @SerializedName("exam_passe")
+    @SerializedName("exam_pass")
     private Integer examPass;
+
+    @SerializedName("exam_note")
+    private Integer examNote;
+
+
+    @SerializedName("exam_description")
+    private Integer examDescription;
 
     private Integer status;
 
@@ -66,6 +73,14 @@ public class Exam {
 
     public Integer getStatus() {
         return status;
+    }
+
+    public Integer getExamNote() {
+        return examNote;
+    }
+
+    public Integer getExamDescription() {
+        return examDescription;
     }
 
     public List<Sample> getSamples() {

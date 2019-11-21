@@ -19,7 +19,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_margin="@dimen/spacing_large"
-        android:src="@drawable/photo_male_6"
+        android:src="@drawable/userphoto"
         app:civ_border_width="2dp" />
 
 
@@ -42,7 +42,7 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="johnmiller@mail.com"
+            android:text="codingacademy@mail.com"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     </LinearLayout>
