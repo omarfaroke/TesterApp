@@ -1,17 +1,24 @@
 package com.codingacademy.testerapp;
 
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -101,18 +108,36 @@ examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
 
     void fillExam() {
         examsArr = new Exam[3];
-        examsArr[0]=(new Exam(null, null, "Java", null, null, null, null, null));
-        examsArr[1]=(new Exam(null, null, "C#", null, null, null, null, null));
-        examsArr[2]=(new Exam(null, null, "fluter", null, null, null, null, null));
+        examsArr[0]=(new Exam(null, null, " Java Exam name", null, null, null, null, null));
+        examsArr[1]=(new Exam(null, null, "C# Exam name", null, null, null, null, null));
+        examsArr[2]=(new Exam(null, null, "fluter Exam name", null, null, null, null, null));
 
     }
 
     private void intViwes(View v) {
+        v.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Toast.makeText(getContext(), "key", Toast.LENGTH_SHORT).show();
+
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                    Toast.makeText(getContext(), "back", Toast.LENGTH_SHORT).show();
+                    ((MenuDrawerNews)getActivity()).showCategory();
+                    return true;
+                }
+                return false;
+            }
+        });
         recyclerExam = v.findViewById(R.id.recyclerExam);
         recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
+
         recyclerExam.setAdapter(new ExamAdapter());
     }
-
+    public int dpToPx(Context c, int dp) {
+        Resources r = c.getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
     private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
 
         @NonNull

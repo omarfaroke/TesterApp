@@ -1,5 +1,7 @@
 package com.codingacademy.testerapp;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -25,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.codingacademy.testerapp.model.Category;
-import com.codingacademy.testerapp.model.UserProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,11 +37,11 @@ import java.util.List;
 public class CategoryFragment extends Fragment {
     private View parent_view;
     int parent = 0;
-    private RecyclerView recyclerCategory, recyclerPro;
+    private RecyclerView recyclerCategory;
     private CategoryAdapter mAdapter;
-    private ProAdapter mProAdapter;
+
     List<Category> arrCategory, subCategory;
-    List<UserProfile> proArr;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class CategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_category, container, false);
+        View v = inflater.inflate(R.layout.fragment_category, container, false);
         intViews(v);
         return v;
     }
@@ -61,18 +61,13 @@ public class CategoryFragment extends Fragment {
     private void intViews(View v) {
          parent_view = v.findViewById(R.id.parent_view);
 
-        recyclerPro = v.findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-
-
-        recyclerCategory = v.findViewById(R.id.recyclerCat);
+              recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));
         recyclerCategory.setHasFixedSize(true);
         recyclerCategory.setNestedScrollingEnabled(false);
                getCategory();
-               subCategory=new ArrayList<>();
+
     }
     void upDateList() {
 //        Toast.makeText(getActivity(), subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
@@ -80,14 +75,10 @@ public class CategoryFragment extends Fragment {
             mAdapter = new CategoryAdapter(getActivity(), subCategory);
             recyclerCategory.setAdapter(mAdapter);
         }
-        if (mProAdapter == null) {
 
-            mProAdapter = new ProAdapter(getActivity(), proArr);
-            recyclerPro.setAdapter(mProAdapter);
-        }
 
         mAdapter.notifyDataSetChanged();
-        mProAdapter.notifyDataSetChanged();
+
 
     }
 
@@ -96,14 +87,15 @@ public class CategoryFragment extends Fragment {
 
     void getSupCat(int parentid) {
        // Toast.makeText(getActivity(), "" + parentid, Toast.LENGTH_SHORT).show();
-        //     subCategory.clear();
+            subCategory.clear();
         for (Category c : arrCategory)
           if (c.getParentId() == parentid)
                 subCategory.add(c);
-            if(parentid==0)
-                 upDateList();
-            else
-        ((MenuDrawerNews)getActivity()).showExam(0);
+            if(subCategory.isEmpty())
+                ((MenuDrawerNews)getActivity()).showExam(0);
+             else     upDateList();
+
+
 
 
 
@@ -130,6 +122,7 @@ public class CategoryFragment extends Fragment {
                                 arrCategory.add(new Category(jsonCat));
 
                             }
+
 subCategory=new ArrayList<>();
                             getSupCat(0);
                         } catch (JSONException e) {
@@ -161,21 +154,9 @@ subCategory=new ArrayList<>();
     }
     private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private List<Category> items = new ArrayList<>();
+        private List<Category> items;
 
         private Context ctx;
-
-
-        void getSupCat(int parentid) {
-            //  Toast.makeText(getActivity(), ""+parentid, Toast.LENGTH_SHORT).show();
-
-            items.clear();
-            for (Category c : arrCategory)
-                if (c.getParentId() == parentid)
-                    items.add(c);
-            notifyDataSetChanged();
-        }
-
 
         public CategoryAdapter(Context context, List<Category> items) {
             this.items = items;
@@ -221,7 +202,7 @@ subCategory=new ArrayList<>();
 
                     }
                 });
-                //   view.image.setImageDrawable(getResources(R.drawable.image_1));
+               MenuDrawerNews.animateFadeIn(holder.itemView,position);
 
             }
         }
@@ -233,64 +214,6 @@ subCategory=new ArrayList<>();
 
     }
 
-    private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        private List<UserProfile> items = new ArrayList<>();
-
-        private Context ctx;
 
 
-        public ProAdapter(Context context, List<UserProfile> items) {
-            this.items = items;
-            ctx = context;
-        }
-
-        public class OriginalViewHolder extends RecyclerView.ViewHolder {
-            public ImageView image;
-            public TextView name;
-
-
-            public OriginalViewHolder(View v) {
-                super(v);
-                image = v.findViewById(R.id.top_pro_photo);
-                name = v.findViewById(R.id.top_pro_name);
-
-            }
-
-
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RecyclerView.ViewHolder vh;
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_top_pro, parent, false);
-            vh = new ProAdapter.OriginalViewHolder(v);
-            return vh;
-        }
-
-        // Replace the contents of a view (invoked by the layout manager)
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof ProAdapter.OriginalViewHolder) {
-                ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
-
-                // UserProfile user = items.get(position);
-                view.name.setText(" Ziad");
-                view.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-
-                    }
-                });
-
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return 5;//items.size();
-        }
-
-    }
 }
