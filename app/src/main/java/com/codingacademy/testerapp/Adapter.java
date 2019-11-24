@@ -1,4 +1,6 @@
-package com.codingacademy.testerapp.adapter;
+package com.codingacademy.testerapp;
+
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -7,15 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-public class Adapter  extends FragmentStatePagerAdapter {
+public class Adapter extends FragmentStatePagerAdapter {
 
-    private List<Fragment> fragmentList;
 
-    public Adapter(FragmentManager fm, List<Fragment> fragmentList){
-        super(fm);
-        this.fragmentList=fragmentList;
+  private List<Fragment>  fragmentList;
 
-    }
+public Adapter(FragmentManager fm,List<Fragment> fragmentList){
+    super(fm);
+this.fragmentList=fragmentList;
+
+}
     @NonNull
     @Override
     public Fragment getItem(int i) {

@@ -2,6 +2,7 @@ package com.codingacademy.testerapp;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -44,7 +45,7 @@ import java.util.Map;
  */
 public class ExamFragment extends Fragment {
     RecyclerView recyclerExam;
-   Exam[] examsArr;
+    Exam[] examsArr;
     ExamAdapter examAdapter;
     int cat_id = 0;
 
@@ -64,11 +65,11 @@ public class ExamFragment extends Fragment {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
 
-                JSONArray examJsonArray=result.getJSONArray("Exams");
+                JSONArray examJsonArray = result.getJSONArray("Exams");
 
-                examsArr=new Exam[examJsonArray.length()];
-                Gson gson=new GsonBuilder().create();
-examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
+                examsArr = new Exam[examJsonArray.length()];
+                Gson gson = new GsonBuilder().create();
+                examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
             }
 
             @Override
@@ -108,9 +109,9 @@ examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
 
     void fillExam() {
         examsArr = new Exam[3];
-        examsArr[0]=(new Exam(null, null, " Java Exam name", null, null, null, null, null));
-        examsArr[1]=(new Exam(null, null, "C# Exam name", null, null, null, null, null));
-        examsArr[2]=(new Exam(null, null, "fluter Exam name", null, null, null, null, null));
+        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null, null));
+        examsArr[1] = (new Exam(null, null, "C# Exam name", null, null, null, null, null));
+        examsArr[2] = (new Exam(null, null, "fluter Exam name", null, null, null, null, null));
 
     }
 
@@ -120,9 +121,9 @@ examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 Toast.makeText(getContext(), "key", Toast.LENGTH_SHORT).show();
 
-                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     Toast.makeText(getContext(), "back", Toast.LENGTH_SHORT).show();
-                    ((MenuDrawerNews)getActivity()).showCategory();
+                    ((MenuDrawerNews) getActivity()).showCategory();
                     return true;
                 }
                 return false;
@@ -134,10 +135,12 @@ examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
 
         recyclerExam.setAdapter(new ExamAdapter());
     }
+
     public int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
     private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
 
         @NonNull
@@ -149,6 +152,10 @@ examsArr=gson.fromJson(examJsonArray.toString(),Exam[].class);
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             holder.examName.setText(examsArr[position].getExamName());
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(getActivity(), QuesExamActvity.class);
+                startActivity(intent);
+            });
         }
 
         @Override

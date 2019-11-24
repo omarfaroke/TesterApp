@@ -36,28 +36,17 @@ android:background="@color/colorPrimary"
                 android:scrollbars="vertical"
                 android:scrollingCache="true"
                 tools:listitem="@layout/temp_category"/>
-            <LinearLayout
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/add_cat"
-                android:orientation="horizontal">
-            <EditText
-                android:id="@+id/edit_cat"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:src="@drawable/c"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_cat_btn"/>
 
-
-</LinearLayout>
 
         </LinearLayout>
 
-
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:srcCompat="@drawable/ic_add"
+    android:layout_gravity="end|bottom"
+    android:layout_margin="40dp"
+    android:id="@+id/add_cat"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

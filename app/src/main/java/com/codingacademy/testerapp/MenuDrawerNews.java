@@ -33,40 +33,42 @@ public class MenuDrawerNews extends AppCompatActivity {
 
     private ActionBar actionBar;
     private Toolbar toolbar;
-    private  FragmentManager fragmentManager;
-    private  CategoryFragment categoryFragment;
-    private  ExamFragment examFragment;
+    private FragmentManager fragmentManager;
+    private CategoryFragment categoryFragment;
+    private ExamFragment examFragment;
     private RecyclerView recyclerPro;
     List<UserProfile> proArr;
     private ProAdapter mProAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_drawer_news);
- fragmentManager= getSupportFragmentManager();
-         categoryFragment=new CategoryFragment();
-        examFragment=new ExamFragment();
+        fragmentManager = getSupportFragmentManager();
+        categoryFragment = new CategoryFragment();
+        examFragment = new ExamFragment();
         initToolbar();
         initNavigationMenu();
-showCategory();
-upDateTop();
+        showCategory();
+        upDateTop();
     }
-   private void upDateTop(){
-       if (mProAdapter == null) {
 
-           mProAdapter = new ProAdapter(MenuDrawerNews.this, proArr);
-           recyclerPro.setAdapter(mProAdapter);
-       }
-       mProAdapter.notifyDataSetChanged();
-   }
-public void showCategory(){
-       fragmentManager.beginTransaction().replace(R.id.main_fram,categoryFragment) .addToBackStack(null).commit();
-            }
+    private void upDateTop() {
+        if (mProAdapter == null) {
+
+            mProAdapter = new ProAdapter(MenuDrawerNews.this, proArr);
+            recyclerPro.setAdapter(mProAdapter);
+        }
+        mProAdapter.notifyDataSetChanged();
+    }
+
+    public void showCategory() {
+        fragmentManager.beginTransaction().replace(R.id.main_fram, categoryFragment).addToBackStack(null).commit();
+    }
 
 
-
-    public void showExam(int cat){
-    fragmentManager.beginTransaction().replace(R.id.main_fram,examFragment).commit();
+    public void showExam(int cat) {
+        fragmentManager.beginTransaction().replace(R.id.main_fram, examFragment).commit();
     }
 
     public static void animateFadeIn(View view, int position) {
@@ -81,6 +83,7 @@ public void showCategory(){
         animatorSet.play(animatorAlpha);
         animatorSet.start();
     }
+
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,12 +92,13 @@ public void showCategory(){
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle("Drawer News");
     }
+
     private void initNavigationMenu() {
         recyclerPro = findViewById(R.id.recyclerPro);
         recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
 
-        NavigationView nav_view =  findViewById(R.id.nav_view);
-        final DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        NavigationView nav_view = findViewById(R.id.nav_view);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -114,6 +118,7 @@ public void showCategory(){
 
 
     }
+
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<UserProfile> items = new ArrayList<>();
@@ -164,7 +169,7 @@ public void showCategory(){
 
                     }
                 });
-                animateFadeIn(view.itemView,position);
+                animateFadeIn(view.itemView, position);
             }
         }
 
@@ -173,5 +178,10 @@ public void showCategory(){
             return 5;//items.size();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

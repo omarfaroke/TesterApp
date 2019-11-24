@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootViwe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:layoutDirection="ltr"
     android:orientation="vertical"
-    tools:context="com.codingacademy.testerapp.MainActivity">
+    tools:context=".QuesExamActvity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <FrameLayout
 
-        android:id="@+id/wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:id="@+id/sign_up_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary" />
+   <androidx.viewpager.widget.ViewPager
+       android:id="@+id/pager"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"/>
 
-        <FrameLayout
-            android:id="@+id/login_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/secondPage" />
-    </FrameLayout>
 
-    <Button
-        android:id="@+id/button"
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:orientation="horizontal"
+       android:layout_marginBottom="40dp"
+       app:layout_constraintBottom_toBottomOf="@+id/pager">
+
+
+
+      <ImageView
+          android:id="@+id/pre"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="60dp"
+          android:src="@drawable/ic_arrow_back_black_24dp"
+          android:textSize="33sp" />
+
+      <ImageView
+          android:id="@+id/next"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="90dp"
+          android:src="@drawable/ic_arrow_forward_black_24dp"
+          android:textSize="33sp" />
+   </LinearLayout>
+
+    <TextView
+        android:id="@+id/time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/bubble"
-        android:onClick="switchFragment"
-        android:textColor="@color/text" />
+        android:text="00:30"
+        android:layout_marginBottom="350dp"
+        android:layout_marginLeft="300dp"
+        android:layout_gravity="center"
+        android:textColor="#ffff"
+        android:textSize="30sp"
+        tools:ignore="MissingConstraints" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

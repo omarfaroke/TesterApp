@@ -25,7 +25,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.fragment.ExampleDialog;
 import com.codingacademy.testerapp.model.Category;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +41,7 @@ public class CategoryFragment extends Fragment {
     int parent = 0;
     private RecyclerView recyclerCategory;
     private CategoryAdapter mAdapter;
-
+    FloatingActionButton addCatBtn;
     List<Category> arrCategory, subCategory;
 
     @Override
@@ -59,16 +61,28 @@ public class CategoryFragment extends Fragment {
     }
 
     private void intViews(View v) {
-         parent_view = v.findViewById(R.id.parent_view);
+        parent_view = v.findViewById(R.id.parent_view);
+        addCatBtn = v.findViewById(R.id.add_cat);
+        addCatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExampleDialog exampleDialog = new ExampleDialog();
+                Bundle bundle=new Bundle();
+                bundle.putInt("parentID",parent);
+                exampleDialog.setArguments(bundle);
+                exampleDialog.show(getActivity().getSupportFragmentManager(), "example dialog");
 
-              recyclerCategory = v.findViewById(R.id.recyclerCat);
+            }
+        });
+        recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));
         recyclerCategory.setHasFixedSize(true);
         recyclerCategory.setNestedScrollingEnabled(false);
-               getCategory();
+        getCategory();
 
     }
+
     void upDateList() {
 //        Toast.makeText(getActivity(), subCategory.size()+" "+arrCategory.size()+" ", Toast.LENGTH_SHORT).show();
         if (mAdapter == null) {
@@ -83,24 +97,19 @@ public class CategoryFragment extends Fragment {
     }
 
 
-
-
     void getSupCat(int parentid) {
-       // Toast.makeText(getActivity(), "" + parentid, Toast.LENGTH_SHORT).show();
-            subCategory.clear();
+        // Toast.makeText(getActivity(), "" + parentid, Toast.LENGTH_SHORT).show();
+        subCategory.clear();
         for (Category c : arrCategory)
-          if (c.getParentId() == parentid)
+            if (c.getParentId() == parentid)
                 subCategory.add(c);
-            if(subCategory.isEmpty())
-                ((MenuDrawerNews)getActivity()).showExam(0);
-             else     upDateList();
-
-
-
-
+        if (subCategory.isEmpty())
+            ((MenuDrawerNews) getActivity()).showExam(0);
+        else upDateList();
 
 
     }
+
     private void getCategory() {
 
         StringRequest request = new StringRequest(Request.Method.GET,
@@ -108,31 +117,31 @@ public class CategoryFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Toast.makeText(CategoryActivity.this, response, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
 
                         if (response.equals("null"))
                             Toast.makeText(getActivity(), "There is no category", Toast.LENGTH_SHORT).show();
                         else
                             try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            int size = jsonArray.length();
-                            arrCategory = new ArrayList<>();
-                            for (int i = 0; i < size; i++) {
-                                JSONObject jsonCat = jsonArray.getJSONObject(i);
-                                arrCategory.add(new Category(jsonCat));
+                                JSONArray jsonArray = new JSONArray(response);
+                                int size = jsonArray.length();
+                                arrCategory = new ArrayList<>();
+                                for (int i = 0; i < size; i++) {
+                                    JSONObject jsonCat = jsonArray.getJSONObject(i);
+                                    arrCategory.add(new Category(jsonCat));
+
+                                }
+
+                                subCategory = new ArrayList<>();
+                                getSupCat(0);
+                            } catch (JSONException e) {
+                                Toast.makeText(getActivity(), e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
+
+                                e.printStackTrace();
+
+                                // Toast.makeText(getContext(),"catch  "+ e.getMessage(), Toast.LENGTH_LONG).show();
 
                             }
-
-subCategory=new ArrayList<>();
-                            getSupCat(0);
-                        } catch (JSONException e) {
-                            Toast.makeText(getActivity(), e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
-
-                            e.printStackTrace();
-
-                            // Toast.makeText(getContext(),"catch  "+ e.getMessage(), Toast.LENGTH_LONG).show();
-
-                        }
 
                     }
                 },
@@ -152,6 +161,7 @@ subCategory=new ArrayList<>();
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
     private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<Category> items;
@@ -197,12 +207,13 @@ subCategory=new ArrayList<>();
                 view.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getSupCat(p.getCatId());
-                        parent = p.getParentId();
+
+                        parent = p.getCatId();
+                        getSupCat(parent);
 
                     }
                 });
-               MenuDrawerNews.animateFadeIn(holder.itemView,position);
+                MenuDrawerNews.animateFadeIn(holder.itemView, position);
 
             }
         }
@@ -213,7 +224,6 @@ subCategory=new ArrayList<>();
         }
 
     }
-
 
 
 }
