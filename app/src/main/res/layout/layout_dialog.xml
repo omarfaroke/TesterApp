@@ -15,7 +15,7 @@
         android:layout_marginTop="22dp"
         android:background="@android:color/white"
         android:foregroundGravity="center"
-        android:src="@drawable/image_4"></androidx.appcompat.widget.AppCompatImageView>
+        android:src="@drawable/image_4"/>
 
    <LinearLayout
        android:layout_width="match_parent"
@@ -30,13 +30,13 @@
            android:layout_width="186dp"
            android:layout_height="37dp"
            android:background="@android:color/black"
-           android:text="please add Category"
+           android:hint="please add Category"
            android:textAlignment="center"
            android:textColor="@android:color/white"
            android:textDirection="firstStrongRtl"
-           android:textSize="15sp">
+           android:textSize="15sp"/>
 
-       </EditText>
+
 
        <Button
            android:id="@+id/save_cat"
@@ -44,7 +44,7 @@
            android:layout_height="46dp"
            android:layout_marginLeft="15dp"
            android:text="Save"
-           android:textSize="15sp"></Button>
+           android:textSize="15sp"/>
    </LinearLayout>
 
 </RelativeLayout>

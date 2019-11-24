@@ -6,12 +6,12 @@ import java.util.Date;
 
 public class Sample {
     @SerializedName("sample_id")
-    private   Integer sampleId;
+    private Integer sampleId;
 
     @SerializedName("sample_name")
-    private   String sampleName;
+    private String sampleName;
 
-     private   Integer status;
+    private Integer status;
 
     @SerializedName("sample_date")
     Date sample_date;

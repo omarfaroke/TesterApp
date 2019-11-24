@@ -24,19 +24,16 @@ public class Dialog extends DialogFragment {
                 .setView(v)
                 .setTitle("ADD Catogry")
                 .setPositiveButton("Add",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        (dialog, which) -> {
 
-                                if (!catogry.getText().toString().equals("")){
+                            if (!catogry.getText().toString().equals("")){
 
-                                    ans = catogry.getText().toString();
+                                ans = catogry.getText().toString();
 
-                                } else {
-                                    Toast.makeText(getActivity(), "Enter Comment", Toast.LENGTH_SHORT).show();
-                                }
-
+                            } else {
+                                Toast.makeText(getActivity(), "Enter Comment", Toast.LENGTH_SHORT).show();
                             }
+
                         })
                 .create();
 

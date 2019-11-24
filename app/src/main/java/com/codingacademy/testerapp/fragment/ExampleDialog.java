@@ -44,7 +44,6 @@ public class ExampleDialog extends AppCompatDialogFragment {
     ImageView mddCategoryImage;
     EditText mAddCategoryEditText;
     Button mSaveCategory;
-    private static final int REQUEST_IMAGE_CAPTURE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
     private Bitmap imageCategory;
     @Override
