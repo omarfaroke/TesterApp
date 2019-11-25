@@ -7,17 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Exam {
-    public Exam(Integer examId, Integer categoryId, String examName, Date examDate, Integer examTime, Integer examPass, Integer status, List<Sample> samples) {
-        this.examId = examId;
-        this.categoryId = categoryId;
-        this.examName = examName;
-        this.examDate = examDate;
-        this.examTime = examTime;
-        this.examPass = examPass;
-        this.status = status;
-        this.samples = samples;
-    }
-
     @SerializedName("exam_id")
     private Integer examId;
 
@@ -28,7 +17,7 @@ public class Exam {
     private String examName;
 
     @SerializedName("exam_date")
-    private Date examDate;
+    private String examDate;
 
     @SerializedName("exam_time")
     private Integer examTime;
@@ -43,6 +32,7 @@ public class Exam {
     @SerializedName("exam_description")
     private Integer examDescription;
 
+    @SerializedName("status")
     private Integer status;
 
     List<Sample> samples;
@@ -59,7 +49,7 @@ public class Exam {
         return examName;
     }
 
-    public Date getExamDate() {
+    public String getExamDate() {
         return examDate;
     }
 
@@ -87,5 +77,15 @@ public class Exam {
         return samples;
     }
 
-
+    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime, Integer examPass, Integer examNote, Integer examDescription, Integer status) {
+        this.examId = examId;
+        this.categoryId = categoryId;
+        this.examName = examName;
+        this.examDate = examDate;
+        this.examTime = examTime;
+        this.examPass = examPass;
+        this.examNote = examNote;
+        this.examDescription = examDescription;
+        this.status = status;
+    }
 }

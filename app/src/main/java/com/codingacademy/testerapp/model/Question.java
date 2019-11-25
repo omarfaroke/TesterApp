@@ -2,10 +2,11 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
+public class Question implements Serializable {
     @SerializedName("Ques_id")
     private Integer quesId;
 
@@ -21,7 +22,13 @@ public class Question {
     @SerializedName("f_sample_id")
     private Integer quesSampleId;
 
-    private List<Choice> choices ;
+    @SerializedName("choices")
+    private List<Choice> choices;
+
+    public Question(String quesText, List<Choice> choices) {
+        this.quesText = quesText;
+        this.choices = choices;
+    }
 
     public Question(Integer quesId, String quesText, Integer quesStatus, Integer quesScore, Integer quesSampleId, List<Choice> choices) {
         this.quesId = quesId;
@@ -79,8 +86,6 @@ public class Question {
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
     }
-
-
 
 
 }

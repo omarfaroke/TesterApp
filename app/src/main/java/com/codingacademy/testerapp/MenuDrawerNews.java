@@ -63,7 +63,7 @@ public class MenuDrawerNews extends AppCompatActivity {
     }
 
     public void showCategory() {
-        fragmentManager.beginTransaction().replace(R.id.main_fram, categoryFragment).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_fram, categoryFragment).commit();
     }
 
 

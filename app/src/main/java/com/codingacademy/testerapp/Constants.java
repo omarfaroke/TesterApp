@@ -30,6 +30,7 @@ public class Constants {
     public static final String LOGIN=BASE_URL + "/login.php";
     public static final String REGISTER =BASE_URL + "/register.php";
     public static final String CATEGORY =BASE_URL + "/get_category.php";
+    public static final String GET_EXAM =BASE_URL + "/get_exam.php";
     public static final String ADD_CATEGORY =BASE_URL + "/add_Category.php";
 
 

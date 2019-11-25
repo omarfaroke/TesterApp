@@ -2,7 +2,7 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-class Choice {
+public class Choice {
     @SerializedName("Choice_id")
     private Integer choiceId;
 
@@ -20,6 +20,10 @@ class Choice {
         this.choiceText = choiceText;
         this.quesSampleId = quesSampleId;
         Answer = answer;
+    }
+
+    public Choice(String choiceText) {
+        this.choiceText = choiceText;
     }
 
     public Integer getChoiceId() {

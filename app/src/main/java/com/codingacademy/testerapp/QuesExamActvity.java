@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -16,19 +17,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.codingacademy.testerapp.model.Ques;
+import com.codingacademy.testerapp.model.Choice;
+import com.codingacademy.testerapp.model.Exam;
+import com.codingacademy.testerapp.model.Question;
+import com.codingacademy.testerapp.requests.VolleyCallback;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class QuesExamActvity extends AppCompatActivity {
-    ArrayList<Ques> quesArrayList = new ArrayList<>();
+
 
     ProgressBar progressBar;
 
     private int questionCounter;
     private int questionCountTotal;
-    private Ques currentQuestion;
+List<Question> quesArrayList;
+List<Choice> choices;
     private ViewPager pager;
     TextView textView;
 
@@ -44,23 +56,14 @@ public class QuesExamActvity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ArrayList<String> ansers = new ArrayList<>();
-        ansers.add("1dd");
-        ansers.add("2dd");
-        ansers.add("3dd");
-        quesArrayList.add(new Ques("1zzzzzzzz", ansers));
-        quesArrayList.add(new Ques("2zzzzzzzz", ansers));
-        quesArrayList.add(new Ques("3zzzzzzzz", ansers));
-        quesArrayList.add(new Ques("4zzzzzzzz", ansers));
+        setContentView(R.layout.activity_exam);
+       fill();
+
 
         progressBar = findViewById(R.id.progress);
-   //     textColorDefault= textView.getTextColors();
 
 
-
-
-        // View v=LayoutInflater.from(this).inflate(R.layout.viewpager1,null);
+        // View v=LayoutInflater.from(this).inflate(R.layout.fragment_ques,null);
         mNext = findViewById(R.id.next);
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +98,7 @@ public class QuesExamActvity extends AppCompatActivity {
            public void onFinish() {
    timeLeftInMills = 0;
    updateCountDownText();
+   finish();
            }
        }.start();
 
@@ -105,25 +109,47 @@ public class QuesExamActvity extends AppCompatActivity {
    int minuts= (int) (timeLeftInMills/1000)/60;
    int secound= (int) (timeLeftInMills/1000)%60;
    String timeFormated = String.format(Locale.getDefault(),"%02d:%02d",minuts,secound);
+   if(secound<5)
+       textView.setTextColor(Color.RED);
    textView.setText(timeFormated);
 
     }
-
+void fill()
+{
+     choices = new ArrayList<>();
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    choices.add(new Choice("Ansers"));
+    quesArrayList = new ArrayList<>();
+    quesArrayList.add(new Question("1zzzzzzzz", choices));
+    quesArrayList.add(new Question("2zzzzzzzz", choices));
+    quesArrayList.add(new Question("3zzzzzzzz", choices));
+    quesArrayList.add(new Question("4zzzzzzzz", choices));
+}
 
     public void init() {
 textView=findViewById(R.id.time_text);
         pager = findViewById(R.id.pager);
         //  adapter= new Adapter(getSupportFragmentManager(),quesArrayList);
+        int count=quesArrayList.size();
+        int prssent=100/count;
+        progressBar.setMax(count);
         pager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
+                progressBar.setProgress(position);
                 return QuesFragment.getInstence(quesArrayList.get(position));
             }
 
             @Override
             public int getCount() {
-                return quesArrayList.size();
+                return count;
             }
         });
 

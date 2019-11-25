@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -12,15 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.codingacademy.testerapp.model.Ques;
+import com.codingacademy.testerapp.model.Question;
 
 public class QuesFragment extends Fragment {
     TextView textView;
 
 
-    RadioButton radioButton1, radioButton2, radioButton3;
+    RadioGroup radioGroup;
 
-    public static Fragment getInstence(Ques ques) {
+    public static Fragment getInstence(Question ques) {
         QuesFragment pagerFragment1 = new QuesFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Ques", ques);
@@ -31,18 +32,25 @@ public class QuesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.viewpager1, container, false);
+        View v =inflater.inflate(R.layout.fragment_ques, container, false);
         textView = v.findViewById(R.id.text1);
-        radioButton1 = v.findViewById(R.id.radio1);
-        radioButton2 = v.findViewById(R.id.radio2);
-        radioButton3 = v.findViewById(R.id.radio3);
+        radioGroup=v.findViewById(R.id.radio_choices);
 
 
-        Ques ques = (Ques) getArguments().getSerializable("Ques");
-        textView.setText(ques.getQues());
-        radioButton1.setText(ques.getAnswers().get(0));
-        radioButton2.setText(ques.getAnswers().get(1));
-        radioButton3.setText(ques.getAnswers().get(2));
+
+        Question ques = (Question) getArguments().getSerializable("Ques");
+
+        int radioNumber=ques.getChoices().size();
+
+        for(int i=0;i<radioNumber;i++)
+        {
+
+            RadioButton radioButton=new RadioButton(getActivity());
+            radioButton.setText(ques.getChoices().get(i).getChoiceText());
+            radioGroup.addView(radioButton);
+        }
+        textView.setText(ques.getQuesText());
+
 
 
 

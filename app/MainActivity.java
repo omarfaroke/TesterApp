@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // View v=LayoutInflater.from(this).inflate(R.layout.viewpager1,null);
+        // View v=LayoutInflater.from(this).inflate(R.layout.fragment_ques,null);
         mNext = findViewById(R.id.next);
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override

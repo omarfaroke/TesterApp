@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.requests.VolleyCallback;
+import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +49,7 @@ public class ExamFragment extends Fragment {
     RecyclerView recyclerExam;
     Exam[] examsArr;
     ExamAdapter examAdapter;
-    int cat_id = 0;
+    int cat_id = 3;
 
     public ExamFragment() {
         // Required empty public constructor
@@ -59,60 +61,77 @@ public class ExamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_exam, container, false);
-        fillExam();
-        getExam(cat_id, new VolleyCallback() {
-
-            @Override
-            public void onSuccess(JSONObject result) throws JSONException {
-
-                JSONArray examJsonArray = result.getJSONArray("Exams");
-
-                examsArr = new Exam[examJsonArray.length()];
-                Gson gson = new GsonBuilder().create();
-                examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
-            }
-
-            @Override
-            public void onError(String result) throws Exception {
-
-            }
-        });
         intViwes(v);
+       fillExam();
+    //  getExam();
+
         return v;
     }
+void getExam(){
+    getExam(cat_id, new VolleyCallback() {
 
+        @Override
+        public void onSuccess(JSONObject result) throws JSONException {
+
+            JSONArray examJsonArray = result.getJSONArray("JA");
+
+            examsArr = new Exam[examJsonArray.length()];
+            Gson gson = new GsonBuilder().create();
+            examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
+            int i=examsArr[0].getCategoryId();
+            upDateExam();
+        }
+
+        @Override
+        public void onError(String result) throws Exception {
+            Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+        }
+    });
+}
     private void getExam(int cat_id, final VolleyCallback mCallback) {
-        String url = Constants.REGISTER;
+        String url = Constants.GET_EXAM;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response ->
+
+                {
                     try {
-                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray = new JSONArray(response);
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("JA", jsonArray);
                         mCallback.onSuccess(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                }, error -> {
-            try {
-                mCallback.onError(error.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }) {
+                },
+
+
+                error -> {
+                    try {
+                        mCallback.onError(error.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+                Map<String, String> par = new HashMap<>();
+                par.put("category_id", "" + cat_id);
+                return par;
             }
         };
+        VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
+
     }
 
     void fillExam() {
-        examsArr = new Exam[3];
-        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null, null));
-        examsArr[1] = (new Exam(null, null, "C# Exam name", null, null, null, null, null));
-        examsArr[2] = (new Exam(null, null, "fluter Exam name", null, null, null, null, null));
-
+        examsArr = new Exam[4];
+        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
+        examsArr[1] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
+        examsArr[2] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
+        examsArr[3] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
+upDateExam();
     }
 
     private void intViwes(View v) {
@@ -132,9 +151,16 @@ public class ExamFragment extends Fragment {
         recyclerExam = v.findViewById(R.id.recyclerExam);
         recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
-
-        recyclerExam.setAdapter(new ExamAdapter());
     }
+
+    private void upDateExam() {
+        if (examAdapter == null) {
+            examAdapter = new ExamAdapter();
+            recyclerExam.setAdapter(examAdapter);
+        }
+        examAdapter.notifyDataSetChanged();
+    }
+
 
     public int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
