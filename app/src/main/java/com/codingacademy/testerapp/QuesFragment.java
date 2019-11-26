@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.codingacademy.testerapp.model.Choice;
 import com.codingacademy.testerapp.model.Question;
 
 public class QuesFragment extends Fragment {
@@ -22,11 +23,11 @@ public class QuesFragment extends Fragment {
     RadioGroup radioGroup;
 
     public static Fragment getInstence(Question ques) {
-        QuesFragment pagerFragment1 = new QuesFragment();
+        QuesFragment quesFragment = new QuesFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Ques", ques);
-        pagerFragment1.setArguments(bundle);
-        return pagerFragment1;
+        quesFragment.setArguments(bundle);
+        return quesFragment;
     }
 
     @Nullable
@@ -39,14 +40,15 @@ public class QuesFragment extends Fragment {
 
 
         Question ques = (Question) getArguments().getSerializable("Ques");
+     Choice[] choices=ques.getChoices();
 
-        int radioNumber=ques.getChoices().size();
+        int radioNumber=choices.length;
 
         for(int i=0;i<radioNumber;i++)
         {
 
             RadioButton radioButton=new RadioButton(getActivity());
-            radioButton.setText(ques.getChoices().get(i).getChoiceText());
+            radioButton.setText(choices[i].getChoiceText());
             radioGroup.addView(radioButton);
         }
         textView.setText(ques.getQuesText());

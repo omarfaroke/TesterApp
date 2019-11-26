@@ -49,7 +49,7 @@ public class ExamFragment extends Fragment {
     RecyclerView recyclerExam;
     Exam[] examsArr;
     ExamAdapter examAdapter;
-    int cat_id = 3;
+
 
     public ExamFragment() {
         // Required empty public constructor
@@ -62,23 +62,24 @@ public class ExamFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_exam, container, false);
         intViwes(v);
-       fillExam();
-    //  getExam();
+        int catId = getArguments().getInt("CAT_ID");
+
+      getExam(catId);
 
         return v;
     }
-void getExam(){
-    getExam(cat_id, new VolleyCallback() {
+void getExam(int catID){
+    getExam(catID, new VolleyCallback() {
 
         @Override
         public void onSuccess(JSONObject result) throws JSONException {
 
             JSONArray examJsonArray = result.getJSONArray("JA");
 
-            examsArr = new Exam[examJsonArray.length()];
+          //  examsArr = new Exam[examJsonArray.length()];
             Gson gson = new GsonBuilder().create();
             examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
-            int i=examsArr[0].getCategoryId();
+
             upDateExam();
         }
 
@@ -177,11 +178,14 @@ upDateExam();
 
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
-            holder.examName.setText(examsArr[position].getExamName());
+            Exam exam=examsArr[position];
+            holder.examName.setText(exam.getExamName());
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(getActivity(), QuesExamActvity.class);
+                intent.putExtra("EXAM_OPJECT",exam);
                 startActivity(intent);
             });
+            MenuDrawerNews.animateFadeIn(holder.itemView, position);
         }
 
         @Override

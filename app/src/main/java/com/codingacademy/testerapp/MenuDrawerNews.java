@@ -67,7 +67,10 @@ public class MenuDrawerNews extends AppCompatActivity {
     }
 
 
-    public void showExam(int cat) {
+    public void showExam(int catID) {
+        Bundle bundle=new Bundle();
+        bundle.putInt("CAT_ID",catID);
+        examFragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.main_fram, examFragment).commit();
     }
 

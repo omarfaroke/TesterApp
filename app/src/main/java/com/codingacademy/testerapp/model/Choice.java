@@ -34,6 +34,10 @@ public class Choice {
         this.choiceId = choiceId;
     }
 
+    public Choice() {
+        this.choiceText = "aaaaaaaaaaaa";
+    }
+
     public String getChoiceText() {
         return choiceText;
     }

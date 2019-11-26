@@ -22,15 +22,15 @@ public class Question implements Serializable {
     @SerializedName("f_sample_id")
     private Integer quesSampleId;
 
-    @SerializedName("choices")
-    private List<Choice> choices;
+    @SerializedName("choice")
+    private Choice[] choices;
 
-    public Question(String quesText, List<Choice> choices) {
+    public Question(String quesText, Choice[] choices) {
         this.quesText = quesText;
         this.choices = choices;
     }
 
-    public Question(Integer quesId, String quesText, Integer quesStatus, Integer quesScore, Integer quesSampleId, List<Choice> choices) {
+    public Question(Integer quesId, String quesText, Integer quesStatus, Integer quesScore, Integer quesSampleId, Choice[] choices) {
         this.quesId = quesId;
         this.quesText = quesText;
         this.quesStatus = quesStatus;
@@ -79,11 +79,11 @@ public class Question implements Serializable {
         this.quesSampleId = quesSampleId;
     }
 
-    public List<Choice> getChoices() {
+    public Choice[] getChoices() {
         return choices;
     }
 
-    public void setChoices(List<Choice> choices) {
+    public void setChoices(Choice[] choices) {
         this.choices = choices;
     }
 

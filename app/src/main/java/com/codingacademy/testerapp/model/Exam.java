@@ -2,11 +2,12 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Exam {
+public class Exam implements Serializable {
     @SerializedName("exam_id")
     private Integer examId;
 
@@ -26,11 +27,11 @@ public class Exam {
     private Integer examPass;
 
     @SerializedName("exam_note")
-    private Integer examNote;
+    private String examNote;
 
 
     @SerializedName("exam_description")
-    private Integer examDescription;
+    private String examDescription;
 
     @SerializedName("status")
     private Integer status;
@@ -65,11 +66,11 @@ public class Exam {
         return status;
     }
 
-    public Integer getExamNote() {
+    public String getExamNote() {
         return examNote;
     }
 
-    public Integer getExamDescription() {
+    public String getExamDescription() {
         return examDescription;
     }
 
@@ -77,7 +78,7 @@ public class Exam {
         return samples;
     }
 
-    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime, Integer examPass, Integer examNote, Integer examDescription, Integer status) {
+    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime, Integer examPass, String examNote, String examDescription, Integer status) {
         this.examId = examId;
         this.categoryId = categoryId;
         this.examName = examName;

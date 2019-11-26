@@ -97,14 +97,14 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    void getSupCat(int parentid) {
+    void getSupCat(int parentid,int catID) {
         // Toast.makeText(getActivity(), "" + parentid, Toast.LENGTH_SHORT).show();
         subCategory.clear();
         for (Category c : arrCategory)
             if (c.getParentId() == parentid)
                 subCategory.add(c);
         if (subCategory.isEmpty())
-            ((MenuDrawerNews) getActivity()).showExam(0);
+            ((MenuDrawerNews) getActivity()).showExam(catID);
         else upDateList();
 
 
@@ -133,7 +133,7 @@ public class CategoryFragment extends Fragment {
                                 }
 
                                 subCategory = new ArrayList<>();
-                                getSupCat(0);
+                                getSupCat(0,0);
                             } catch (JSONException e) {
                                 Toast.makeText(getActivity(), e.getMessage() + "  jason", Toast.LENGTH_LONG).show();
 
@@ -209,7 +209,7 @@ public class CategoryFragment extends Fragment {
                     public void onClick(View view) {
 
                         parent = p.getCatId();
-                        getSupCat(parent);
+                        getSupCat(parent,p.catId);
 
                     }
                 });
