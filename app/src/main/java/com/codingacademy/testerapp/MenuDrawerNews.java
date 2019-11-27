@@ -9,9 +9,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,15 +30,16 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuDrawerNews extends AppCompatActivity {
+public class MenuDrawerNews extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
 
     private ActionBar actionBar;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
-    private CategoryFragment categoryFragment;
-    private ExamFragment examFragment;
+
+    private FragmentTransaction mFragmentTransaction;
+
     private RecyclerView recyclerPro;
-    List<UserProfile> proArr;
+    private List<UserProfile> proArr;
     private ProAdapter mProAdapter;
 
     @Override
@@ -45,8 +47,7 @@ public class MenuDrawerNews extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_drawer_news);
         fragmentManager = getSupportFragmentManager();
-        categoryFragment = new CategoryFragment();
-        examFragment = new ExamFragment();
+
         initToolbar();
         initNavigationMenu();
         showCategory();
@@ -63,16 +64,16 @@ public class MenuDrawerNews extends AppCompatActivity {
     }
 
     public void showCategory() {
-        fragmentManager.beginTransaction().replace(R.id.main_fram, categoryFragment).commit();
-    }
+
+        CategoryFragment categoryFragment = new CategoryFragment();
 
 
-    public void showExam(int catID) {
-        Bundle bundle=new Bundle();
-        bundle.putInt("CAT_ID",catID);
-        examFragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.main_fram, examFragment).commit();
+        mFragmentTransaction = fragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
     }
+
 
     public static void animateFadeIn(View view, int position) {
         boolean not_first_item = position == -1;
@@ -121,6 +122,22 @@ public class MenuDrawerNews extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void showExams(int currentCategory) {
+
+        ExamFragment examFragment = new ExamFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(CategoryFragment.CATEGORY_ID, currentCategory);
+        examFragment.setArguments(bundle);
+
+        mFragmentTransaction = fragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.main_fram, examFragment, ExamFragment.TAG);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+    }
+
 
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -183,8 +200,63 @@ public class MenuDrawerNews extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        Fragment fragment = fragmentManager.findFragmentById(R.id.main_fram);
+        if (fragment != null) {
+            if (fragment instanceof CategoryFragment) {
+
+                if (((CategoryFragment) fragment).backCategory()) {
+                    //((CategoryFragment) fragment).restartFocusView();
+                } else {
+                    exitFromApp();
+                }
+
+            } else if (fragment instanceof ExamFragment) {
+                fragmentManager.popBackStack();
+
+            }
+
+        }
+
     }
+
+    //
+    @Override
+    public void restartFocusView() {
+        Fragment fragment = fragmentManager.findFragmentByTag(CategoryFragment.TAG);
+        if (fragment != null) {
+            if (fragment instanceof CategoryFragment) {
+                ((CategoryFragment) fragment).restartFocusView();
+            }
+
+        }
+
+
+    }
+
+
+    private long backPressedTime;
+    private Toast backToast;
+
+    private void exitFromApp() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            //super.onBackPressed();
+
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+
+            return;
+        } else {
+            backToast = Toast.makeText(MenuDrawerNews.this, "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
+    }
+
 }

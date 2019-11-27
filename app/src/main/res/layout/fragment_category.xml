@@ -8,45 +8,41 @@
     android:background="@color/text_two"
     android:orientation="vertical"
 
-   >
+    >
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:weightSum="7">
 
 
-        <LinearLayout
-            android:weightSum="7"
-android:background="@color/colorPrimary"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:layout_weight="5.5"
+            android:paddingLeft="@dimen/spacing_middle"
+            android:paddingRight="@dimen/spacing_middle"
+            android:scrollbars="vertical"
+            android:scrollingCache="true"
+            tools:listitem="@layout/temp_category" />
 
 
+    </LinearLayout>
 
-
-
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerCat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    android:layout_weight="5.5"
-    android:layout_marginTop="10dp"
-                android:paddingLeft="@dimen/spacing_middle"
-                android:paddingRight="@dimen/spacing_middle"
-                android:scrollbars="vertical"
-                android:scrollingCache="true"
-                tools:listitem="@layout/temp_category"/>
-
-
-        </LinearLayout>
-
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:srcCompat="@drawable/ic_add"
-    android:layout_gravity="end|bottom"
-    android:layout_margin="40dp"
-    android:id="@+id/add_cat"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="40dp"
+        app:srcCompat="@drawable/ic_add"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

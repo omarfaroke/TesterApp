@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,49 +47,89 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class ExamFragment extends Fragment {
-    RecyclerView recyclerExam;
-    Exam[] examsArr;
-    ExamAdapter examAdapter;
+    public static final String TAG = "ExamFragment";
+    public static final String EXAM_OBJECT = "EXAM_OBJECT";
+
+    private RecyclerView recyclerExam;
+    private Exam[] examsArr;
+    private ExamAdapter examAdapter;
+    private int currentCategory;
+    private ExamFragmentActionListener mListener;
 
 
     public ExamFragment() {
         // Required empty public constructor
     }
 
+    interface ExamFragmentActionListener {
+        void restartFocusView();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ExamFragment.ExamFragmentActionListener) {
+            mListener = (ExamFragment.ExamFragmentActionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            if (getArguments().containsKey(CategoryFragment.CATEGORY_ID)) {
+                currentCategory = getArguments().getInt(CategoryFragment.CATEGORY_ID);
+            }
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_exam, container, false);
-        intViwes(v);
-        int catId = getArguments().getInt("CAT_ID");
+        initView(v);
 
-      getExam(catId);
+        getExam(currentCategory);
 
         return v;
     }
-void getExam(int catID){
-    getExam(catID, new VolleyCallback() {
 
-        @Override
-        public void onSuccess(JSONObject result) throws JSONException {
+    void getExam(int catID) {
+        getExam(catID, new VolleyCallback() {
 
-            JSONArray examJsonArray = result.getJSONArray("JA");
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
 
-          //  examsArr = new Exam[examJsonArray.length()];
-            Gson gson = new GsonBuilder().create();
-            examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
+                JSONArray examJsonArray = result.getJSONArray("JA");
 
-            upDateExam();
-        }
+                //  examsArr = new Exam[examJsonArray.length()];
+                Gson gson = new GsonBuilder().create();
+                examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
 
-        @Override
-        public void onError(String result) throws Exception {
-            Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-        }
-    });
-}
+                upDateExam();
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void getExam(int cat_id, final VolleyCallback mCallback) {
         String url = Constants.GET_EXAM;
 
@@ -118,7 +159,7 @@ void getExam(int catID){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                par.put("category_id", "" + cat_id);
+                par.put(CategoryFragment.CATEGORY_ID, "" + cat_id);
                 return par;
             }
         };
@@ -126,33 +167,15 @@ void getExam(int catID){
 
     }
 
-    void fillExam() {
-        examsArr = new Exam[4];
-        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
-        examsArr[1] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
-        examsArr[2] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
-        examsArr[3] = (new Exam(null, null, " Java Exam name", null, null, null, null,null,null));
-upDateExam();
-    }
 
-    private void intViwes(View v) {
-        v.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Toast.makeText(getContext(), "key", Toast.LENGTH_SHORT).show();
-
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    Toast.makeText(getContext(), "back", Toast.LENGTH_SHORT).show();
-                    ((MenuDrawerNews) getActivity()).showCategory();
-                    return true;
-                }
-                return false;
-            }
-        });
-        recyclerExam = v.findViewById(R.id.recyclerExam);
-        recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
-    }
+//    void fillExam() {
+//        examsArr = new Exam[4];
+//        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
+//        examsArr[1] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
+//        examsArr[2] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
+//        examsArr[3] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
+//        upDateExam();
+//    }
 
     private void upDateExam() {
         if (examAdapter == null) {
@@ -162,6 +185,14 @@ upDateExam();
         examAdapter.notifyDataSetChanged();
     }
 
+
+    private void initView(View v) {
+
+        recyclerExam = v.findViewById(R.id.recyclerExam);
+        recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
+
+    }
 
     public int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
@@ -178,11 +209,12 @@ upDateExam();
 
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
-            Exam exam=examsArr[position];
+            Exam exam = examsArr[position];
             holder.examName.setText(exam.getExamName());
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(getActivity(), QuesExamActvity.class);
-                intent.putExtra("EXAM_OPJECT",exam);
+                intent.putExtra(EXAM_OBJECT, exam);
+
                 startActivity(intent);
             });
             MenuDrawerNews.animateFadeIn(holder.itemView, position);
@@ -201,5 +233,27 @@ upDateExam();
                 examName = itemView.findViewById(R.id.exam_name);
             }
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        getView().setFocusableInTouchMode(false);
+        getView().clearFocus();
+
+        if (mListener != null) {
+            mListener.restartFocusView();
+        }
+
+        super.onDestroyView();
     }
 }
