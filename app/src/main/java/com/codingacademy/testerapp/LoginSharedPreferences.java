@@ -49,7 +49,7 @@ public class LoginSharedPreferences {
     }
 
 
-    public static void UserLogOut(Activity mActivity){
+    public static void userLogOut(Activity mActivity){
         SharedPreferences mSharedPreferences = mActivity.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
@@ -60,6 +60,13 @@ public class LoginSharedPreferences {
         mEditor.commit();
 
         mActivity.finish();
+    }
+
+    public static boolean userAsAdmin(Context mContext){
+        if (getUserType(mContext) == Constants.USER_ADMIN){
+            return true;
+        }
+        return false;
     }
 
 }

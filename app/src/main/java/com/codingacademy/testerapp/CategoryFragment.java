@@ -35,7 +35,7 @@ import java.util.List;
 
 public class CategoryFragment extends Fragment {
     public static final String TAG = "CategoryFragment";
-    public static final String CATEGORY_ID="category_id";
+    public static final String CATEGORY_ID = "category_id";
 
     private RecyclerView recyclerCategory;
     private CategoryAdapter mAdapter;
@@ -111,6 +111,13 @@ public class CategoryFragment extends Fragment {
             exampleDialog.show(getActivity().getSupportFragmentManager(), "example dialog");
 
         });
+
+        if (LoginSharedPreferences.userAsAdmin(getActivity())) {
+            addCatBtn.setVisibility(View.VISIBLE);
+
+        } else {
+            addCatBtn.setVisibility(View.GONE);
+        }
         recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));

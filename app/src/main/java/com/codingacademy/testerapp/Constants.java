@@ -35,5 +35,5 @@ public class Constants {
     public static final String ADD_CATEGORY =BASE_URL + "/add_Category.php";
 
 
-
+    public static final int USER_ADMIN = 0 ;
 }
