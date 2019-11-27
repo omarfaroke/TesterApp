@@ -35,7 +35,7 @@ import java.util.List;
 
 public class CategoryFragment extends Fragment {
     public static final String TAG = "CategoryFragment";
-    public static final String CATEGORY_ID="Category_id";
+    public static final String CATEGORY_ID="category_id";
 
     private RecyclerView recyclerCategory;
     private CategoryAdapter mAdapter;

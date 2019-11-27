@@ -1,15 +1,10 @@
 package com.codingacademy.testerapp.model;
 
-import android.graphics.drawable.Drawable;
-
 import com.codingacademy.testerapp.Constants;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class Category {
     @SerializedName("Category_id")
@@ -25,7 +20,7 @@ public class Category {
     public String imageURL;
 
     @SerializedName("status")
-    public Integer stutus;
+    public Integer status;
 
 
     public Category(Integer catId, int parentId, String name) {
@@ -35,12 +30,12 @@ public class Category {
         this.name = name;
     }
 
-    public Category(Integer catId, String name, Integer parentId, String imageURL, Integer stutus) {
+    public Category(Integer catId, String name, Integer parentId, String imageURL, Integer status) {
         this.catId = catId;
         this.name = name;
         this.parentId = parentId;
         this.imageURL = imageURL;
-        this.stutus = stutus;
+        this.status = status;
     }
 
     public Category(JSONObject jsonCat) {
@@ -62,8 +57,8 @@ public class Category {
         return parentId;
     }
 
-    public int getStutus() {
-        return stutus;
+    public int getStatus() {
+        return status;
     }
 
     public String getName() {

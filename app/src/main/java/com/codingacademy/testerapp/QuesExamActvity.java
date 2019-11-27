@@ -68,7 +68,7 @@ public class QuesExamActvity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        Exam exam = (Exam) getIntent().getSerializableExtra("EXAM_OPJECT");
+        Exam exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
 
         int examId = exam.getExamId();
         timeLeftInSeconds = exam.getExamTime();

@@ -208,9 +208,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         if (fragment != null) {
             if (fragment instanceof CategoryFragment) {
 
-                if (((CategoryFragment) fragment).backCategory()) {
-                    //((CategoryFragment) fragment).restartFocusView();
-                } else {
+                if (!((CategoryFragment) fragment).backCategory()) {
                     exitFromApp();
                 }
 
@@ -233,7 +231,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
             }
 
         }
-
 
     }
 
