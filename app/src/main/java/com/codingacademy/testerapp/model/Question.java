@@ -25,6 +25,8 @@ public class Question implements Serializable {
     @SerializedName("choice")
     private Choice[] choices;
 
+    public boolean gotCorrect=false;
+
     public Question(String quesText, Choice[] choices) {
         this.quesText = quesText;
         this.choices = choices;

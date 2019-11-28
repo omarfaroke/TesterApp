@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,7 @@ import com.codingacademy.testerapp.model.Question;
 
 public class QuesFragment extends Fragment {
     TextView textView;
-
+Context context;
 
     RadioGroup radioGroup;
 
@@ -49,6 +51,15 @@ public class QuesFragment extends Fragment {
 
             RadioButton radioButton=new RadioButton(getActivity());
             radioButton.setText(choices[i].getChoiceText());
+
+               boolean isRight=choices[i].getAnswer()==1;
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((QuesExamActvity)context).setAnswer(isRight);
+
+                }
+            });
             radioGroup.addView(radioButton);
         }
         textView.setText(ques.getQuesText());
@@ -61,6 +72,11 @@ public class QuesFragment extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context=context;
+    }
 }
 
 

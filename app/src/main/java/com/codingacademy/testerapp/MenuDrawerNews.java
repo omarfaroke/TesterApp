@@ -24,10 +24,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codingacademy.testerapp.model.UserProfile;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.codingacademy.testerapp.model.TopTalent;
+import com.codingacademy.testerapp.requests.VolleyCallback;
+import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MenuDrawerNews extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
@@ -39,24 +50,77 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     private FragmentTransaction mFragmentTransaction;
 
     private RecyclerView recyclerPro;
-    private List<UserProfile> proArr;
+    private List<TopTalent> proArr;
     private ProAdapter mProAdapter;
+    private TopTalent[] allProArray;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_drawer_news);
         fragmentManager = getSupportFragmentManager();
-
+        initTopTalent();
         initToolbar();
         initNavigationMenu();
         showCategory();
+
+    }
+    void initTopTalent(){
+        recyclerPro = findViewById(R.id.recyclerPro);
+        recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
+        getTalent(new VolleyCallback() {
+
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
+                JSONArray examJsonArray = result.getJSONArray("JA");
+                Gson gson = new GsonBuilder().create();
+                allProArray = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
+                proArr=Arrays.asList(allProArray);
+                upDateTop();
+            }
+            @Override
+            public void onError(String result) throws Exception {
+                Toast.makeText(MenuDrawerNews.this, result, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void getTalent(final VolleyCallback mCallback){
+        String url = Constants.GET_TOP_TALET;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response ->
+                {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("JA", jsonArray);
+                        mCallback.onSuccess(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    try {
+                        mCallback.onError(error.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+        VolleyController.getInstance(MenuDrawerNews.this).addToRequestQueue(stringRequest);
+    }
+void filterTalent(int cat){
+
+}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         upDateTop();
     }
 
     private void upDateTop() {
         if (mProAdapter == null) {
-
             mProAdapter = new ProAdapter(MenuDrawerNews.this, proArr);
             recyclerPro.setAdapter(mProAdapter);
         }
@@ -64,11 +128,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
     public void showCategory() {
-
         CategoryFragment categoryFragment = new CategoryFragment();
-
-
-        mFragmentTransaction = fragmentManager.beginTransaction();
+       mFragmentTransaction = fragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
@@ -98,9 +159,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
     private void initNavigationMenu() {
-        recyclerPro = findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
-
         NavigationView nav_view = findViewById(R.id.nav_view);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -141,12 +199,12 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private List<UserProfile> items = new ArrayList<>();
+        private List<TopTalent> items = new ArrayList<>();
 
         private Context ctx;
 
 
-        public ProAdapter(Context context, List<UserProfile> items) {
+        public ProAdapter(Context context, List<TopTalent> items) {
             this.items = items;
             ctx = context;
         }
@@ -181,7 +239,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
 
                 // UserProfile user = items.get(position);
-                view.name.setText(" Ziad");
+                view.name.setText(proArr.get(position).getUserProfile().getFirstName());
                 view.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -195,7 +253,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
         @Override
         public int getItemCount() {
-            return 5;//items.size();
+            return proArr.size();//items.size();
         }
 
     }

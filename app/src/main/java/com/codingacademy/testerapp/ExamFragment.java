@@ -9,23 +9,21 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.requests.VolleyCallback;
@@ -37,9 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -57,9 +53,7 @@ public class ExamFragment extends Fragment {
     private ExamFragmentActionListener mListener;
 
 
-    public ExamFragment() {
-        // Required empty public constructor
-    }
+
 
     interface ExamFragmentActionListener {
         void restartFocusView();
@@ -211,13 +205,95 @@ public class ExamFragment extends Fragment {
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             Exam exam = examsArr[position];
             holder.examName.setText(exam.getExamName());
+            holder.examDesc.setText(exam.getExamDescription());
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(getActivity(), QuesExamActvity.class);
                 intent.putExtra(EXAM_OBJECT, exam);
-
                 startActivity(intent);
             });
             MenuDrawerNews.animateFadeIn(holder.itemView, position);
+
+            holder.btExpand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean show = toggleLayoutExpand(!exam.expanded, v, holder.lyt_expand);
+                    exam.expanded = show;
+                }
+            });
+            if(exam.expanded){
+                holder.lyt_expand.setVisibility(View.VISIBLE);
+            } else {
+                holder.lyt_expand.setVisibility(View.GONE);
+            }
+            toggleArrow(exam.expanded, holder.btExpand, false);
+
+        }
+        private boolean toggleLayoutExpand(boolean show, View view, View lyt_expand) {
+            toggleArrow(show, view,true);
+            if (show)
+                lyt_expand.startAnimation(expand(lyt_expand));
+            else
+               collapse(lyt_expand);
+
+            return show;
+        }
+        public  void collapse(final View v) {
+            final int initialHeight = v.getMeasuredHeight();
+
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
+        }
+
+        public boolean toggleArrow(boolean show, View view, boolean delay) {
+            if (show) {
+                view.animate().setDuration(delay ? 200 : 0).rotation(180);
+                return true;
+            } else {
+                view.animate().setDuration(delay ? 200 : 0).rotation(0);
+                return false;
+            }
+        }
+        private Animation expand(final View v) {
+            v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            final int targtetHeight = v.getMeasuredHeight();
+
+            v.getLayoutParams().height = 0;
+            v.setVisibility(View.VISIBLE);
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? ViewGroup.LayoutParams.WRAP_CONTENT
+                            : (int) (targtetHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
+            return a;
         }
 
         @Override
@@ -226,11 +302,16 @@ public class ExamFragment extends Fragment {
         }
 
         private class ExamVH extends RecyclerView.ViewHolder {
-            TextView examName;
+            TextView examName,examDesc;
+            public ImageButton btExpand;
+            public View lyt_expand;
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
                 examName = itemView.findViewById(R.id.exam_name);
+                examDesc = itemView.findViewById(R.id.exam_desc);
+                btExpand = itemView.findViewById(R.id.bt_expand);
+                lyt_expand = itemView.findViewById(R.id.lyt_expand);
             }
         }
     }

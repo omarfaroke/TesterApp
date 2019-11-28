@@ -13,13 +13,13 @@ public class Choice {
     private Integer quesSampleId;
 
     @SerializedName("answer")
-    private String Answer;
+    private int answer;
 
-    public Choice(Integer choiceId, String choiceText, Integer quesSampleId, String answer) {
+    public Choice(Integer choiceId, String choiceText, Integer quesSampleId, int answer) {
         this.choiceId = choiceId;
         this.choiceText = choiceText;
         this.quesSampleId = quesSampleId;
-        Answer = answer;
+        this.answer = answer;
     }
 
     public Choice(String choiceText) {
@@ -54,11 +54,11 @@ public class Choice {
         this.quesSampleId = quesSampleId;
     }
 
-    public String getAnswer() {
-        return Answer;
+    public int getAnswer() {
+        return answer;
     }
 
-    public void setAnswer(String answer) {
-        Answer = answer;
+    public void setAnswer(int answer) {
+        this.answer = answer;
     }
 }

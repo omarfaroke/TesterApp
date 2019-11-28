@@ -3,6 +3,7 @@ package com.codingacademy.testerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -10,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.model.Choice;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.model.Question;
@@ -42,7 +45,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-public class QuesExamActvity extends AppCompatActivity {
+public class QuesExamActvity extends AppCompatActivity  {
 
 
     ProgressBar progressBar;
@@ -59,9 +62,21 @@ public class QuesExamActvity extends AppCompatActivity {
     private ColorStateList textColorDefault;
     private CountDownTimer countDownTimer;
     private Integer timeLeftInSeconds = 60;
+    private int scorePerQues,totalScore=0;
+
     // int counter =0;
 
+
     ImageView mNext, mPre;
+    int position;
+   public void setAnswer(boolean isRight){
+        quesArrayList.get(position).gotCorrect=isRight;
+       Toast.makeText(this, position+" is "+isRight, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
 
     @Override
@@ -70,11 +85,11 @@ public class QuesExamActvity extends AppCompatActivity {
         setContentView(R.layout.activity_exam);
         Exam exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
 
+
         int examId = exam.getExamId();
         timeLeftInSeconds = exam.getExamTime();
         init();
         getSamples(examId);
-
     }
 
     private void getSamples(int examId) {
@@ -85,7 +100,7 @@ public class QuesExamActvity extends AppCompatActivity {
 
                 JSONArray sampleJsonArray = result.getJSONArray("JA");
 
-                //  examsArr = new Exam[examJsonArray.length()];
+                //  allProArray = new Exam[examJsonArray.length()];
                 Gson gson = new GsonBuilder().create();
                 sampleArray = gson.fromJson(sampleJsonArray.toString(), Sample[].class);
 
@@ -108,17 +123,36 @@ public class QuesExamActvity extends AppCompatActivity {
     private void upDateSample() {
         int count = quesArrayList.size();
         progressBar.setMax(count);
-        pager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+;
+        pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                progressBar.setProgress(position);
                 return QuesFragment.getInstence(quesArrayList.get(position));
             }
+
 
             @Override
             public int getCount() {
                 return count;
+            }
+        });
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                progressBar.setProgress(position);
+                setPosition(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }
@@ -168,18 +202,70 @@ public class QuesExamActvity extends AppCompatActivity {
             public void onTick(long lTime) {
                 timeLeftInSeconds = (int) lTime;
                 updateCountDownText();
-
             }
 
             @Override
             public void onFinish() {
                 timeLeftInSeconds = 0;
                 updateCountDownText();
-                finish();
+                finishExam();
             }
         }.start();
 
 
+    }
+
+    private void finishExam() {
+       FinishExamDialog finishExamDialog=new FinishExamDialog();
+       Bundle bundle=new Bundle();
+       String result="The Exam is finish You got "+getScore();
+       bundle.putString("RESULT",result);
+       finishExamDialog.setArguments(bundle);
+       uploadResult();
+
+       finishExamDialog.show(getSupportFragmentManager(),"Your result");
+
+    }
+    private void uploadResult() {
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.ADD_EXAM_HISTORY,
+                response -> {
+
+
+
+                },
+                error -> {
+
+
+                }){  @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+
+            Map<String, String> parameter = new HashMap<>();
+
+            parameter.put("user_id","7");
+            parameter.put("sample_id","1");
+            parameter.put("date","2020");
+            parameter.put("score","99");
+            parameter.put("status","1");
+
+            return parameter;
+
+        }
+
+        };
+
+        VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(request);
+
+    }
+
+
+    private String getScore() {
+       int s=0;
+       for(Question q:quesArrayList)
+           if(q.gotCorrect)
+               s++;
+           return s+"/"+quesArrayList.size();
     }
 
     private void updateCountDownText() {
@@ -221,7 +307,6 @@ public class QuesExamActvity extends AppCompatActivity {
 
                 pager.setCurrentItem(pager.getCurrentItem() + 1);
 
-                Toast.makeText(QuesExamActvity.this, "test on click", Toast.LENGTH_SHORT).show();
             }
         });
         mPre = findViewById(R.id.pre);

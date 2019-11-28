@@ -64,7 +64,7 @@
                     android:id="@+id/recyclerPro"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="-20dp"
+                    android:layout_marginTop="-10dp"
                     android:layout_weight="1.5"
                     android:orientation="horizontal"
                     tools:listitem="@layout/temp_top_pro" />
@@ -74,6 +74,7 @@
 
 
             <FrameLayout
+                android:layout_marginTop="-10dp"
                 android:id="@+id/main_fram"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

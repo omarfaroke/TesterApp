@@ -3,8 +3,16 @@
     <color name="colorPrimary">#131A56</color>
     <color name="colorPrimaryDark">#131A56</color>
     <color name="secondPage">#00838F</color>
-    <color name="colorAccent">#FFF8B9</color>
+    <color name="colorAccent">#00838F</color>
     <color name="text">#ffffff</color>
     <color name="text_two">#94ffffff</color>
     <color name="green">#940ce61f</color>
+    <color name="grey_3">#f7f7f7</color>
+    <color name="grey_5">#f2f2f2</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
 </resources>

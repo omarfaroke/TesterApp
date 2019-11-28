@@ -32,7 +32,9 @@ public class Constants {
     public static final String CATEGORY =BASE_URL + "/get_category.php";
     public static final String GET_EXAM =BASE_URL + "/get_exam.php";
     public static final String GET_SAMPLE =BASE_URL + "/get_question.php";
+    public static final String GET_TOP_TALET =BASE_URL + "/get_top_talent.php";
     public static final String ADD_CATEGORY =BASE_URL + "/add_Category.php";
+    public static final String ADD_EXAM_HISTORY =BASE_URL + "/add_exams_history.php";
 
 
     public static final int USER_ADMIN = 0 ;

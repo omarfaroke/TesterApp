@@ -1,60 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lyt_parent"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
+    android:background="@color/text"
+    android:clickable="true"
 
-    app:cardBackgroundColor="@color/text_two"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="2dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="wrap_content" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/exam_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:text="Item Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/secondPage" />
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/exam_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:text="Exam Name Exam description Exam description Exam description Exam description "
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textColor="@color/secondPage"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-
-            <TextView
-                android:id="@+id/exam_desc"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:maxLines="3"
-                android:text="Exam description Exam description Exam description Exam description Exam description Exam description Exam description Exam description "
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/secondPage"
-                android:textSize="17dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/secondPage" />
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/bt_expand"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/secondPage"
+            android:src="@drawable/ic_expand_arrow" />
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/lyt_expand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_3"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/exam_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_large"
+            android:text="@string/lorem_ipsum" />
+
+    </LinearLayout>
+
+</LinearLayout>
