@@ -121,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mViewFlipper = findViewById(R.id.viewFlipper);
         mLoginButton = findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(this);
+
     }
 
     @Override
@@ -240,8 +241,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void onSuccess(JSONObject result) throws JSONException {
                 if (result.getString("status") == "0") {
                     int userId = result.getInt("user_id");
+                    String imageUrl = result.getString("image_url");
 
-                    LoginSharedPreferences.commitLogin(RegisterActivity.this, userId, 1);
+                    LoginSharedPreferences.commitLogin(
+                            RegisterActivity.this
+                            ,userId, 1 , mEmail.getText().toString()
+                            ,userId ,mFirstName.getText().toString()
+                            ,mLastName.getText().toString(),imageUrl);
+
+
                     Toast.makeText(RegisterActivity.this, "successful ....", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
@@ -358,12 +366,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 imageProfile = (Bitmap) extras.get("data");
+                mProfileImage.setImageBitmap(imageProfile);
 
             } else if (requestCode == GALLERY_REQUEST_CODE) {
                 try {
                     Uri selectedImage = data.getData();
                     InputStream imageStream = getContentResolver().openInputStream(selectedImage);
                     imageProfile = BitmapFactory.decodeStream(imageStream);
+                    mProfileImage.setImageBitmap(imageProfile);
 
                 } catch (IOException exception) {
                     exception.printStackTrace();

@@ -3,6 +3,9 @@
     package="com.codingacademy.testerapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -12,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".QuesExamActvity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".RegisterActivity" android:parentActivityName=".LoginActivity"/>
 
         <activity android:name=".MenuDrawerNews">
             <intent-filter>

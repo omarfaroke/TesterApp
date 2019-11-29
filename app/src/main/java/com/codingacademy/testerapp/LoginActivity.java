@@ -1,14 +1,17 @@
 package com.codingacademy.testerapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
@@ -25,32 +28,48 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final int REQUEST_CODE_LOGIN = 10;
+    /**
+     * Email
+     */
+    private EditText mEtLoginEmail;
+    /**
+     * Password
+     */
+    private EditText mEtLoginPassword;
+    /**
+     * Login
+     */
+    private Button mBtnLogin;
+    /**
+     * Register
+     */
+    private Button mBtnRegister;
 
-    private Button mLoginButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        initView();
 
 
-
-    private void initView() {
-        mLoginButton.setOnClickListener(this);
     }
 
 
-
-
     private void checkLoginInfo(final String mEmail, final String mPass, final VolleyCallback mCallback) {
-        String url = Constants.BASE_URL + "/" + Constants.LOGIN;
+        String url = Constants.LOGIN;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                mCallback.onSuccess(jsonObject);
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        mCallback.onSuccess(jsonObject);
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-        }, error -> {
+                }, error -> {
             try {
                 mCallback.onError(error.getMessage());
 
@@ -90,27 +109,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             default:
                 break;
-            case 6: //R.id.login_button:
-                String email = null;
-                String pass = null;
+            case R.id.btnLogin:
+                if (validate()) {
 
-                checkLoginInfo(email, pass, new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject result) throws JSONException {
+                    String email = mEtLoginEmail.getText().toString();
+                    String pass = mEtLoginPassword.getText().toString();
 
-                    }
+                    checkLoginInfo(email, pass, new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) throws JSONException {
+                            if (result.getInt("success") == 0) {
+                                JSONObject jsonObjectLogin = result.getJSONArray("login").getJSONObject(0);
+                                int userId, userType, status;
+                                String userEmail, firstName, lastName, imageUrl;
 
-                    @Override
-                    public void onError(String result) throws Exception {
+                                userId = jsonObjectLogin.getInt("user_id");
+                                userType = jsonObjectLogin.getInt("type");
+                                status = jsonObjectLogin.getInt("status");
 
-                    }
-                });
+                                userEmail = jsonObjectLogin.getString("email");
+                                firstName = jsonObjectLogin.getString("first_name");
+                                lastName = jsonObjectLogin.getString("last_name");
+                                imageUrl = jsonObjectLogin.getString("image_url");
 
+                                LoginSharedPreferences.commitLogin(LoginActivity.this, userId, status, userEmail, userType, firstName, lastName, imageUrl);
+
+                               // setResult(REQUEST_CODE_LOGIN);
+                                finish();
+
+                            } else {
+                                Toast.makeText(LoginActivity.this, "البريد الذي ادخلته او كلمة المرور غير صحيحة !!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(String result) throws Exception {
+
+                        }
+                    });
+
+                }
+                break;
+            case R.id.btnRegister:
+                showRegisterActivity();
                 break;
         }
     }
 
+    private void showRegisterActivity() {
+        Intent intent = new Intent(this, RegisterActivity.class);
 
+        startActivity(intent);
+    }
 
 
     // convert string password to hash SHA256
@@ -136,6 +186,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return hexString.toString();
+    }
+
+
+    private void initView() {
+        mEtLoginEmail = findViewById(R.id.etLoginEmail);
+        mEtLoginPassword = findViewById(R.id.etLoginPassword);
+        mBtnLogin = findViewById(R.id.btnLogin);
+        mBtnLogin.setOnClickListener(this);
+        mBtnRegister = findViewById(R.id.btnRegister);
+        mBtnRegister.setOnClickListener(this);
+    }
+
+
+    private boolean validate() {
+        int f = 3;
+        String s = mEtLoginEmail.getText().toString();
+        if (Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+            mEtLoginEmail.setError(null);
+
+        } else if (s.isEmpty())
+            mEtLoginEmail.setError("Enter Email");
+        else {
+            mEtLoginEmail.setError("not valid");
+            f--;
+        }
+
+        if (mEtLoginPassword.getText().toString().trim().isEmpty()) {
+            mEtLoginPassword.setError("Enter Password");
+            f--;
+        }
+
+        return f == 3;
     }
 
 

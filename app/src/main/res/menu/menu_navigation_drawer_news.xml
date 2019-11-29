@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <group
         android:id="@+id/grp_1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/logout"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="Logout" />
+            android:title="Logout"
+            android:visible="false"
+            tools:visible="true"
+            />
         <item
-            android:id="@+id/nav_trending"
-            android:icon="@drawable/ic_whatshot"
-            android:title="Trending" />
-        <item
-            android:id="@+id/nav_latest"
-            android:icon="@drawable/ic_schedule"
-            android:title="Latest" />
-        <item
-            android:id="@+id/nav_highlight"
-            android:icon="@drawable/ic_highlight"
-            android:title="Highlight" />
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="Login" />
     </group>
     <group
         android:id="@+id/grp_2"

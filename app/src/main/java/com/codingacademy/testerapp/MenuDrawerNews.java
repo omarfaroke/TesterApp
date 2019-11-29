@@ -3,8 +3,13 @@ package com.codingacademy.testerapp;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +31,10 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.codingacademy.testerapp.model.TopTalent;
+import com.codingacademy.testerapp.model.UserProfile;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.navigation.NavigationView;
@@ -37,14 +45,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MenuDrawerNews extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
 
+
     private ActionBar actionBar;
     private Toolbar toolbar;
+    private NavigationView nav_view;
     private FragmentManager fragmentManager;
 
     private FragmentTransaction mFragmentTransaction;
@@ -66,7 +78,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         showCategory();
 
     }
-    void initTopTalent(){
+
+    void initTopTalent() {
         recyclerPro = findViewById(R.id.recyclerPro);
         recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
         getTalent(new VolleyCallback() {
@@ -76,9 +89,10 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 JSONArray examJsonArray = result.getJSONArray("JA");
                 Gson gson = new GsonBuilder().create();
                 allProArray = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
-                proArr=Arrays.asList(allProArray);
+                proArr = Arrays.asList(allProArray);
                 upDateTop();
             }
+
             @Override
             public void onError(String result) throws Exception {
                 Toast.makeText(MenuDrawerNews.this, result, Toast.LENGTH_SHORT).show();
@@ -86,7 +100,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         });
     }
 
-    void getTalent(final VolleyCallback mCallback){
+    void getTalent(final VolleyCallback mCallback) {
         String url = Constants.GET_TOP_TALET;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response ->
@@ -109,14 +123,21 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 });
         VolleyController.getInstance(MenuDrawerNews.this).addToRequestQueue(stringRequest);
     }
-void filterTalent(int cat){
 
-}
+    void filterTalent(int cat) {
+
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        upDateTop();
+
+        if (LoginSharedPreferences.checkIsLogin(this)) {
+            nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
+
+        }
+
     }
 
     private void upDateTop() {
@@ -128,8 +149,11 @@ void filterTalent(int cat){
     }
 
     public void showCategory() {
+
         CategoryFragment categoryFragment = new CategoryFragment();
-       mFragmentTransaction = fragmentManager.beginTransaction();
+
+
+        mFragmentTransaction = fragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
@@ -159,7 +183,10 @@ void filterTalent(int cat){
     }
 
     private void initNavigationMenu() {
-        NavigationView nav_view = findViewById(R.id.nav_view);
+//        recyclerPro = findViewById(R.id.recyclerPro);
+//        recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
+
+        nav_view = findViewById(R.id.nav_view);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerOpened(View drawerView) {
@@ -173,13 +200,54 @@ void filterTalent(int cat){
             public boolean onNavigationItemSelected(final MenuItem item) {
                 Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
                 actionBar.setTitle(item.getTitle());
+
+
                 drawer.closeDrawers();
+
+                switch (item.getItemId()) {
+                    case R.id.nav_login:
+                        showLoginActivity();
+                        break;
+
+                    case R.id.nav_logout:
+                        LoginSharedPreferences.userLogOut(MenuDrawerNews.this);
+
+                        nav_view.getMenu().findItem(R.id.nav_logout).setVisible(false);
+                        nav_view.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        break;
+                }
+
                 return true;
             }
         });
 
 
     }
+
+    private void showLoginActivity() {
+        Intent intent = new Intent(MenuDrawerNews.this, LoginActivity.class);
+
+
+        startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN);
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == LoginActivity.REQUEST_CODE_LOGIN) {
+                if (LoginSharedPreferences.checkIsLogin(this)) {
+                    nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
+                    nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
+
+                }
+            }
+        }
+    }
+
 
     @Override
     public void showExams(int currentCategory) {
@@ -238,8 +306,15 @@ void filterTalent(int cat){
             if (holder instanceof ProAdapter.OriginalViewHolder) {
                 ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
 
-                // UserProfile user = items.get(position);
-                view.name.setText(proArr.get(position).getUserProfile().getFirstName());
+                UserProfile userProfile = items.get(position).getUserProfile();
+                view.name.setText(userProfile.getFirstName());
+
+                Glide.with(ctx).applyDefaultRequestOptions(new RequestOptions()
+                        .placeholder(R.drawable.userphoto)
+                        .error(R.drawable.userphoto))
+                        .load(Constants.BASE_URL + "/" + userProfile.getImageUrl())
+                        .into(view.image);
+
                 view.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
