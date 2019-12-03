@@ -27,7 +27,7 @@ public class ExamModifyActivity extends AppCompatActivity {
     private List<RelativeLayout> step_view_list = new ArrayList<>();
 
     private View parent_view;
-   private Switch swAprove;
+    private Switch swAprove;
     Spinner spinnerCat;
 
     @Override
@@ -75,34 +75,44 @@ public class ExamModifyActivity extends AppCompatActivity {
         step_view_list.add((findViewById(R.id.step_confirmation)));
 
         spinnerCat = findViewById(R.id.sp_cat);
-        swAprove=findViewById(R.id.sw_aprove);
+        swAprove = findViewById(R.id.sw_aprove);
 
-checkPrevlige();
+        checkPrevlige();
 
 
         hideSoftKeyboard();
 
 
-
     }
 
-    private void checkPrevlige(){
-        int type=LoginSharedPreferences.getUserType(ExamModifyActivity.this);
-        switch (1){
-            case Constants.USER_ADMIN:
-            case 1: swAprove.setVisibility(View.VISIBLE);
+    private void checkPrevlige() {
 
+        int type = LoginSharedPreferences.getUserType(ExamModifyActivity.this);
+
+        switch (type) {
+            case Constants.USER_TYPE_ADMIN:
+                break;
+            case Constants.USER_TYPE_TALENT:
+                break;
+
+            case Constants.USER_TYPE_EXAMINER:
+                swAprove.setVisibility(View.VISIBLE);
+                break;
+            case Constants.USER_TYPE_RECRUITER:
+                break;
+
+            default:
 
         }
     }
-   public void clickLabel(View v){
-        Toast.makeText(this, v.getId()+"", Toast.LENGTH_SHORT).show();
+
+    public void clickLabel(View v) {
+        Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
     }
 
     public void clickAction(View view) {
         int id = view.getId();
         switch (id) {
-
 
 
             case R.id.bt_modify_exam:
@@ -111,14 +121,6 @@ checkPrevlige();
                 break;
         }
     }
-
-
-
-
-
-
-
-
 
 
     public void hideSoftKeyboard() {

@@ -356,7 +356,7 @@ public class CategoryFragment extends Fragment {
                     }
                 });
 
-                MenuDrawerNews.animateFadeIn(holder.itemView, position);
+                ViewAnimation.animateFadeIn(holder.itemView, position);
 
             }
         }
