@@ -87,7 +87,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
                 JSONArray examJsonArray = result.getJSONArray("JA");
-                Gson gson = new GsonBuilder().create();
+                Gson gson =  new GsonBuilder().create();
                 allProArray = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
                 proArr = Arrays.asList(allProArray);
                 upDateTop();
@@ -160,18 +160,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
 
-    public static void animateFadeIn(View view, int position) {
-        boolean not_first_item = position == -1;
-        position = position + 1;
-        view.setAlpha(0.f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(view, "alpha", 0.f, 0.5f, 1.f);
-        ObjectAnimator.ofFloat(view, "alpha", 0.f).start();
-        animatorAlpha.setStartDelay(not_first_item ? 500 / 2 : (position * 500 / 3));
-        animatorAlpha.setDuration(500);
-        animatorSet.play(animatorAlpha);
-        animatorSet.start();
-    }
+
 
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
@@ -322,7 +311,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                     }
                 });
-                animateFadeIn(view.itemView, position);
+                ViewAnimation.animateFadeIn(view.itemView, position);
             }
         }
 

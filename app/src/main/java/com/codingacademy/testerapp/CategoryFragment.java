@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.codingacademy.testerapp.fragment.ExampleDialog;
 import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.requests.VolleyController;
@@ -32,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class CategoryFragment extends Fragment {
     public static final String TAG = "CategoryFragment";
@@ -245,6 +248,10 @@ public class CategoryFragment extends Fragment {
 
                 Category p = items.get(position);
                 view.title.setText(p.name);
+                Glide.with(getActivity())
+                        .applyDefaultRequestOptions(new RequestOptions().error(R.drawable.p))
+                        .load(Constants.BASE_URL + "/" + p.getImageURL())
+                        .into(view.image);
                 view.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -255,7 +262,7 @@ public class CategoryFragment extends Fragment {
 
                     }
                 });
-                MenuDrawerNews.animateFadeIn(holder.itemView, position);
+                ViewAnimation.animateFadeIn(holder.itemView,position);
 
             }
         }
