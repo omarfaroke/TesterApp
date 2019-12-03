@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -256,7 +258,7 @@ public class ExamFragment extends Fragment {
 
 
             });
-            MenuDrawerNews.animateFadeIn(holder.itemView, position);
+            ViewAnimation.animateFadeIn(holder.itemView,position);
 
             holder.btExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -276,35 +278,13 @@ public class ExamFragment extends Fragment {
         private boolean toggleLayoutExpand(boolean show, View view, View lyt_expand) {
             toggleArrow(show, view,true);
             if (show)
-                lyt_expand.startAnimation(expand(lyt_expand));
+                ViewAnimation.expand(lyt_expand);
             else
-               collapse(lyt_expand);
+                ViewAnimation.collapse(lyt_expand);
 
             return show;
         }
-        public  void collapse(final View v) {
-            final int initialHeight = v.getMeasuredHeight();
 
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                        v.setVisibility(View.GONE);
-                    } else {
-                        v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                        v.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-            v.startAnimation(a);
-        }
 
         public boolean toggleArrow(boolean show, View view, boolean delay) {
             if (show) {
@@ -315,31 +295,7 @@ public class ExamFragment extends Fragment {
                 return false;
             }
         }
-        private Animation expand(final View v) {
-            v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            final int targtetHeight = v.getMeasuredHeight();
 
-            v.getLayoutParams().height = 0;
-            v.setVisibility(View.VISIBLE);
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    v.getLayoutParams().height = interpolatedTime == 1
-                            ? ViewGroup.LayoutParams.WRAP_CONTENT
-                            : (int) (targtetHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
-            v.startAnimation(a);
-            return a;
-        }
 
         @Override
         public int getItemCount() {

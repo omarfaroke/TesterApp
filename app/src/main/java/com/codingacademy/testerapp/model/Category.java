@@ -19,10 +19,14 @@ public class Category implements Serializable {
     public Integer parentId;
 
     @SerializedName("image_url")
-    public String imageURL;
+    private String imageURL;
+
+    public String getImageURL() {
+        return imageURL;
+    }
 
     @SerializedName("status")
-    public Integer status;
+    private Integer status;
 
 
     public Category(Integer catId, int parentId, String name) {

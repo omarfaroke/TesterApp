@@ -16,6 +16,13 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ButtonPrimary" >
+        <item name="android:background">@drawable/bubble</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/text</item>
+
+
+    </style>
 
     <style name="spinner_style" >
         <item name="android:background">@drawable/spinner_bg</item>

@@ -4,6 +4,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -188,18 +191,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
 
-    public static void animateFadeIn(View view, int position) {
-        boolean not_first_item = position == -1;
-        position = position + 1;
-        view.setAlpha(0.f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(view, "alpha", 0.f, 0.5f, 1.f);
-        ObjectAnimator.ofFloat(view, "alpha", 0.f).start();
-        animatorAlpha.setStartDelay(not_first_item ? 300 / 2 : (position * 300 / 3));
-        animatorAlpha.setDuration(500);
-        animatorSet.play(animatorAlpha);
-        animatorSet.start();
-    }
+
 
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
@@ -354,7 +346,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                     }
                 });
-                animateFadeIn(view.itemView, position);
+                ViewAnimation.animateFadeIn(view.itemView, position);
             }
         }
 
@@ -420,6 +412,5 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
         backPressedTime = System.currentTimeMillis();
     }
-
 
 }
