@@ -1,12 +1,26 @@
 package com.codingacademy.testerapp.requests;
 
 import android.content.Context;
+import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.Constants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class VolleyController    {
+public class VolleyController {
     private static VolleyController mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
@@ -33,8 +47,10 @@ public class VolleyController    {
         return mRequestQueue;
     }
 
-    public  void addToRequestQueue(Request req) {
+    public void addToRequestQueue(Request req) {
         getRequestQueue().add(req);
     }
+
+
 
 }

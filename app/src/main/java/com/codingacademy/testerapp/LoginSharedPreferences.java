@@ -1,6 +1,5 @@
 package com.codingacademy.testerapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -83,8 +82,8 @@ public class LoginSharedPreferences {
     }
 
 
-    public static void userLogOut(Activity mActivity){
-        SharedPreferences mSharedPreferences = mActivity.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
+    public static void userLogOut(Context mContext){
+        SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
         mEditor.putString(Constants.LOGIN_STATE_PREFERENCES, Constants.LOGIN_STATE_NOT_LOGGED_IN);
@@ -92,12 +91,10 @@ public class LoginSharedPreferences {
         mEditor.remove(Constants.USER_ID_PREFERENCES);
         mEditor.apply();
         mEditor.commit();
-
-        mActivity.finish();
     }
 
     public static boolean userAsAdmin(Context mContext){
-        if (getUserType(mContext) == Constants.USER_ADMIN){
+        if (getUserType(mContext) == Constants.USER_TYPE_ADMIN){
             return true;
         }
         return false;

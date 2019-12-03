@@ -22,9 +22,15 @@ public class AlertDialogAcativitiy extends AppCompatActivity {
       mDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                int mNumberOfQuestions =0;
+                String mExameTime = "";
+
+                String mBodyMessege = getString(R.string.dialog_info_exam , mNumberOfQuestions,mExameTime);
+
                 AlertDialog.Builder builder=new  AlertDialog.Builder(AlertDialogAcativitiy.this);
                 builder.setTitle("Welcome to Exam?");
-                builder.setMessage("in this Exam you have a 12 Question you must answer ");
+                builder.setMessage(mBodyMessege);
                 builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

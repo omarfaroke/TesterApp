@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".QuesExamActvity"/>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".RegisterActivity" android:parentActivityName=".LoginActivity"/>
+        <activity android:name=".LoginActivity" android:launchMode="singleTop"/>
+        <activity android:name=".RegisterActivity" android:parentActivityName=".LoginActivity" android:launchMode="singleTop"/>
 
         <activity android:name=".MenuDrawerNews">
             <intent-filter>

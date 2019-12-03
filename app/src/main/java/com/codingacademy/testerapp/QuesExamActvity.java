@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-public class QuesExamActvity extends AppCompatActivity  {
+public class QuesExamActvity extends AppCompatActivity {
 
 
     ProgressBar progressBar;
@@ -62,16 +62,17 @@ public class QuesExamActvity extends AppCompatActivity  {
     private ColorStateList textColorDefault;
     private CountDownTimer countDownTimer;
     private Integer timeLeftInSeconds = 60;
-    private int scorePerQues,totalScore=0;
+    private int scorePerQues, totalScore = 0;
 
     // int counter =0;
 
 
     ImageView mNext, mPre;
     int position;
-   public void setAnswer(boolean isRight){
-        quesArrayList.get(position).gotCorrect=isRight;
-       Toast.makeText(this, position+" is "+isRight, Toast.LENGTH_SHORT).show();
+
+    public void setAnswer(boolean isRight) {
+        quesArrayList.get(position).gotCorrect = isRight;
+        Toast.makeText(this, position + " is " + isRight, Toast.LENGTH_SHORT).show();
     }
 
     public void setPosition(int position) {
@@ -107,10 +108,15 @@ public class QuesExamActvity extends AppCompatActivity  {
                 //s=random sample from sampleArray
 
                 int sampleNumber = sampleArray.length;
-                if(sampleNumber>0){
-                quesArrayList = Arrays.asList(sampleArray[0].getQuestions());
-                upDateSample();
+                if (sampleNumber > 0) {
+                    quesArrayList = Arrays.asList(sampleArray[0].getQuestions());
+                    upDateSample();
                 }
+            }
+
+            @Override
+            public void onSuccess(JSONArray result) throws JSONException {
+
             }
 
             @Override
@@ -123,7 +129,7 @@ public class QuesExamActvity extends AppCompatActivity  {
     private void upDateSample() {
         int count = quesArrayList.size();
         progressBar.setMax(count);
-;
+        ;
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
@@ -189,6 +195,14 @@ public class QuesExamActvity extends AppCompatActivity  {
                 par.put("exam_id", "" + examId);
                 return par;
             }
+
+            @Override
+            public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
         };
         VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(stringRequest);
 
@@ -216,16 +230,17 @@ public class QuesExamActvity extends AppCompatActivity  {
     }
 
     private void finishExam() {
-       FinishExamDialog finishExamDialog=new FinishExamDialog();
-       Bundle bundle=new Bundle();
-       String result="The Exam is finish You got "+getScore();
-       bundle.putString("RESULT",result);
-       finishExamDialog.setArguments(bundle);
-       uploadResult();
+        FinishExamDialog finishExamDialog = new FinishExamDialog();
+        Bundle bundle = new Bundle();
+        String result = "The Exam is finish You got " + getScore();
+        bundle.putString("RESULT", result);
+        finishExamDialog.setArguments(bundle);
+        uploadResult();
 
-       finishExamDialog.show(getSupportFragmentManager(),"Your result");
+        finishExamDialog.show(getSupportFragmentManager(), "Your result");
 
     }
+
     private void uploadResult() {
 
         StringRequest request = new StringRequest(Request.Method.POST,
@@ -233,27 +248,35 @@ public class QuesExamActvity extends AppCompatActivity  {
                 response -> {
 
 
-
                 },
                 error -> {
 
 
-                }){  @Override
-        protected Map<String, String> getParams() throws AuthFailureError {
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
 
-            Map<String, String> parameter = new HashMap<>();
+                Map<String, String> parameter = new HashMap<>();
 
-            parameter.put("user_id","7");
-            parameter.put("sample_id","1");
-            parameter.put("date","2020");
-            parameter.put("score","99");
-            parameter.put("status","1");
+                parameter.put("user_id", "7");
+                parameter.put("sample_id", "1");
+                parameter.put("date", "2020");
+                parameter.put("score", "99");
+                parameter.put("status", "1");
 
-            return parameter;
+                return parameter;
 
-        }
+            }
 
-        };
+
+                @Override
+                public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+            };
 
         VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(request);
 
@@ -261,11 +284,11 @@ public class QuesExamActvity extends AppCompatActivity  {
 
 
     private String getScore() {
-       int s=0;
-       for(Question q:quesArrayList)
-           if(q.gotCorrect)
-               s++;
-           return s+"/"+quesArrayList.size();
+        int s = 0;
+        for (Question q : quesArrayList)
+            if (q.gotCorrect)
+                s++;
+        return s + "/" + quesArrayList.size();
     }
 
     private void updateCountDownText() {

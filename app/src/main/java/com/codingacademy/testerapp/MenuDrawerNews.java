@@ -4,9 +4,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -21,15 +18,22 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -49,11 +53,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MenuDrawerNews extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
 
 
+    private static final String TAG = "MenuDrawerNews";
     private ActionBar actionBar;
     private Toolbar toolbar;
     private NavigationView nav_view;
@@ -71,6 +78,11 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_drawer_news);
+
+        //setup cookies
+        Constants.getCookiesFromUrl(MenuDrawerNews.this);
+
+
         fragmentManager = getSupportFragmentManager();
         initTopTalent();
         initToolbar();
@@ -91,6 +103,11 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 allProArray = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
                 proArr = Arrays.asList(allProArray);
                 upDateTop();
+            }
+
+            @Override
+            public void onSuccess(JSONArray result) throws JSONException {
+
             }
 
             @Override
@@ -120,7 +137,18 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+
+
+
         VolleyController.getInstance(MenuDrawerNews.this).addToRequestQueue(stringRequest);
     }
 
@@ -167,7 +195,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(view, "alpha", 0.f, 0.5f, 1.f);
         ObjectAnimator.ofFloat(view, "alpha", 0.f).start();
-        animatorAlpha.setStartDelay(not_first_item ? 500 / 2 : (position * 500 / 3));
+        animatorAlpha.setStartDelay(not_first_item ? 300 / 2 : (position * 300 / 3));
         animatorAlpha.setDuration(500);
         animatorSet.play(animatorAlpha);
         animatorSet.start();
@@ -212,6 +240,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     case R.id.nav_logout:
                         LoginSharedPreferences.userLogOut(MenuDrawerNews.this);
 
+                        Toast.makeText(MenuDrawerNews.this, "Logout ...", Toast.LENGTH_SHORT).show();
+
                         nav_view.getMenu().findItem(R.id.nav_logout).setVisible(false);
                         nav_view.getMenu().findItem(R.id.nav_login).setVisible(true);
                         break;
@@ -226,7 +256,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     private void showLoginActivity() {
         Intent intent = new Intent(MenuDrawerNews.this, LoginActivity.class);
-
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN);
 
@@ -243,6 +274,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
                     nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
 
+                    Toast.makeText(this, "test no h", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -388,5 +420,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
         backPressedTime = System.currentTimeMillis();
     }
+
 
 }

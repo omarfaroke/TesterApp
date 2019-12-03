@@ -19,6 +19,10 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
     <string name="Next">Next</string>
+    <string name="chang_icon">Change Icon</string>
+
+    <string name="save">Save</string>
+    <string name="add_category">Please Add Category</string>
     <string name="Previous">Previous</string>
     <string name="sign_up">Sign up</string>
     <string name="or">or</string>
@@ -48,7 +52,10 @@
     <string name="Register">Register</string>
 
 
-    rahma
-    <string name="btn_addcatogry">AddCatogry</string>
-    <string name="ed_addcatogry">AddCatogry</string>
+    <string name="dialog_info_exam">
+        This test contains %1$s questions, which must be answered in less than %2$s minutes./n
+        Ready to start the test?
+    </string>
+
+
 </resources>

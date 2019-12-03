@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +30,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final int REQUEST_CODE_LOGIN = 10;
+    public static final int REQUEST_CODE_LOGIN = 11;
     /**
      * Email
      */
@@ -96,7 +98,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 return parameter;
             }
-        };
+
+                @Override
+                public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+            };
 
 
         VolleyController.getInstance(this).addToRequestQueue(stringRequest);
@@ -134,12 +144,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 LoginSharedPreferences.commitLogin(LoginActivity.this, userId, status, userEmail, userType, firstName, lastName, imageUrl);
 
-                               // setResult(REQUEST_CODE_LOGIN);
+                                setResult(Activity.RESULT_OK);
+
                                 finish();
 
                             } else {
                                 Toast.makeText(LoginActivity.this, "البريد الذي ادخلته او كلمة المرور غير صحيحة !!", Toast.LENGTH_SHORT).show();
                             }
+                        }
+
+                        @Override
+                        public void onSuccess(JSONArray result) throws JSONException {
+
                         }
 
                         @Override
@@ -158,7 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showRegisterActivity() {
         Intent intent = new Intent(this, RegisterActivity.class);
-
+       // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
 

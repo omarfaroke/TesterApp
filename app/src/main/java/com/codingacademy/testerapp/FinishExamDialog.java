@@ -11,32 +11,31 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class FinishExamDialog extends AppCompatDialogFragment {
-   TextView mTextQuestion;
+    TextView mTextQuestion;
 
     TextView mTextQuestionTime;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater=getActivity().getLayoutInflater();
-        String result=getArguments().getString("RESULT");
-        View view= inflater.inflate(R.layout.finish_exam_dialog,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        String result = getArguments().getString("RESULT");
+        View view = inflater.inflate(R.layout.finish_exam_dialog, null);
         builder.setView(view)
                 .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-getActivity().finish();
+                        getActivity().finish();
                     }
                 });
 
-   mTextQuestion=view.findViewById(R.id.question_number);
-   mTextQuestion.setText(result);
-       mTextQuestionTime=view.findViewById(R.id.question_time);
+        mTextQuestion = view.findViewById(R.id.question_number);
+        mTextQuestion.setText(result);
+        mTextQuestionTime = view.findViewById(R.id.question_time);
 
 
-      return   builder.create();
+        return builder.create();
     }
-
 
 
 }

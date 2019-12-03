@@ -20,7 +20,7 @@ import com.codingacademy.testerapp.model.Question;
 
 public class QuesFragment extends Fragment {
     TextView textView;
-Context context;
+    Context context;
 
     RadioGroup radioGroup;
 
@@ -35,36 +35,32 @@ Context context;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.fragment_ques, container, false);
+        View v = inflater.inflate(R.layout.fragment_ques, container, false);
         textView = v.findViewById(R.id.text1);
-        radioGroup=v.findViewById(R.id.radio_choices);
-
+        radioGroup = v.findViewById(R.id.radio_choices);
 
 
         Question ques = (Question) getArguments().getSerializable("Ques");
-     Choice[] choices=ques.getChoices();
+        Choice[] choices = ques.getChoices();
 
-        int radioNumber=choices.length;
+        int radioNumber = choices.length;
 
-        for(int i=0;i<radioNumber;i++)
-        {
+        for (int i = 0; i < radioNumber; i++) {
 
-            RadioButton radioButton=new RadioButton(getActivity());
+            RadioButton radioButton = new RadioButton(getActivity());
             radioButton.setText(choices[i].getChoiceText());
 
-               boolean isRight=choices[i].getAnswer()==1;
+            boolean isRight = choices[i].getAnswer() == 1;
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((QuesExamActvity)context).setAnswer(isRight);
+                    ((QuesExamActvity) context).setAnswer(isRight);
 
                 }
             });
             radioGroup.addView(radioButton);
         }
         textView.setText(ques.getQuesText());
-
-
 
 
         return v;
@@ -75,7 +71,7 @@ Context context;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context=context;
+        this.context = context;
     }
 }
 

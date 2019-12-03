@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,13 +10,17 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -26,6 +31,7 @@ import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +44,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 100;
@@ -90,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private int currentSignUpViewNumber = 1;
     private Bitmap imageProfile;
+    private Spinner spinnerType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +128,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mViewFlipper = findViewById(R.id.viewFlipper);
         mLoginButton = findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(this);
+        spinnerType=findViewById(R.id.spinner_type);
 
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.type_array,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerType.setAdapter(adapter);
+        spinnerType.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -136,6 +149,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 dispatchTakePictureIntent();
                 break;
             case R.id.next_button:
+
+               // finish();
                 if (validate()) {
                     moveToSignUpView2();
                 }
@@ -151,8 +166,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
+
+
     private void openActivityLogin() {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+       // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
 
@@ -232,7 +251,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void register() {
-        UserProfile userProfile = new UserProfile(null, 1, mFirstName.getText().toString(),
+        UserProfile userProfile = new UserProfile(null, spinnerType.getSelectedItemPosition(), mFirstName.getText().toString(),
                 "", mLastName.getText().toString(), mAddressEditText.getText().toString(), mPhoneEditText.getText().toString(), "");
 
 
@@ -255,6 +274,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     Toast.makeText(RegisterActivity.this, result.getString("message"), Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onSuccess(JSONArray result) throws JSONException {
+
             }
 
             @Override
@@ -319,7 +343,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 return parameter;
             }
-        };
+
+                @Override
+                public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+            };
 
 
         VolleyController.getInstance(this).addToRequestQueue(stringRequest);
@@ -381,6 +413,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
 
         }
+    }
+
+
+    private void alertMessage(){
+        AlertDialog.Builder builder=new  AlertDialog.Builder(RegisterActivity.this);
+        builder.setTitle("Welcome");
+        builder.setMessage("Thank you for sending your request to the Admin we wiil take your application and contact with you soon ");
+        builder.setIcon(R.drawable.image_1);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(RegisterActivity.this, "you clicked Ok", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String text=adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
 

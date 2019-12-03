@@ -1,7 +1,10 @@
 package com.codingacademy.testerapp;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -118,6 +121,11 @@ public class ExamFragment extends Fragment {
             }
 
             @Override
+            public void onSuccess(JSONArray result) throws JSONException {
+
+            }
+
+            @Override
             public void onError(String result) throws Exception {
                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
@@ -155,6 +163,14 @@ public class ExamFragment extends Fragment {
                 Map<String, String> par = new HashMap<>();
                 par.put(CategoryFragment.CATEGORY_ID, "" + cat_id);
                 return par;
+            }
+
+            @Override
+            public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
             }
         };
         VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
@@ -207,9 +223,38 @@ public class ExamFragment extends Fragment {
             holder.examName.setText(exam.getExamName());
             holder.examDesc.setText(exam.getExamDescription());
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(getActivity(), QuesExamActvity.class);
-                intent.putExtra(EXAM_OBJECT, exam);
-                startActivity(intent);
+
+
+
+
+                String mNumberOfQuestions =exam.getQuestionNumber() + "";
+                String mExamTime = exam.getExamTime() + "" ;
+
+                String mBodyMessage = getString(R.string.dialog_info_exam , mNumberOfQuestions,mExamTime);
+
+                AlertDialog.Builder builder=new  AlertDialog.Builder(getActivity());
+                builder.setTitle("Welcome to Exam?");
+                builder.setMessage(mBodyMessage);
+                builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Intent intent = new Intent(getActivity(), QuesExamActvity.class);
+                        intent.putExtra(EXAM_OBJECT, exam);
+                        startActivity(intent);
+
+                    }
+                }).setNegativeButton("stop", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "you clicked no", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Dialog dialog=builder.create();
+                dialog.show();
+
+
+
             });
             MenuDrawerNews.animateFadeIn(holder.itemView, position);
 

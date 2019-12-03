@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -41,44 +42,53 @@ import java.util.Map;
 import static android.app.Activity.RESULT_OK;
 
 public class ExampleDialog extends AppCompatDialogFragment {
-    ImageView mddCategoryImage;
-    EditText mAddCategoryEditText;
-    Button mSaveCategory;
+    public static final String TAG = "ExampleDialog";
+    public static final String NEW_CATEGORY = "info_new_category";
+    private ImageView mAddCategoryImage;
+    private Button mChangeIconBTN;
+    private EditText mAddCategoryEditText;
+
+
     private static final int GALLERY_REQUEST_CODE = 101;
     private Bitmap imageCategory;
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_dialog, null);
-        mddCategoryImage = view.findViewById(R.id.image_add_cat);
-        mddCategoryImage.setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.dialog_add_category, null);
+        mAddCategoryImage = view.findViewById(R.id.image_add_cat);
+        mChangeIconBTN = view.findViewById(R.id.change_icon);
+
+        mChangeIconBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pickFromGallery();
             }
         });
+
+
         mAddCategoryEditText = view.findViewById(R.id.edit_add_cat);
-        mSaveCategory = view.findViewById(R.id.save_cat);
+
         int parent = getArguments().getInt("parentID");
         builder.setView(view)
                 .setTitle("Add Category Dialog")
                 .setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        sendResult(Activity.RESULT_CANCELED, null);
                     }
                 })
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String s = mAddCategoryEditText.getText().toString();
-                        if (s.isEmpty())
-                            Toast.makeText(getActivity(), "no", Toast.LENGTH_SHORT).show();
+                        if (s.trim().isEmpty())
+                            Toast.makeText(getActivity(), "add name category !", Toast.LENGTH_SHORT).show();
                         else {
                             Category category = new Category(null, s, parent, null, 1);
                             addCategory(category);
-
                         }
                     }
                 });
@@ -87,16 +97,22 @@ public class ExampleDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+
     private void addCategory(Category cat) {
         String url = Constants.ADD_CATEGORY;
-        Toast.makeText(getActivity(), url, Toast.LENGTH_LONG).show();
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
 
                     try {
                         JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getInt("status") == 0) {
+                            int categoryId = jsonObject.getInt("category_id");
 
+                            cat.catId = categoryId;
+                            sendResult(RESULT_OK, cat);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -124,10 +140,20 @@ public class ExampleDialog extends AppCompatDialogFragment {
                 parameter.put("photo_base64", imageProfileString);
                 return parameter;
             }
+
+            @Override
+            public Map<String, String> getHeaders(){
+                Map<String, String> map = new HashMap<>();
+        	while (Constants.COOKIES == null);
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
         };
         VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
     }
+
+
     private String bitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -137,6 +163,8 @@ public class ExampleDialog extends AppCompatDialogFragment {
 
         return encodedImage;
     }
+
+
     private void pickFromGallery() {
         //Create an Intent with action as ACTION_PICK
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -148,6 +176,8 @@ public class ExampleDialog extends AppCompatDialogFragment {
         // Launching the Intent
         startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,7 +187,7 @@ public class ExampleDialog extends AppCompatDialogFragment {
                     Uri selectedImage = data.getData();
                     InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
                     imageCategory = BitmapFactory.decodeStream(imageStream);
-                  //  mddCategoryImage.setImageURI(selectedImage);
+                    //  mddCategoryImage.setImageURI(selectedImage);
 
                 } catch (IOException exception) {
                     exception.printStackTrace();
@@ -165,6 +195,17 @@ public class ExampleDialog extends AppCompatDialogFragment {
             }
 
         }
+    }
+
+    private void sendResult(int resultCode, Category category) {
+        if (getTargetFragment() == null) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(NEW_CATEGORY, category);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+
     }
 
 
