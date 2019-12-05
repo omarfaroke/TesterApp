@@ -1,12 +1,8 @@
 package com.codingacademy.testerapp;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -21,22 +17,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -52,8 +41,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -151,7 +138,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         };
 
 
-
         VolleyController.getInstance(MenuDrawerNews.this).addToRequestQueue(stringRequest);
     }
 
@@ -163,12 +149,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     protected void onResume() {
         super.onResume();
 
-        if (LoginSharedPreferences.checkIsLogin(this)) {
-            nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
-            nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
 
-        }
-
+        setupItemsMenuNavDrawer();
     }
 
     private void upDateTop() {
@@ -189,8 +171,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
-
-
 
 
     private void initToolbar() {
@@ -266,9 +246,56 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
                     nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
 
+
                     Toast.makeText(this, "test no h", Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+
+    private void setupItemsMenuNavDrawer() {
+        int type = LoginSharedPreferences.getUserType(MenuDrawerNews.this);
+
+        if (!LoginSharedPreferences.checkIsLogin(MenuDrawerNews.this))
+            type=-1;
+
+
+        switch (type) {
+            case Constants.USER_TYPE_ADMIN:
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin, true);
+
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                break;
+            case Constants.USER_TYPE_EXAMINER:
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,true);
+
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                break;
+            case Constants.USER_TYPE_RECRUITER:
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,true);
+
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                break;
+            case Constants.USER_TYPE_TALENT:
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,true);
+
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
+                break;
+        }
+
+
+        if (LoginSharedPreferences.checkIsLogin(this)) {
+            nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
         }
     }
 

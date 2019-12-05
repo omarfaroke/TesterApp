@@ -10,13 +10,133 @@
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="Logout"
             android:visible="false"
-            tools:visible="true"
-            />
+            tools:visible="true" />
         <item
             android:id="@+id/nav_login"
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="Login" />
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_circle"
+            android:title="Profile" />
+
     </group>
+
+
+    //talent
+    <group
+        android:id="@+id/group_items_talent"
+        android:checkableBehavior="single"
+        android:visible="false"
+        tools:visible="true">
+
+        <item
+            android:id="@+id/nav_my_certificate"
+            android:icon="@drawable/ic_certificate_requests"
+            android:title="My Certificate" />
+
+
+        <item
+            android:id="@+id/nav_talent_applications"
+            android:icon="@drawable/ic_applications"
+            android:title="applications" />
+
+    </group>
+
+    //examiner
+    <group
+        android:id="@+id/group_items_examiner"
+        android:checkableBehavior="single"
+        android:visible="false"
+        tools:visible="true">
+
+        <item
+            android:id="@+id/nav_my_exam"
+            android:icon="@drawable/ic_exam"
+            android:title="My Exam" />
+
+        <item
+            android:id="@+id/nav_exam_talent"
+            android:icon="@drawable/ic_item_menu"
+            android:title="Talent" />
+
+
+        <item
+            android:id="@+id/nav_add_exam"
+            android:icon="@drawable/ic_add"
+            android:title="Add Exam" />
+
+
+        <item
+            android:id="@+id/nav_c_requests"
+            android:icon="@drawable/ic_certificate_requests"
+            android:title="Certificate Requests" />
+
+
+    </group>
+
+    //Recruiters
+    <group
+        android:id="@+id/group_items_recruiters"
+        android:checkableBehavior="single"
+        android:visible="false"
+        tools:visible="true">
+
+
+        <item
+            android:id="@+id/nav_top_talent"
+            android:icon="@drawable/ic_item_menu"
+            android:title="Talent" />
+
+
+        <item
+            android:id="@+id/nav_recruiters_applications"
+            android:icon="@drawable/ic_applications"
+            android:title="applications" />
+
+
+    </group>
+
+
+    //admin
+    <group
+        android:id="@+id/group_items_admin"
+        android:checkableBehavior="single"
+        android:visible="false"
+        tools:visible="true">
+
+        <item
+            android:id="@+id/nav_approve_test"
+            android:icon="@drawable/ic_item_menu"
+            android:title="Approve Test" />
+
+        <item
+            android:id="@+id/nav_approve_examiner"
+            android:icon="@drawable/ic_item_menu"
+            android:title="Approve Examiner" />
+
+
+        <item
+            android:id="@+id/nav_approve_rerecruiter"
+            android:icon="@drawable/ic_item_menu"
+            android:title="Approve Rerecruiter" />
+
+
+        <item
+            android:id="@+id/nav_add_category"
+            android:icon="@drawable/ic_add"
+            android:title="Add category" />
+
+
+        <item
+            android:id="@+id/nav_edit_category"
+            android:icon="@drawable/ic_edit"
+            android:title="Edit category" />
+
+
+    </group>
+
     <group
         android:id="@+id/grp_2"
         android:checkableBehavior="none">
@@ -28,6 +148,13 @@
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help"
             android:title="Help" />
+
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="Exit" />
+
+
     </group>
 
 </menu>

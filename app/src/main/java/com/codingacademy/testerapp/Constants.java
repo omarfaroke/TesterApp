@@ -48,9 +48,9 @@ public class Constants {
 
 
     public static final int USER_TYPE_ADMIN = 0;
-    public static final int USER_TYPE_TALENT = 1;
-    public static final int USER_TYPE_EXAMINER = 2;
-    public static final int USER_TYPE_RECRUITER = 3;
+    public static final int USER_TYPE_TALENT = 3;
+    public static final int USER_TYPE_EXAMINER = 1;
+    public static final int USER_TYPE_RECRUITER = 2;
     public static final String USER_STATUS = "status";
 
 

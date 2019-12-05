@@ -2,9 +2,6 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-import java.util.List;
-
 public class Sample {
     @SerializedName("sample_id")
     private Integer sampleId;
@@ -18,7 +15,7 @@ public class Sample {
     String sample_date;
 
     @SerializedName("question")
-    private Question[] questions ;
+    private Question[] questions;
 
     public Integer getSample_id() {
         return sampleId;
@@ -43,92 +40,7 @@ public class Sample {
         return status;
     }
 
-    public String
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    getSample_date() {
+    public String getSample_date() {
         return sample_date;
     }
 
