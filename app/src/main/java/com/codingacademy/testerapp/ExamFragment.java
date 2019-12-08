@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +48,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExamFragment extends Fragment {
+public class ExamFragment extends Fragment  {
     public static final String TAG = "ExamFragment";
     public static final String EXAM_OBJECT = "EXAM_OBJECT";
 
@@ -59,9 +60,9 @@ public class ExamFragment extends Fragment {
 
 
 
-
     interface ExamFragmentActionListener {
         void restartFocusView();
+        void showSample(int examID);
     }
 
     @Override
@@ -203,7 +204,6 @@ public class ExamFragment extends Fragment {
         recyclerExam = v.findViewById(R.id.recyclerExam);
         recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
-
     }
 
     public int dpToPx(Context c, int dp) {
@@ -211,7 +211,7 @@ public class ExamFragment extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
+    private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> implements View.OnClickListener {
 
         @NonNull
         @Override
@@ -221,6 +221,7 @@ public class ExamFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
+            holder.btnShowSample.setOnClickListener(this);
             Exam exam = examsArr[position];
             holder.examName.setText(exam.getExamName());
             holder.examDesc.setText(exam.getExamDescription());
@@ -302,10 +303,19 @@ public class ExamFragment extends Fragment {
             return examsArr.length;
         }
 
-        private class ExamVH extends RecyclerView.ViewHolder {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId())
+            {
+                case R.id.show_sample: mListener.showSample(0);
+            }
+        }
+
+        private class ExamVH extends RecyclerView.ViewHolder  {
             TextView examName,examDesc;
             public ImageButton btExpand;
             public View lyt_expand;
+            private Button btnShowSample,btnShowTalent;
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
@@ -313,7 +323,11 @@ public class ExamFragment extends Fragment {
                 examDesc = itemView.findViewById(R.id.exam_desc);
                 btExpand = itemView.findViewById(R.id.bt_expand);
                 lyt_expand = itemView.findViewById(R.id.lyt_expand);
+                btnShowSample = itemView.findViewById(R.id.show_sample);
+                btnShowTalent = itemView.findViewById(R.id.show_talent);
             }
+void bind(int i){}
+
         }
     }
 

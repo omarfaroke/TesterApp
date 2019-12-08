@@ -17,6 +17,8 @@ public class Sample {
     @SerializedName("question")
     private Question[] questions;
 
+    public boolean expanded;
+
     public Integer getSample_id() {
         return sampleId;
     }

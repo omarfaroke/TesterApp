@@ -10,13 +10,13 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -39,9 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragment.QuesFragmentActionListener{
-
-
+public class QuesSampleActivity extends AppCompatActivity implements QuesEntryFragment.QuesFragmentActionListener {
     ProgressBar progressBar;
 
     private int questionCounter;
@@ -59,96 +57,83 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     private Integer timeLeftInSeconds = 60;
     private int scorePerQues, totalScore = 0;
 
-    // int counter =0;
+    QuesIndex mIndex;
 
 
     ImageView mNext, mPre;
-    int position;
 
-
+    interface QuesIndex {
+        int check();
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        Exam exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
-        int examId = exam.getExamId();
+        //    Exam exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
+        Exam exam = new Exam(null, null, null, null, 20, 7, null, null, null, null, null);
+
+        //   int examId = exam.getExamId();
         timeLeftInSeconds = exam.getExamTime();
         init();
         Fragment fragment;
-        if (true)
-            getSamples(examId);
+        if (false) ;
+
+            // getSamples(examId);
         else enterNewSample(exam);
     }
 
     private void enterNewSample(Exam exam) {
-
         quesArray = new Question[exam.getQuestionNumber()];
         findViewById(R.id.et_sample_name).setVisibility(View.VISIBLE);
-        showQuesFragment(true);
+        upDateSample();
     }
 
-    private void getSamples(int examId) {
-        getSamples(examId, new VolleyCallback() {
-
-            @Override
-            public void onSuccess(JSONObject result) throws JSONException {
-
-                JSONArray sampleJsonArray = result.getJSONArray("JA");
-
-                Gson gson = new GsonBuilder().create();
-                sampleArray = gson.fromJson(sampleJsonArray.toString(), Sample[].class);
-                int sampleNumber = sampleArray.length;
-                if (sampleNumber > 0) {
-                    quesArray = sampleArray[0].getQuestions();
-                    showQuesFragment(false);
-                    if (!(timeLeftInSeconds == null || timeLeftInSeconds == 0))
-                     ;//   startCountDown();
-                }
-            }
-
-            @Override
-            public void onSuccess(JSONArray result) throws JSONException { }
-
-            @Override
-            public void onError(String result) throws Exception {
-                Toast.makeText(QuesExamActvity.this, result, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void showQuesFragment(boolean isEnter) {
+    private void upDateSample() {
         int count = quesArray.length;
         progressBar.setMax(count);
+
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                return QuesEntryFragment.getInstence(position,quesArray[position],isEnter);
+
+
+                return QuesEntryFragment.getInstence(position, quesArray[position]);
             }
+
             @Override
             public int getCount() {
-                return count;
+                return 7;
             }
         });
+
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            private int mCurrentSelectedPage =0;
-            @Override
-            public void onPageSelected(int position) {
-                if (position > mCurrentSelectedPage &&
-                        ((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, mCurrentSelectedPage)).notValidate()) {
-                    pager.setCurrentItem(mCurrentSelectedPage, true);
-                } else
-                    mCurrentSelectedPage = position;
-
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
+
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageSelected(int position) {
+
+                    if (position > mCurrentSelectedPage &&
+                            ((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, mCurrentSelectedPage)).notValidate()) {
+                        pager.setCurrentItem(mCurrentSelectedPage, true);
+                    }else
+                        mCurrentSelectedPage = position;
+
+            }
+
+            private int mCurrentSelectedPage = pager.getCurrentItem();
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Toast.makeText(QuesSampleActivity.this, "state :"+state, Toast.LENGTH_SHORT).show();
+            }
         });
+
     }
 
     private void getSamples(int examId, final VolleyCallback mCallback) {
@@ -192,102 +177,10 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
                 return map;
             }
         };
-        VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(stringRequest);
+        VolleyController.getInstance(QuesSampleActivity.this).addToRequestQueue(stringRequest);
 
     }
 
-
-    private void startCountDown() {
-        countDownTimer = new CountDownTimer(timeLeftInSeconds * 1000, 1000) {
-
-            @Override
-            public void onTick(long lTime) {
-                timeLeftInSeconds = (int) lTime;
-                updateCountDownText();
-            }
-
-            @Override
-            public void onFinish() {
-                timeLeftInSeconds = 0;
-                updateCountDownText();
-                finishExam();
-            }
-        }.start();
-
-
-    }
-
-    private void finishExam() {
-        FinishExamDialog finishExamDialog = new FinishExamDialog();
-        Bundle bundle = new Bundle();
-        String result = "The Exam is finish You got " + getScore();
-        bundle.putString("RESULT", result);
-        finishExamDialog.setArguments(bundle);
-        uploadResult();
-
-        finishExamDialog.show(getSupportFragmentManager(), "Your result");
-
-    }
-
-    private void uploadResult() {
-
-        StringRequest request = new StringRequest(Request.Method.POST,
-                Constants.ADD_EXAM_HISTORY,
-                response -> {
-
-
-                },
-                error -> {
-
-
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> parameter = new HashMap<>();
-
-                parameter.put("user_id", "7");
-                parameter.put("sample_id", "1");
-                parameter.put("date", "2020");
-                parameter.put("score", "99");
-                parameter.put("status", "1");
-
-                return parameter;
-
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
-                return map;
-            }
-        };
-
-        VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(request);
-
-    }
-
-
-    private String getScore() {
-        int s = 0;
-        for (Question q : quesArray)
-            if (q.gotCorrect)
-                s++;
-        return s + "/" + quesArray.length;
-    }
-
-    private void updateCountDownText() {
-        int minuts = (int) (timeLeftInSeconds / 1000) / 60;
-        int secound = (int) (timeLeftInSeconds / 1000) % 60;
-        String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minuts, secound);
-        if (secound < 5)
-            tvTimer.setTextColor(Color.RED);
-        tvTimer.setText(timeFormated);
-
-    }
 
     public void init() {
         tvTimer = findViewById(R.id.time_text);
@@ -310,7 +203,8 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
 
             }
         });
-
+        if (!(timeLeftInSeconds == null || timeLeftInSeconds == 0))
+            ;
     }
 
     @Override
@@ -330,7 +224,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     }
 
     @Override
-    public void setAnswer(boolean isRight, int index) {
+    public void setAnswer(boolean isRight,int index) {
         quesArray[index].gotCorrect = isRight;
         Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
     }

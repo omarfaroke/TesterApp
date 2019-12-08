@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/text">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/et_ques"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/question1"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30sp" />
+        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_choice"
+            >
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_choice"/>
+            <Button
+                android:text="Add"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/bt_choice"/>
+        </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/radio_cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+
+
+
+
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

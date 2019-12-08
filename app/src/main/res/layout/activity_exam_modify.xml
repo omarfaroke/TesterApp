@@ -100,7 +100,7 @@
                             android:id="@+id/sp_cat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
+                            android:background="@drawable/spinner_bg"
                             android:clickable="true"
 
                             android:textAppearance="@style/TextAppearance.AppCompat.Display3"

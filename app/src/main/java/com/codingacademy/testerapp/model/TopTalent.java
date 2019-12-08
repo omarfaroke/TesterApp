@@ -11,11 +11,29 @@ public class TopTalent {
     @SerializedName("Category_id")
     private Integer categoryID;
 
+    @SerializedName("exam_id")
+    private Integer examId;
+
+    @SerializedName("sample_id")
+    private Integer sampleId;
+
+    @SerializedName("date")
+    private Integer date;
+
     private Integer score;
 
     public TopTalent(UserProfile userProfile, Integer categoryID, Integer score) {
         this.userProfile = userProfile;
         this.categoryID = categoryID;
+        this.score = score;
+    }
+
+    public TopTalent(UserProfile userProfile, Integer categoryID, Integer examId, Integer sampleId, Integer date, Integer score) {
+        this.userProfile = userProfile;
+        this.categoryID = categoryID;
+        this.examId = examId;
+        this.sampleId = sampleId;
+        this.date = date;
         this.score = score;
     }
 

@@ -418,6 +418,20 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     }
 
+    @Override
+    public void showSample(int examID) {
+        SampleFragment sampleFragment = new SampleFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(CategoryFragment.CATEGORY_ID, examID);
+        sampleFragment.setArguments(bundle);
+
+        mFragmentTransaction = fragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.main_fram, sampleFragment, ExamFragment.TAG);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+    }
+
 
     private long backPressedTime;
     private Toast backToast;

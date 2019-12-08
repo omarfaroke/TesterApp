@@ -56,6 +56,7 @@
         This test contains %1$s questions, which must be answered in less than %2$s minutes./n
         Ready to start the test?
     </string>
+    <string name="dialog_delet_choice">Delete selected choice</string>
 
 
 </resources>
