@@ -3,11 +3,8 @@ package com.codingacademy.testerapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,17 +117,16 @@ public class CategoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        restartFocusView();
-        getView().setOnKeyListener((v, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-
-                boolean flag = backCategory();
-
-                return flag;
-
-            }
-            return false;
-        });
+//        getView().setOnKeyListener((v, keyCode, event) -> {
+//            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+//
+//                boolean flag = backCategory();
+//
+//                return flag;
+//
+//            }
+//            return false;
+//        });
 
     }
 
@@ -166,12 +162,15 @@ public class CategoryFragment extends Fragment {
 
         });
 
+
         if (LoginSharedPreferences.userAsAdmin(getActivity())) {
             addCatBtn.setVisibility(View.VISIBLE);
 
         } else {
             addCatBtn.setVisibility(View.GONE);
         }
+
+
 
         recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -382,10 +381,6 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    public void restartFocusView() {
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-    }
 
     public List<Integer> getParents() {
         return parents;

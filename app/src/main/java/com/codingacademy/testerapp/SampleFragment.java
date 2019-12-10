@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SampleFragment extends Fragment {
+    public static final String TAG = "SampleFragment" ;
     RecyclerView mRecyclerSample;
     Exam exam;
     Sample[] mSamples;

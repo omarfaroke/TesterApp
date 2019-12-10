@@ -220,6 +220,13 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                         nav_view.getMenu().findItem(R.id.nav_logout).setVisible(false);
                         nav_view.getMenu().findItem(R.id.nav_login).setVisible(true);
                         break;
+                    case R.id.nav_help:
+                        LoginSharedPreferences.checkIsLogin(MenuDrawerNews.this);
+                        break;
+                    case R.id.nav_settings:
+                        LoginSharedPreferences.test(MenuDrawerNews.this);
+
+                        break;
                 }
 
                 return true;
@@ -260,38 +267,35 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     private void setupItemsMenuNavDrawer() {
         int type = LoginSharedPreferences.getUserType(MenuDrawerNews.this);
 
-        if (!LoginSharedPreferences.checkIsLogin(MenuDrawerNews.this))
-            type=-1;
-
 
         switch (type) {
             case Constants.USER_TYPE_ADMIN:
                 nav_view.getMenu().setGroupVisible(R.id.group_items_admin, true);
 
-                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent, false);
                 break;
             case Constants.USER_TYPE_EXAMINER:
-                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,true);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, true);
 
-                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent, false);
                 break;
             case Constants.USER_TYPE_RECRUITER:
-                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,true);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, true);
 
-                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent, false);
                 break;
             case Constants.USER_TYPE_TALENT:
-                nav_view.getMenu().setGroupVisible(R.id.group_items_talent,true);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent, true);
 
-                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_admin,false);
-                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters,false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, false);
                 break;
         }
 
@@ -314,6 +318,21 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
         mFragmentTransaction = fragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.main_fram, examFragment, ExamFragment.TAG);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+    }
+
+
+    @Override
+    public void showSample(Exam exam) {
+        SampleFragment sampleFragment = new SampleFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SampleFragment.EXAM_OPJECT, (Serializable) exam);
+        sampleFragment.setArguments(bundle);
+
+        mFragmentTransaction = fragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.main_fram, sampleFragment, SampleFragment.TAG);
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
@@ -402,37 +421,13 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
             } else if (fragment instanceof ExamFragment) {
                 fragmentManager.popBackStack();
 
+            } else if (fragment instanceof SampleFragment) {
+                fragmentManager.popBackStack();
+
             }
 
         }
 
-    }
-
-    //
-    @Override
-    public void restartFocusView() {
-        Fragment fragment = fragmentManager.findFragmentByTag(CategoryFragment.TAG);
-        if (fragment != null) {
-            if (fragment instanceof CategoryFragment) {
-                ((CategoryFragment) fragment).restartFocusView();
-            }
-
-        }
-
-    }
-
-    @Override
-    public void showSample(Exam exam) {
-        SampleFragment sampleFragment = new SampleFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(SampleFragment.EXAM_OPJECT, (Serializable) exam);
-        sampleFragment.setArguments(bundle);
-
-        mFragmentTransaction = fragmentManager.beginTransaction();
-        mFragmentTransaction.add(R.id.main_fram, sampleFragment, ExamFragment.TAG);
-        mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.commit();
     }
 
 

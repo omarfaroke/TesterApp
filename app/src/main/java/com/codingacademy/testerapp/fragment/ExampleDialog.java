@@ -112,6 +112,9 @@ public class ExampleDialog extends AppCompatDialogFragment {
 
                             cat.catId = categoryId;
                             sendResult(RESULT_OK, cat);
+
+                        }else if (jsonObject.getInt("status") == 2){
+                            Toast.makeText(getActivity(), "الاسم موجود من قبل , جرب اسماً آخر .", Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (JSONException e) {

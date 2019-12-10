@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -19,8 +18,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,7 +27,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Exam;
-import com.codingacademy.testerapp.model.Sample;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
@@ -41,7 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -60,10 +55,11 @@ public class ExamFragment extends Fragment {
     private ExamFragmentActionListener mListener;
 
 
-    interface ExamFragmentActionListener {
-        void restartFocusView();
 
+
+    interface ExamFragmentActionListener {
         void showSample(Exam exam);
+
     }
 
     @Override
@@ -114,6 +110,7 @@ public class ExamFragment extends Fragment {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
+
                 JSONArray examJsonArray = result.getJSONArray("JA");
 
                 //  examsArr = new Exam[examJsonArray.length()];
@@ -169,9 +166,9 @@ public class ExamFragment extends Fragment {
             }
 
             @Override
-            public Map<String, String> getHeaders() {
+            public Map<String, String> getHeaders(){
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
+        	while (Constants.COOKIES == null);
                 map.put("Cookie", Constants.COOKIES);
                 return map;
             }
@@ -181,14 +178,6 @@ public class ExamFragment extends Fragment {
     }
 
 
-//    void fillExam() {
-//        examsArr = new Exam[4];
-//        examsArr[0] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
-//        examsArr[1] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
-//        examsArr[2] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
-//        examsArr[3] = (new Exam(null, null, " Java Exam name", null, null, null, null, null, null));
-//        upDateExam();
-//    }
 
     private void upDateExam() {
         if (examAdapter == null) {
@@ -333,24 +322,5 @@ public class ExamFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
 
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        getView().setFocusableInTouchMode(false);
-        getView().clearFocus();
-
-        if (mListener != null) {
-            mListener.restartFocusView();
-        }
-
-        super.onDestroyView();
-    }
 }

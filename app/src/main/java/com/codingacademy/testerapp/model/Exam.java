@@ -1,10 +1,7 @@
 package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Exam implements Serializable {
