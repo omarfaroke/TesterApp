@@ -2,7 +2,9 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Sample {
+import java.io.Serializable;
+
+public class Sample implements Serializable {
     @SerializedName("sample_id")
     private Integer sampleId;
 

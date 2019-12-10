@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,57 +38,82 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
-public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragment.QuesFragmentActionListener{
+public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragment.QuesFragmentActionListener {
 
 
     ProgressBar progressBar;
 
     private int questionCounter;
     private int questionCountTotal;
-    Question[] quesArray;
+
     List<Choice> choices;
-    Sample sampleArray[];
+    Question questionArray[];
     private ViewPager pager;
     TextView tvTimer;
     EditText etSampleName;
+    Button btnFinish;
+    Sample sample;
+    Exam exam;
+
 
     public static final long COUNTDOWN_TIME = 30000;
     private ColorStateList textColorDefault;
     private CountDownTimer countDownTimer;
     private Integer timeLeftInSeconds = 60;
     private int scorePerQues, totalScore = 0;
-
+    static final int ADD_SAMPLE = -101;
+    static final int TAKE_EXAM = -103;
+    private static final String WHAT = "WHAT";
     // int counter =0;
 
 
     ImageView mNext, mPre;
-    int position;
 
 
+    public static Intent getInstance(Context context, Exam exam, int what) {
+        Intent intent = new Intent(context, QuesExamActvity.class);
+        intent.putExtra(ExamFragment.EXAM_OBJECT, exam);
+        intent.putExtra(WHAT, what);
+
+        return intent;
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        Exam exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
-        int examId = exam.getExamId();
+         exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
+        int what = getIntent().getIntExtra(WHAT, -1);
+
         timeLeftInSeconds = exam.getExamTime();
         init();
-        Fragment fragment;
-        if (true)
-            getSamples(examId);
-        else enterNewSample(exam);
+
+        if (what == TAKE_EXAM) {
+            sample = exam.getSamples()[new Random().nextInt(exam.getSamples().length-1)];
+            getSamples(sample.getSampleId());
+        }
+
+        else if (what == ADD_SAMPLE)
+            enterNewSample();
+        else if (what >=0) {
+            sample = exam.getSamples()[what];
+            getSamples(sample.getSampleId());
+        }
+
+        else finish();
     }
 
-    private void enterNewSample(Exam exam) {
+    private void enterNewSample() {
 
-        quesArray = new Question[exam.getQuestionNumber()];
+        questionArray = new Question[exam.getQuestionNumber()];
         findViewById(R.id.et_sample_name).setVisibility(View.VISIBLE);
         showQuesFragment(true);
     }
@@ -98,18 +127,17 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
                 JSONArray sampleJsonArray = result.getJSONArray("JA");
 
                 Gson gson = new GsonBuilder().create();
-                sampleArray = gson.fromJson(sampleJsonArray.toString(), Sample[].class);
-                int sampleNumber = sampleArray.length;
-                if (sampleNumber > 0) {
-                    quesArray = sampleArray[0].getQuestions();
-                    showQuesFragment(false);
-                    if (!(timeLeftInSeconds == null || timeLeftInSeconds == 0))
-                     ;//   startCountDown();
-                }
+                questionArray = gson.fromJson(sampleJsonArray.toString(), Question[].class);
+
+                showQuesFragment(false);
+                if (!(timeLeftInSeconds == null || timeLeftInSeconds == 0))
+                    startCountDown();
+
             }
 
             @Override
-            public void onSuccess(JSONArray result) throws JSONException { }
+            public void onSuccess(JSONArray result) throws JSONException {
+            }
 
             @Override
             public void onError(String result) throws Exception {
@@ -119,14 +147,15 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     }
 
     private void showQuesFragment(boolean isEnter) {
-        int count = quesArray.length;
+        int count = questionArray.length;
         progressBar.setMax(count);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                return QuesEntryFragment.getInstence(position,quesArray[position],isEnter);
+                return QuesEntryFragment.getInstence(position, questionArray[position], isEnter);
             }
+
             @Override
             public int getCount() {
                 return count;
@@ -134,20 +163,29 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         });
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            private int mCurrentSelectedPage =0;
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            private int mCurrentSelectedPage = 0;
+
             @Override
             public void onPageSelected(int position) {
                 if (position > mCurrentSelectedPage &&
                         ((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, mCurrentSelectedPage)).notValidate()) {
                     pager.setCurrentItem(mCurrentSelectedPage, true);
-                } else
+                } else {
                     mCurrentSelectedPage = position;
+                    progressBar.setProgress(mCurrentSelectedPage + 1);
+                    if (position == questionArray.length - 1)
+                        btnFinish.setVisibility(View.VISIBLE);
 
 
+                }
             }
+
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
     }
 
@@ -180,7 +218,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                par.put("exam_id", "" + examId);
+                par.put("sample_id", "" + examId);
                 return par;
             }
 
@@ -220,38 +258,31 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     private void finishExam() {
         FinishExamDialog finishExamDialog = new FinishExamDialog();
         Bundle bundle = new Bundle();
-        String result = "The Exam is finish You got " + getScore();
+        String result = "The Exam is finish You got " + getScore() + "/" + questionArray.length;
         bundle.putString("RESULT", result);
         finishExamDialog.setArguments(bundle);
         uploadResult();
-
         finishExamDialog.show(getSupportFragmentManager(), "Your result");
-
-    }
+           }
 
     private void uploadResult() {
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 Constants.ADD_EXAM_HISTORY,
                 response -> {
-
-
                 },
                 error -> {
-
-
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 Map<String, String> parameter = new HashMap<>();
+                int score=getScore();
 
-                parameter.put("user_id", "7");
-                parameter.put("sample_id", "1");
-                parameter.put("date", "2020");
-                parameter.put("score", "99");
+                parameter.put("user_id", LoginSharedPreferences.getUserId(QuesExamActvity.this)+"");
+                parameter.put("sample_id", sample.getSample_id()+"");
+                parameter.put("date", new Date()+"");
+                parameter.put("score", score+"");
                 parameter.put("status", "1");
-
                 return parameter;
 
             }
@@ -271,12 +302,14 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     }
 
 
-    private String getScore() {
+    private int getScore() {
+       int markPerQues=exam.getFullMarks()/exam.getQuestionNumber();
         int s = 0;
-        for (Question q : quesArray)
+        for (Question q : questionArray)
             if (q.gotCorrect)
-                s++;
-        return s + "/" + quesArray.length;
+                s+=markPerQues;
+
+        return s;
     }
 
     private void updateCountDownText() {
@@ -290,10 +323,17 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     }
 
     public void init() {
+        btnFinish = findViewById(R.id.finish_exam);
         tvTimer = findViewById(R.id.time_text);
         pager = findViewById(R.id.pager);
         progressBar = findViewById(R.id.progress);
         mNext = findViewById(R.id.next);
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishExam();
+            }
+        });
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,14 +364,14 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
 
     @Override
     public void addQues(Question question, int index) {
-        quesArray[index] = question;
+        questionArray[index] = question;
         pager.getAdapter().notifyDataSetChanged();
         progressBar.setProgress(index);
     }
 
     @Override
     public void setAnswer(boolean isRight, int index) {
-        quesArray[index].gotCorrect = isRight;
-        Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
+        questionArray[index].gotCorrect = isRight;
+       // Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
     }
 }

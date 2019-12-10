@@ -30,6 +30,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Exam;
+import com.codingacademy.testerapp.model.Sample;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
@@ -40,15 +41,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-
+import java.util.Random;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExamFragment extends Fragment  {
+public class ExamFragment extends Fragment {
     public static final String TAG = "ExamFragment";
     public static final String EXAM_OBJECT = "EXAM_OBJECT";
 
@@ -59,10 +60,10 @@ public class ExamFragment extends Fragment  {
     private ExamFragmentActionListener mListener;
 
 
-
     interface ExamFragmentActionListener {
         void restartFocusView();
-        void showSample(int examID);
+
+        void showSample(Exam exam);
     }
 
     @Override
@@ -113,7 +114,6 @@ public class ExamFragment extends Fragment  {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
-
                 JSONArray examJsonArray = result.getJSONArray("JA");
 
                 //  examsArr = new Exam[examJsonArray.length()];
@@ -169,9 +169,9 @@ public class ExamFragment extends Fragment  {
             }
 
             @Override
-            public Map<String, String> getHeaders(){
+            public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-        	while (Constants.COOKIES == null);
+                while (Constants.COOKIES == null) ;
                 map.put("Cookie", Constants.COOKIES);
                 return map;
             }
@@ -211,7 +211,8 @@ public class ExamFragment extends Fragment  {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> implements View.OnClickListener {
+    private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
+        Exam exam;
 
         @NonNull
         @Override
@@ -221,54 +222,14 @@ public class ExamFragment extends Fragment  {
 
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
-            holder.btnShowSample.setOnClickListener(this);
-            Exam exam = examsArr[position];
+            exam = examsArr[position];
             holder.examName.setText(exam.getExamName());
             holder.examDesc.setText(exam.getExamDescription());
-            holder.itemView.setOnClickListener(view -> {
+
+            ViewAnimation.animateFadeIn(holder.itemView, position);
 
 
-
-
-                String mNumberOfQuestions =exam.getQuestionNumber() + "";
-                String mExamTime = exam.getExamTime() + "" ;
-
-                String mBodyMessage = getString(R.string.dialog_info_exam , mNumberOfQuestions,mExamTime);
-
-                AlertDialog.Builder builder=new  AlertDialog.Builder(getActivity());
-                builder.setTitle("Welcome to Exam?");
-                builder.setMessage(mBodyMessage);
-                builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        Intent intent = new Intent(getActivity(), QuesExamActvity.class);
-                        intent.putExtra(EXAM_OBJECT, exam);
-                        startActivity(intent);
-
-                    }
-                }).setNegativeButton("stop", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "you clicked no", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Dialog dialog=builder.create();
-                dialog.show();
-
-
-
-            });
-            ViewAnimation.animateFadeIn(holder.itemView,position);
-
-            holder.btExpand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean show = toggleLayoutExpand(!exam.expanded, v, holder.lyt_expand);
-                    exam.expanded = show;
-                }
-            });
-            if(exam.expanded){
+            if (exam.expanded) {
                 holder.lyt_expand.setVisibility(View.VISIBLE);
             } else {
                 holder.lyt_expand.setVisibility(View.GONE);
@@ -276,8 +237,9 @@ public class ExamFragment extends Fragment  {
             toggleArrow(exam.expanded, holder.btExpand, false);
 
         }
+
         private boolean toggleLayoutExpand(boolean show, View view, View lyt_expand) {
-            toggleArrow(show, view,true);
+            toggleArrow(show, view, true);
             if (show)
                 ViewAnimation.expand(lyt_expand);
             else
@@ -303,19 +265,12 @@ public class ExamFragment extends Fragment  {
             return examsArr.length;
         }
 
-        @Override
-        public void onClick(View view) {
-            switch (view.getId())
-            {
-                case R.id.show_sample: mListener.showSample(0);
-            }
-        }
 
-        private class ExamVH extends RecyclerView.ViewHolder  {
-            TextView examName,examDesc;
+        private class ExamVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView examName, examDesc;
             public ImageButton btExpand;
             public View lyt_expand;
-            private Button btnShowSample,btnShowTalent;
+            private Button btnShowSample, btnShowTalent;
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
@@ -325,9 +280,55 @@ public class ExamFragment extends Fragment  {
                 lyt_expand = itemView.findViewById(R.id.lyt_expand);
                 btnShowSample = itemView.findViewById(R.id.show_sample);
                 btnShowTalent = itemView.findViewById(R.id.show_talent);
+                btnShowSample.setOnClickListener(this);
+                examName.setOnClickListener(this);
+                btExpand.setOnClickListener(this);
             }
-void bind(int i){}
 
+
+            @Override
+            public void onClick(View view) {
+                exam = examsArr[getAdapterPosition()];
+
+                switch (view.getId()) {
+                    case R.id.show_sample:
+                        mListener.showSample(exam);
+                        Toast.makeText(getActivity(), "" + exam.getSamples().length, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.exam_name:
+                        showQuestions();
+                        break;
+                    case R.id.bt_expand:
+                        boolean show = toggleLayoutExpand(!exam.expanded, btExpand, lyt_expand);
+                        exam.expanded = show;
+                        break;
+                }
+            }
+
+            private void showQuestions() {
+
+                String mNumberOfQuestions = exam.getQuestionNumber() + "";
+                String mExamTime = exam.getExamTime() + "";
+                String mBodyMessage = getString(R.string.dialog_info_exam, mNumberOfQuestions, mExamTime);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Welcome to Exam?");
+                builder.setMessage(mBodyMessage);
+                builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Random random=new Random();
+                        startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.TAKE_EXAM));
+
+                    }
+                }).setNegativeButton("stop", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "you clicked no", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
         }
     }
 

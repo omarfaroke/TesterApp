@@ -29,14 +29,14 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class    QuesEntryFragment extends Fragment implements View.OnClickListener {
-  private   EditText etQues, etChoice;
-    private  Button btChoice;
-    private  Context context;
-    private  Question ques;
-    private  RadioGroup radioGroup;
-    private  LinearLayout layAddChoice;
-    private  ArrayList<RadioButton> radioButtons ;
+public class QuesEntryFragment extends Fragment implements View.OnClickListener {
+    private EditText etQues, etChoice;
+    private Button btChoice;
+    private Context context;
+    private Question ques;
+    private RadioGroup radioGroup;
+    private LinearLayout layAddChoice;
+    private ArrayList<RadioButton> radioButtons;
     private CardView cardView;
 
 
@@ -82,10 +82,12 @@ public class    QuesEntryFragment extends Fragment implements View.OnClickListen
 
         layAddChoice = v.findViewById(R.id.add_choice);
         radioButtons = new ArrayList<>();
-cardView=v.findViewById(R.id.radio_cards);
+        cardView = v.findViewById(R.id.radio_cards);
         index = getArguments().getInt(INDEX);
         ques = (Question) getArguments().getSerializable(QUES);
         editState = getArguments().getBoolean(IS_ENTER);
+        radioGroup = new RadioGroup(context);
+        cardView.addView(radioGroup);
         if (ques != null)
             setQuestion();
 
@@ -122,16 +124,21 @@ cardView=v.findViewById(R.id.radio_cards);
 
 
     void setQuestion() {
-        radioGroup = new RadioGroup(context);
 
-        cardView.addView(radioGroup);
         etQues.setText(ques.getQuesText());
         Choice[] choices = ques.getChoices();
         int radioNumber = choices.length;
         for (int choiceIndex = 0; choiceIndex < radioNumber; choiceIndex++) {
             RadioButton radioButton = new RadioButton(getActivity());
             radioButton.setText(choices[choiceIndex].getChoiceText());
-
+            int finalChoiceIndex = choiceIndex;
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isRight = choices[finalChoiceIndex].getAnswer() == 1;
+                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                }
+            });
             radioButton.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -151,14 +158,7 @@ cardView=v.findViewById(R.id.radio_cards);
             radioButtons.add(radioButton);
 
             radioGroup.addView(radioButton);
-            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    if (!editState)
-                      isRight = choices[i-1].getAnswer() == 1;
-                       Toast.makeText(context, etQues.getId()+"   "+radioGroup.getCheckedRadioButtonId()+ i, Toast.LENGTH_SHORT).show();
-                }
-            });
+
         }
 
     }
@@ -180,7 +180,7 @@ cardView=v.findViewById(R.id.radio_cards);
         String s = etQues.getText().toString();
         int c = radioButtons.size();
         if (c < 2 || s.isEmpty()) {
-            Toast.makeText(getActivity(), c + " s> " + s, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Qutetion and two choices at least must be entered", Toast.LENGTH_SHORT).show();
             return true;
         } else {
             Choice[] choices = new Choice[c];
@@ -191,8 +191,10 @@ cardView=v.findViewById(R.id.radio_cards);
                 countAnswer += answer;
                 choices[i] = new Choice(null, radioButton.getText().toString(), null, answer);
             }
-            if (countAnswer != 1)
+            if (countAnswer != 1) {
+                Toast.makeText(getActivity(), "Choose right answer", Toast.LENGTH_SHORT).show();
                 return true;
+            }
             Question question = new Question(s, choices);
             mListener.addQues(question, index);
             return false;

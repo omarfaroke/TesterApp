@@ -14,6 +14,7 @@ public class Exam implements Serializable {
     @SerializedName("category_id")
     private Integer categoryId;
 
+
     @SerializedName("exam_name")
     private String examName;
 
@@ -23,7 +24,7 @@ public class Exam implements Serializable {
     @SerializedName("exam_time")
     private Integer examTime;
 
-    @SerializedName("question_number")
+    @SerializedName("Question_number")
     private Integer questionNumber;
 
     @SerializedName("full_mark")
@@ -42,7 +43,8 @@ public class Exam implements Serializable {
     @SerializedName("status")
     private Integer status;
 
-    List<Sample> samples;
+    @SerializedName("sample")
+   private Sample[] samples;
 
     public boolean expanded = false;
 
@@ -83,11 +85,11 @@ public class Exam implements Serializable {
         return examDescription;
     }
 
-    public List<Sample> getSamples() {
+    public Sample[] getSamples() {
         return samples;
     }
 
-    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime,Integer questionNumber, Integer fullMarks, Integer examPass, String examNote, String examDescription, Integer status) {
+    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime,Integer questionNumber, Integer fullMarks, Integer examPass, String examNote, String examDescription, Integer status,Sample[] samples) {
         this.examId = examId;
         this.categoryId = categoryId;
         this.examName = examName;
@@ -99,6 +101,7 @@ public class Exam implements Serializable {
         this.examNote = examNote;
         this.examDescription = examDescription;
         this.status = status;
+        this.samples=samples;
     }
 
     public void setExamPass(Integer examPass) {

@@ -75,8 +75,13 @@ public class LoginSharedPreferences {
 
 
     public static int getUserType(Context mContext) {
-        SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
-        int userImageUrl = mSharedPreferences.getInt(Constants.USER_TYPE_PREFERENCES, -1);
+        int userImageUrl =-1;
+
+        if (checkIsLogin(mContext)) {
+
+            SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
+            userImageUrl = mSharedPreferences.getInt(Constants.USER_TYPE_PREFERENCES, -1);
+        }
 
         return userImageUrl;
     }

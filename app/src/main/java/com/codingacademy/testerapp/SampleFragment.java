@@ -1,7 +1,6 @@
 package com.codingacademy.testerapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -26,12 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SampleFragment extends Fragment {
     RecyclerView mRecyclerSample;
+    Exam exam;
     Sample[] mSamples;
     private FloatingActionButton btnAddSample;
 
     SampleRecyclerViewAdapter myAdapterSample;
     private SampleFragmentActionListener mListener;
-
+    static final String EXAM_OPJECT = "EXAM_OPJECT";
 
 
     interface SampleFragmentActionListener {
@@ -44,27 +44,28 @@ public class SampleFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_sample, container, false);
-        fillAdapter();
+        //fillAdapter();
+        exam = (Exam) getArguments().getSerializable(SampleFragment.EXAM_OPJECT);
+        mSamples = exam.getSamples();
         initView(v);
 
         return v;
     }
-    private void initView(View v) {
-       Exam exam = new Exam(1, null, null, null, 20, 7, null, null, null, null, null);
 
-       mRecyclerSample= v.findViewById(R.id.recyclersample);
-    mRecyclerSample.setLayoutManager(new LinearLayoutManager(getActivity()));
+    private void initView(View v) {
+        /// Exam exam = new Exam(1, null, null, null, 20, 7, null, null, null, null, null);
+
+        mRecyclerSample = v.findViewById(R.id.recyclersample);
+        mRecyclerSample.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerSample.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
 
-        myAdapterSample=new SampleRecyclerViewAdapter(getContext(),mSamples);
+        myAdapterSample = new SampleRecyclerViewAdapter();
         mRecyclerSample.setAdapter(myAdapterSample);
-        btnAddSample=v.findViewById(R.id.add_sample);
+        btnAddSample = v.findViewById(R.id.add_sample);
         btnAddSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),QuesExamActvity.class);
-                intent.putExtra(ExamFragment.EXAM_OBJECT,exam);
-                startActivity(intent);
+                startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.ADD_SAMPLE));
             }
         });
 
@@ -74,22 +75,10 @@ public class SampleFragment extends Fragment {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-    public void fillAdapter() {
-        mSamples = new Sample[4];
-        mSamples[0] = new Sample(null, " Sample A", null, null);
-        mSamples[1] = new Sample(null, " Sample B", null, null);
-        mSamples[2] = new Sample(null, " Sample C", null, null);
-        mSamples[3] = new Sample(null, " Sample D", null, null);
-    }
+
 
     public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleRecyclerViewAdapter.ViewHolder> {
-        private Sample[] mSamples;
-        private Context mContext;
 
-        public SampleRecyclerViewAdapter(Context mContext, Sample[] mSamples) {
-            this.mContext = mContext;
-            this.mSamples = mSamples;
-        }
 
         @NonNull
         @Override
@@ -193,7 +182,7 @@ public class SampleFragment extends Fragment {
             return mSamples.length;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView mSampleName;
             Button mBtnTalent;
@@ -204,13 +193,25 @@ public class SampleFragment extends Fragment {
             public ViewHolder(View view) {
                 super(view);
                 mSampleName = view.findViewById(R.id.sample_name);
+                mSampleName.setOnClickListener(this);
                 mBtnExpand = view.findViewById(R.id.btn_expand);
                 layoutExpand = view.findViewById(R.id.layoutt_expand);
                 mBtnTalent = view.findViewById(R.id.btn_talent);
                 mBtnModify = view.findViewById(R.id.btn_modify);
+            }
 
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.sample_name:
+                        int whatPos=getAdapterPosition();
+                        startActivity(QuesExamActvity.getInstance(getActivity(), exam, whatPos));
+                        break;
 
+                }
             }
         }
     }
+
+
 }

@@ -96,12 +96,22 @@ android:focusableInTouchMode="false"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
           android:textSize="33sp" />
+<View
+    android:layout_width="0dp"
+    android:layout_height="1dp"
+   android:layout_weight="1"/>
+      <Button
+          android:visibility="gone"
 
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+         android:layout_weight="5"
+         android:text="Finish Exam"
+         android:id="@+id/finish_exam"/>
       <View
           android:layout_width="0dp"
-          android:layout_height="0dp"
-          android:layout_weight="5" />
-
+          android:layout_height="1dp"
+          android:layout_weight="1"/>
       <ImageView
           android:id="@+id/next"
           android:layout_width="wrap_content"

@@ -29,6 +29,8 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.codingacademy.testerapp.model.Exam;
+import com.codingacademy.testerapp.model.Sample;
 import com.codingacademy.testerapp.model.TopTalent;
 import com.codingacademy.testerapp.model.UserProfile;
 import com.codingacademy.testerapp.requests.VolleyCallback;
@@ -41,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -419,11 +422,11 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
     @Override
-    public void showSample(int examID) {
+    public void showSample(Exam exam) {
         SampleFragment sampleFragment = new SampleFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(CategoryFragment.CATEGORY_ID, examID);
+        bundle.putSerializable(SampleFragment.EXAM_OPJECT, (Serializable) exam);
         sampleFragment.setArguments(bundle);
 
         mFragmentTransaction = fragmentManager.beginTransaction();
