@@ -62,13 +62,16 @@ public class SampleFragment extends Fragment {
 
         myAdapterSample = new SampleRecyclerViewAdapter();
         mRecyclerSample.setAdapter(myAdapterSample);
-        btnAddSample = v.findViewById(R.id.add_sample);
-        btnAddSample.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.ADD_SAMPLE));
-            }
-        });
+        if(LoginSharedPreferences.getUserId(getContext())==exam.getExaminerID()) {
+            btnAddSample = v.findViewById(R.id.add_sample);
+            btnAddSample.setVisibility(View.VISIBLE);
+            btnAddSample.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.ADD_SAMPLE));
+                }
+            });
+        }
 
     }
 

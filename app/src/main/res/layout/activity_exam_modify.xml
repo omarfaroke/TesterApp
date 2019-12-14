@@ -709,6 +709,7 @@
                             android:visibility="gone" />
 
                         <Button
+                            android:visibility="gone"
                             android:id="@+id/bt_modify_exam"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -719,6 +720,7 @@
                             android:onClick="clickAction"
                             android:padding="10dp"
                             android:text="Submet"
+                            android:enabled="false"
                             android:textColor="@color/text"
                             android:theme="@style/ButtonPrimary" />
 

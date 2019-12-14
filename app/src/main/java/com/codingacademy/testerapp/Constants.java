@@ -42,15 +42,18 @@ public class Constants {
     public static final String GET_TOP_TALET = BASE_URL + "/get_top_talent.php";
     public static final String ADD_CATEGORY = BASE_URL + "/add_Category.php";
     public static final String ADD_EXAM_HISTORY = BASE_URL + "/add_exams_history.php";
+    public static final String ADD_SAMPLE = BASE_URL + "/add_questions.php";
+    public static final String ADD_EXAM = BASE_URL + "/add_exam.php";
+    public static final String UPDATE_EXAM_STATE = BASE_URL + "/update_exam_state.php";
 
 
-    public static String COOKIES ;
+    public static String COOKIES;
 
 
     public static final int USER_TYPE_ADMIN = 0;
-    public static final int USER_TYPE_TALENT = 3;
     public static final int USER_TYPE_EXAMINER = 1;
     public static final int USER_TYPE_RECRUITER = 2;
+    public static final int USER_TYPE_TALENT = 3;
     public static final String USER_STATUS = "status";
 
 
@@ -58,7 +61,6 @@ public class Constants {
 //        String cookies = CookieManager.getInstance().getCookie(Constants.GET_TOP_TALET);
 //        return cookies;
 //    }
-
 
 
     static void getCookiesFromUrl(Context context) {
@@ -90,7 +92,6 @@ public class Constants {
             }
         });
         webViewRequest.loadUrl(Constants.GET_TOP_TALET);
-
 
 
     }

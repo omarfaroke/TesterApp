@@ -30,7 +30,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.codingacademy.testerapp.model.Exam;
-import com.codingacademy.testerapp.model.Sample;
 import com.codingacademy.testerapp.model.TopTalent;
 import com.codingacademy.testerapp.model.UserProfile;
 import com.codingacademy.testerapp.requests.VolleyCallback;
@@ -58,7 +57,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     private Toolbar toolbar;
     private NavigationView nav_view;
     private FragmentManager fragmentManager;
-
+    FrgmentInerface frgmentInerface;
     private FragmentTransaction mFragmentTransaction;
 
     private RecyclerView recyclerPro;
@@ -173,6 +172,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
+
+
     }
 
 
@@ -219,12 +220,19 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                         nav_view.getMenu().findItem(R.id.nav_logout).setVisible(false);
                         nav_view.getMenu().findItem(R.id.nav_login).setVisible(true);
+                        setupItemsMenuNavDrawer();
+
+                        showCategory();
                         break;
                     case R.id.nav_help:
                         LoginSharedPreferences.checkIsLogin(MenuDrawerNews.this);
                         break;
                     case R.id.nav_settings:
                         LoginSharedPreferences.test(MenuDrawerNews.this);
+
+                        break;
+                    case R.id.nav_approve_test:
+                        showExams(0);
 
                         break;
                 }
@@ -296,6 +304,13 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
                 nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
                 nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, false);
+
+            default:
+                nav_view.getMenu().setGroupVisible(R.id.group_items_talent, false);
+
+                nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
+                nav_view.getMenu().setGroupVisible(R.id.group_items_recruiters, false);
                 break;
         }
 
@@ -322,7 +337,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         mFragmentTransaction.commit();
     }
 
-
     @Override
     public void showSample(Exam exam) {
         SampleFragment sampleFragment = new SampleFragment();
@@ -336,7 +350,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
-
 
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

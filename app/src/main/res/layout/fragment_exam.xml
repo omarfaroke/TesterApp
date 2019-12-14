@@ -20,4 +20,13 @@
         android:id="@+id/recyclerExam"
         tools:listitem="@layout/temp_exam"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_exam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="40dp"
+        android:src="@drawable/ic_add"
+        tools:ignore="VectorDrawableCompat" />
+
 </FrameLayout>

@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -17,17 +19,28 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.model.Exam;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExamModifyActivity extends AppCompatActivity {
-    private List<View> view_list = new ArrayList<>();
-    private List<RelativeLayout> step_view_list = new ArrayList<>();
 
+
+    private List<EditText> editTexts=new ArrayList<>();
+    private Exam exam;
+    Button btnSave;
     private View parent_view;
     private Switch swAprove;
+    boolean abrove;
     Spinner spinnerCat;
 
     @Override
@@ -35,15 +48,26 @@ public class ExamModifyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_modify);
         parent_view = findViewById(android.R.id.content);
-
+        exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
 
         initSpinner();
 
 
         initComponent();
+        checkPrivilige();
+    }
+
+    private void checkPrivilige() {
+        if (LoginSharedPreferences.userAsAdmin(this)) {
+            swAprove.setVisibility(View.VISIBLE);
+
+        } else {
+            swAprove.setVisibility(View.VISIBLE);
+        }
     }
 
     void initSpinner() {
+        spinnerCat = findViewById(R.id.sp_cat);
         ArrayList<String> arrList = new ArrayList<>();
         arrList.add("OOP");
         arrList.add("Java");
@@ -56,28 +80,58 @@ public class ExamModifyActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        // populate layout field
-        view_list.add(findViewById(R.id.lyt_cat));
-        view_list.add(findViewById(R.id.lyt_title));
-        view_list.add(findViewById(R.id.lyt_num_ques));
-        view_list.add(findViewById(R.id.lyt_mark));
-        view_list.add(findViewById(R.id.lyt_note));
-        view_list.add(findViewById(R.id.lyt_description));
-        view_list.add(findViewById(R.id.lyt_confirmation));
 
-        // populate view step (circle in left)
-        step_view_list.add((findViewById(R.id.step_cat)));
-        step_view_list.add((findViewById(R.id.step_title)));
-        step_view_list.add((findViewById(R.id.step_num_ques)));
-        step_view_list.add((findViewById(R.id.step_mark)));
-        step_view_list.add((findViewById(R.id.step_note)));
-        step_view_list.add((findViewById(R.id.step_description)));
-        step_view_list.add((findViewById(R.id.step_confirmation)));
+        editTexts.add(0,(findViewById(R.id.et_title)));
+        editTexts.get(0).setText(exam.getExamName());
 
-        spinnerCat = findViewById(R.id.sp_cat);
+        editTexts.add(0,(findViewById(R.id.et_num_ques)));
+        editTexts.get(0).setText(exam.getQuestionNumber()+"");
+
+        editTexts.add(0,(findViewById(R.id.et_time_ques)));
+        editTexts.get(0).setText(exam.getExamTime()+"");
+
+        editTexts.add((findViewById(R.id.et_full_mark)));
+        editTexts.get(0).setText(exam.getFullMarks()+"");
+
+        editTexts.add(0,(findViewById(R.id.et_pass_mark)));
+        editTexts.get(0).setText(exam.getExamPass()+"");
+
+        editTexts.add(0,(findViewById(R.id.et_note)));
+        editTexts.get(0).setText(exam.getExamNote());
+
+        editTexts.add(0,(findViewById(R.id.et_description)));
+        editTexts.get(0).setText(exam.getExamDescription());
+
+
+       // Toast.makeText(this, editTexts.size()+"", Toast.LENGTH_SHORT).show();
+        for(EditText e:editTexts)
+            e.setEnabled(false);
+
+        btnSave=findViewById(R.id.bt_modify_exam);
         swAprove = findViewById(R.id.sw_aprove);
+       if(LoginSharedPreferences.getUserType(ExamModifyActivity.this)==Constants.USER_TYPE_ADMIN) {
+           swAprove.setVisibility(View.VISIBLE);
+           btnSave.setVisibility(View.VISIBLE);
+           abrove = exam.getStatus() == 1 ? true : false;
+           swAprove.setChecked(abrove);
+           swAprove.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-        checkPrevlige();
+               @Override
+               public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                   exam.setStatus(b ? 1 : 0);
+                   btnSave.setEnabled(true);
+
+               }
+           });
+           btnSave.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   upDateExam();
+               }
+           });
+       }
+
+
 
 
         hideSoftKeyboard();
@@ -85,26 +139,26 @@ public class ExamModifyActivity extends AppCompatActivity {
 
     }
 
-    private void checkPrevlige() {
-
-        int type = LoginSharedPreferences.getUserType(ExamModifyActivity.this);
-
-        switch (type) {
-            case Constants.USER_TYPE_ADMIN:
-                break;
-            case Constants.USER_TYPE_TALENT:
-                break;
-
-            case Constants.USER_TYPE_EXAMINER:
-                swAprove.setVisibility(View.VISIBLE);
-                break;
-            case Constants.USER_TYPE_RECRUITER:
-                break;
-
-            default:
-
-        }
-    }
+//    private void checkPrevlige() {
+//
+//        int type = LoginSharedPreferences.getUserType(ExamModifyActivity.this);
+//
+//        switch (type) {
+//            case Constants.USER_TYPE_ADMIN:
+//                break;
+//            case Constants.USER_TYPE_TALENT:
+//                break;
+//
+//            case Constants.USER_TYPE_EXAMINER:
+//                swAprove.setVisibility(View.VISIBLE);
+//                break;
+//            case Constants.USER_TYPE_RECRUITER:
+//                break;
+//
+//            default:
+//
+//        }
+//    }
 
     public void clickLabel(View v) {
         Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
@@ -116,10 +170,44 @@ public class ExamModifyActivity extends AppCompatActivity {
 
 
             case R.id.bt_modify_exam:
-                // validate input user here
+                upDateExam();
                 finish();
                 break;
         }
+    }
+
+    private void upDateExam() {
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.UPDATE_EXAM_STATE,
+                response -> {
+                    Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+
+
+                },
+                error -> {
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameter = new HashMap<>();
+
+                parameter.put("exam_id", exam.getExamId()+"");
+                parameter.put("status", exam.getStatus()+"");
+                return parameter;
+
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+        Volley.newRequestQueue(ExamModifyActivity.this).add(request);
+
     }
 
 

@@ -11,15 +11,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.model.Exam;
+import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExamEntryActivity extends AppCompatActivity {
 
@@ -28,6 +36,8 @@ public class ExamEntryActivity extends AppCompatActivity {
     private int success_step = 0;
     private int current_step = 0;
     private View parent_view;
+    private int categoryID;
+    Exam exam;
 
     Spinner spinnerCat;
 
@@ -37,6 +47,11 @@ public class ExamEntryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exam_entry);
         parent_view = findViewById(android.R.id.content);
         spinnerCat = findViewById(R.id.sp_cat);
+        if (getIntent() != null) {
+            categoryID = getIntent().getIntExtra(CategoryFragment.CATEGORY_ID, 0);
+            exam = new Exam(1);
+            exam.setCategoryId(categoryID);
+        }
         initSpinner();
 
 
@@ -74,14 +89,12 @@ public class ExamEntryActivity extends AppCompatActivity {
         step_view_list.add((findViewById(R.id.step_description)));
         step_view_list.add((findViewById(R.id.step_confirmation)));
 
-            for (View v : view_list)
-                v.setVisibility(View.GONE);
+        for (View v : view_list)
+            v.setVisibility(View.GONE);
 
 
         view_list.get(0).setVisibility(View.VISIBLE);
         hideSoftKeyboard();
-
-
 
 
     }
@@ -99,26 +112,30 @@ public class ExamEntryActivity extends AppCompatActivity {
                 collapseAndContinue(0);
                 break;
             case R.id.bt_continue_title:
+                String s = ((EditText) findViewById(R.id.et_title)).getText().toString();
                 // validate input user here
-                if (((EditText) findViewById(R.id.et_title)).getText().toString().trim().equals("")) {
+                if (s.trim().equals("")) {
                     Snackbar.make(parent_view, "Title cannot empty", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
+                exam.setExamName(s);
 
                 collapseAndContinue(1);
                 break;
             case R.id.bt_continue_num_ques:
                 // validate input user here
                 String q_n_t = null;
-
-                if (((EditText) findViewById(R.id.et_num_ques)).getText().toString().trim().equals(""))
+                s = ((EditText) findViewById(R.id.et_num_ques)).getText().toString();
+                if (s.trim().equals(""))
                     q_n_t = "Please set number of question";
-
-                if (((EditText) findViewById(R.id.et_time_ques)).getText().toString().trim().equals("")) {
+                else
+                    exam.setQuestionNumber(Integer.valueOf(s));
+                s = ((EditText) findViewById(R.id.et_time_ques)).getText().toString();
+                if (s.trim().equals("")) {
                     if (q_n_t == null)
                         q_n_t = "Please set time for exam";
                     else q_n_t += " & time for exam";
-                }
+                } else exam.setExamTime(Integer.valueOf(s));
 
                 if (q_n_t == null) {
                     collapseAndContinue(2);
@@ -129,15 +146,16 @@ public class ExamEntryActivity extends AppCompatActivity {
             case R.id.bt_continue_mark:
                 // validate input user here
                 String mark = null;
-
-                if (((EditText) findViewById(R.id.et_full_mark)).getText().toString().trim().equals(""))
+                s = ((EditText) findViewById(R.id.et_full_mark)).getText().toString();
+                if (s.trim().equals(""))
                     mark = "Please set full mark";
-
-                if (((EditText) findViewById(R.id.et_pass_mark)).getText().toString().trim().equals("")) {
+                else exam.setFullMarks(Integer.valueOf(s));
+                s = ((EditText) findViewById(R.id.et_pass_mark)).getText().toString();
+                if (s.trim().equals("")) {
                     if (mark == null)
                         mark = "Please set pass mark";
                     else mark += " & pass mark";
-                }
+                } else exam.setExamPass(Integer.valueOf(s));
 
                 if (mark == null) {
                     collapseAndContinue(3);
@@ -147,20 +165,22 @@ public class ExamEntryActivity extends AppCompatActivity {
                 return;
             case R.id.bt_continue_note:
                 // validate input user here
-                if (((EditText) findViewById(R.id.et_note)).getText().toString().trim().equals("")) {
+                s = ((EditText) findViewById(R.id.et_note)).getText().toString();
+                if (s.trim().equals("")) {
                     Snackbar.make(parent_view, "Note cannot empty", Snackbar.LENGTH_SHORT).show();
                     return;
-                }
+                } else exam.setExamNote(s);
                 collapseAndContinue(4);
                 break;
 
 
             case R.id.bt_continue_description:
                 // validate input user here
-                if (((EditText) findViewById(R.id.et_description)).getText().toString().trim().equals("")) {
+                s = ((EditText) findViewById(R.id.et_description)).getText().toString();
+                if (s.trim().equals("")) {
                     Snackbar.make(parent_view, "Description cannot empty", Snackbar.LENGTH_SHORT).show();
                     return;
-                }
+                } else exam.setExamDescription(s);
 
                 collapseAndContinue(5);
                 break;
@@ -168,9 +188,40 @@ public class ExamEntryActivity extends AppCompatActivity {
 
             case R.id.bt_add_event:
                 // validate input user here
-                finish();
+                upLoadExam();
+
                 break;
         }
+    }
+
+    private void upLoadExam() {
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.ADD_EXAM,
+                response -> {
+                    Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                },
+                error -> {
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameter = new HashMap<>();
+                String examString = new Gson().toJson(exam);
+                parameter.put("exam", examString);
+                return parameter;
+
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+        Volley.newRequestQueue(ExamEntryActivity.this).add(request);
+        // VolleyController.getInstance(ExamEntryActivity.this).addToRequestQueue(request);
     }
 
     public void clickLabel(View view) {

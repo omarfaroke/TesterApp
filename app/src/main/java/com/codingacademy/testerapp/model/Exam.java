@@ -40,11 +40,89 @@ public class Exam implements Serializable {
     @SerializedName("status")
     private Integer status;
 
+    @SerializedName("examiner_id")
+    private Integer examinerID;
+
     @SerializedName("sample")
    private Sample[] samples;
 
     public boolean expanded = false;
 
+    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime, Integer questionNumber, Integer fullMarks, Integer examPass, String examNote, String examDescription, Integer status, Integer examinerID, Sample[] samples) {
+        this.examId = examId;
+        this.categoryId = categoryId;
+        this.examName = examName;
+        this.examDate = examDate;
+        this.examTime = examTime;
+        this.questionNumber = questionNumber;
+        this.fullMarks = fullMarks;
+        this.examPass = examPass;
+        this.examNote = examNote;
+        this.examDescription = examDescription;
+        this.status = status;
+        this.examinerID = examinerID;
+        this.samples = samples;
+    }
+
+    public Exam(Integer examinerID) {
+        this.examinerID = examinerID;
+    }
+
+    public Integer getExaminerID() {
+        return examinerID;
+    }
+
+    public void setExamId(Integer examId) {
+        this.examId = examId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
+    }
+
+    public void setExamDate(String examDate) {
+        this.examDate = examDate;
+    }
+
+    public void setExamTime(Integer examTime) {
+        this.examTime = examTime;
+    }
+
+    public void setQuestionNumber(Integer questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public void setFullMarks(Integer fullMarks) {
+        this.fullMarks = fullMarks;
+    }
+
+    public void setExamPass(Integer examPass) {
+        this.examPass = examPass;
+    }
+
+    public void setExamNote(String examNote) {
+        this.examNote = examNote;
+    }
+
+    public void setExamDescription(String examDescription) {
+        this.examDescription = examDescription;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void setSamples(Sample[] samples) {
+        this.samples = samples;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
 
     public Integer getExamId() {
         return examId;
@@ -66,12 +144,16 @@ public class Exam implements Serializable {
         return examTime;
     }
 
-    public Integer getExamPass() {
-        return examPass;
+    public Integer getQuestionNumber() {
+        return questionNumber;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getFullMarks() {
+        return fullMarks;
+    }
+
+    public Integer getExamPass() {
+        return examPass;
     }
 
     public String getExamNote() {
@@ -82,34 +164,15 @@ public class Exam implements Serializable {
         return examDescription;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
     public Sample[] getSamples() {
         return samples;
     }
 
-    public Exam(Integer examId, Integer categoryId, String examName, String examDate, Integer examTime,Integer questionNumber, Integer fullMarks, Integer examPass, String examNote, String examDescription, Integer status,Sample[] samples) {
-        this.examId = examId;
-        this.categoryId = categoryId;
-        this.examName = examName;
-        this.examDate = examDate;
-        this.examTime = examTime;
-        this.questionNumber = questionNumber;
-        this.fullMarks = fullMarks;
-        this.examPass = examPass;
-        this.examNote = examNote;
-        this.examDescription = examDescription;
-        this.status = status;
-        this.samples=samples;
-    }
-
-    public void setExamPass(Integer examPass) {
-        this.examPass = examPass;
-    }
-
-    public Integer getQuestionNumber() {
-        return questionNumber;
-    }
-
-    public Integer getFullMarks() {
-        return fullMarks;
+    public boolean isExpanded() {
+        return expanded;
     }
 }

@@ -16,8 +16,8 @@ public class LoginSharedPreferences {
         mSharedPreferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                Toast.makeText(mContext, "onSharedPreferenceChanged", Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, key, Toast.LENGTH_SHORT).show();
+          //      Toast.makeText(mContext, "onSharedPreferenceChanged", Toast.LENGTH_SHORT).show();
+               Toast.makeText(mContext, key, Toast.LENGTH_SHORT).show();
 
             }
         });

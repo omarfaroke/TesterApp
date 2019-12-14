@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class QuesEntryFragment extends Fragment implements View.OnClickListener {
+public class QuesEntryFragment extends Fragment  {
     private EditText etQues, etChoice;
     private Button btChoice;
     private Context context;
@@ -47,11 +47,6 @@ public class QuesEntryFragment extends Fragment implements View.OnClickListener 
     private static final String IS_ENTER = "ENTER";
     boolean editState = false;
     private boolean isRight = false;
-
-    @Override
-    public void onClick(View view) {
-
-    }
 
 
     interface QuesFragmentActionListener {
@@ -100,12 +95,6 @@ public class QuesEntryFragment extends Fragment implements View.OnClickListener 
         return v;
     }
 
-    boolean gotAnswer = false;
-
-
-    private void fillChoices() {
-
-    }
 
     private void editQuestion() {
         {

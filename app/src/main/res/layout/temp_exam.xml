@@ -10,6 +10,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
@@ -17,9 +18,6 @@
         android:minHeight="?attr/actionBarSize"
         android:orientation="horizontal">
 
-        <View
-            android:layout_width="@dimen/spacing_large"
-            android:layout_height="wrap_content" />
 
 
 
@@ -28,11 +26,13 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:gravity="center_vertical"
             android:id="@+id/exam_name"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Item Title"
+
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimary" />
 
@@ -68,18 +68,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lay_exam_button"
+            android:gravity="center"
             >
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Show Sample"
                 android:id="@+id/show_sample"
+                android:visibility="gone"
                 />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Show talent"
                 android:id="@+id/show_talent"
+                android:visibility="gone"
+
+                />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="DETAILS"
+                android:id="@+id/detils_exam"
+                android:visibility="gone"
+
                 />
         </LinearLayout>
 

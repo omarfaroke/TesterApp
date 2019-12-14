@@ -8,7 +8,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -71,6 +70,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     static final int ADD_SAMPLE = -101;
     static final int TAKE_EXAM = -103;
     private static final String WHAT = "WHAT";
+    private int STATE;
     // int counter =0;
 
 
@@ -90,25 +90,23 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-         exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
-        int what = getIntent().getIntExtra(WHAT, -1);
+        exam = (Exam) getIntent().getSerializableExtra(ExamFragment.EXAM_OBJECT);
+         STATE = getIntent().getIntExtra(WHAT, -1);
 
         timeLeftInSeconds = exam.getExamTime();
         init();
 
-        if (what == TAKE_EXAM) {
-            sample = exam.getSamples()[new Random().nextInt(exam.getSamples().length-1)];
+        if (STATE == TAKE_EXAM) {
+            int size = exam.getSamples().length;
+            int r = new Random().nextInt(size);
+            sample = exam.getSamples()[r];
             getSamples(sample.getSampleId());
-        }
-
-        else if (what == ADD_SAMPLE)
+        } else if (STATE == ADD_SAMPLE)
             enterNewSample();
-        else if (what >=0) {
-            sample = exam.getSamples()[what];
+        else if (STATE >= 0) {
+            sample = exam.getSamples()[STATE];
             getSamples(sample.getSampleId());
-        }
-
-        else finish();
+        } else finish();
     }
 
     private void enterNewSample() {
@@ -118,8 +116,8 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         showQuesFragment(true);
     }
 
-    private void getSamples(int examId) {
-        getSamples(examId, new VolleyCallback() {
+    private void getSamples(int sampleId) {
+        getSamples(sampleId, new VolleyCallback() {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
@@ -165,7 +163,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
-
+private int size=questionArray.length;
             private int mCurrentSelectedPage = 0;
 
             @Override
@@ -176,10 +174,14 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
                 } else {
                     mCurrentSelectedPage = position;
                     progressBar.setProgress(mCurrentSelectedPage + 1);
-                    if (position == questionArray.length - 1)
+                    if (position == size - 1) {
                         btnFinish.setVisibility(View.VISIBLE);
-
-
+                        mNext.setVisibility(View.INVISIBLE);
+                    }
+                    else if (position < mCurrentSelectedPage && position == size - 2) {
+                        btnFinish.setVisibility(View.INVISIBLE);
+                        mNext.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -189,7 +191,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         });
     }
 
-    private void getSamples(int examId, final VolleyCallback mCallback) {
+    private void getSamples(int sampleId, final VolleyCallback mCallback) {
         String url = Constants.GET_SAMPLE;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -218,7 +220,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                par.put("sample_id", "" + examId);
+                par.put("sample_id", "" + sampleId);
                 return par;
             }
 
@@ -258,12 +260,55 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     private void finishExam() {
         FinishExamDialog finishExamDialog = new FinishExamDialog();
         Bundle bundle = new Bundle();
-        String result = "The Exam is finish You got " + getScore() + "/" + questionArray.length;
-        bundle.putString("RESULT", result);
-        finishExamDialog.setArguments(bundle);
-        uploadResult();
+        String result;
+        if(STATE==TAKE_EXAM||STATE>=0) {
+             result = "The Exam is finish You got " + getScore() + "/" + exam.getFullMarks();
+            bundle.putString("RESULT", result);
+            finishExamDialog.setArguments(bundle);
+            uploadResult();
+        }
+        else if(STATE==ADD_SAMPLE){
+            uploadSample();
+            result = "The Exam is finish You got ";
+            bundle.putString("RESULT", result);
+            finishExamDialog.setArguments(bundle);
+
+        }
         finishExamDialog.show(getSupportFragmentManager(), "Your result");
-           }
+    }
+
+    private void uploadSample() {
+
+        Sample sample=new Sample(null,etSampleName.getText().toString(),1,"date",exam.getExamId(),questionArray);
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.ADD_SAMPLE,
+                response -> {
+                    Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                },
+                error -> {
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameter = new HashMap<>();
+                String sampleString = new Gson().toJson(sample);
+                parameter.put("sample",sampleString);
+                return parameter;
+
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+
+        VolleyController.getInstance(QuesExamActvity.this).addToRequestQueue(request);
+    }
 
     private void uploadResult() {
 
@@ -276,12 +321,12 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameter = new HashMap<>();
-                int score=getScore();
+                float score = getScore();
 
-                parameter.put("user_id", LoginSharedPreferences.getUserId(QuesExamActvity.this)+"");
-                parameter.put("sample_id", sample.getSample_id()+"");
-                parameter.put("date", new Date()+"");
-                parameter.put("score", score+"");
+                parameter.put("user_id", LoginSharedPreferences.getUserId(QuesExamActvity.this) + "");
+                parameter.put("sample_id", sample.getSample_id() + "");
+                parameter.put("date",  "2020");
+                parameter.put("score", score + "");
                 parameter.put("status", "1");
                 return parameter;
 
@@ -302,13 +347,12 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     }
 
 
-    private int getScore() {
-       int markPerQues=exam.getFullMarks()/exam.getQuestionNumber();
-        int s = 0;
+    private float getScore() {
+        float markPerQues = exam.getFullMarks() / exam.getQuestionNumber();
+        float s = 0;
         for (Question q : questionArray)
             if (q.gotCorrect)
-                s+=markPerQues;
-
+                s += markPerQues;
         return s;
     }
 
@@ -331,6 +375,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, questionArray.length-1)).notValidate())
                 finishExam();
             }
         });
@@ -372,6 +417,6 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
     @Override
     public void setAnswer(boolean isRight, int index) {
         questionArray[index].gotCorrect = isRight;
-       // Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
     }
 }

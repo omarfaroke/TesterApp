@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +31,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,13 +41,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExamFragment extends Fragment {
+public class ExamFragment extends Fragment implements FrgmentInerface {
     public static final String TAG = "ExamFragment";
     public static final String EXAM_OBJECT = "EXAM_OBJECT";
 
@@ -53,8 +55,12 @@ public class ExamFragment extends Fragment {
     private ExamAdapter examAdapter;
     private int currentCategory;
     private ExamFragmentActionListener mListener;
+    private FloatingActionButton btnAddExam;
 
-
+    @Override
+    public void refresh() {
+        upDateExam();
+    }
 
 
     interface ExamFragmentActionListener {
@@ -161,14 +167,15 @@ public class ExamFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                par.put(CategoryFragment.CATEGORY_ID, "" + cat_id);
+                if (cat_id != 0)
+                    par.put(CategoryFragment.CATEGORY_ID, "" + cat_id);
                 return par;
             }
 
             @Override
-            public Map<String, String> getHeaders(){
+            public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-        	while (Constants.COOKIES == null);
+                while (Constants.COOKIES == null) ;
                 map.put("Cookie", Constants.COOKIES);
                 return map;
             }
@@ -176,7 +183,6 @@ public class ExamFragment extends Fragment {
         VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
     }
-
 
 
     private void upDateExam() {
@@ -193,7 +199,24 @@ public class ExamFragment extends Fragment {
         recyclerExam = v.findViewById(R.id.recyclerExam);
         recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
+        btnAddExam = v.findViewById(R.id.add_exam);
+        if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER) {
+            btnAddExam.setVisibility(View.VISIBLE);
+            btnAddExam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ExamEntryActivity.class);
+                    intent.putExtra(CategoryFragment.CATEGORY_ID, currentCategory);
+                    startActivity(intent);
+                }
+            });
+
+        } else {
+            btnAddExam.setVisibility(View.GONE);
+        }
+
     }
+
 
     public int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
@@ -212,6 +235,22 @@ public class ExamFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             exam = examsArr[position];
+            if(LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())
+                holder.btnShowSample.setVisibility(View.VISIBLE);
+            if (exam.getStatus() == 0) {
+                if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_ADMIN ||
+                        LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())
+                    holder.examName.setBackgroundColor(Color.GRAY);
+
+                else {
+                    holder.itemView.setVisibility(View.GONE);
+                    holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+                }
+
+
+            }
+
+
             holder.examName.setText(exam.getExamName());
             holder.examDesc.setText(exam.getExamDescription());
 
@@ -226,6 +265,7 @@ public class ExamFragment extends Fragment {
             toggleArrow(exam.expanded, holder.btExpand, false);
 
         }
+
 
         private boolean toggleLayoutExpand(boolean show, View view, View lyt_expand) {
             toggleArrow(show, view, true);
@@ -246,6 +286,7 @@ public class ExamFragment extends Fragment {
                 view.animate().setDuration(delay ? 200 : 0).rotation(0);
                 return false;
             }
+
         }
 
 
@@ -259,7 +300,7 @@ public class ExamFragment extends Fragment {
             TextView examName, examDesc;
             public ImageButton btExpand;
             public View lyt_expand;
-            private Button btnShowSample, btnShowTalent;
+            private Button btnShowSample, btnShowTalent, btnDetilsExam;
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
@@ -269,9 +310,33 @@ public class ExamFragment extends Fragment {
                 lyt_expand = itemView.findViewById(R.id.lyt_expand);
                 btnShowSample = itemView.findViewById(R.id.show_sample);
                 btnShowTalent = itemView.findViewById(R.id.show_talent);
+                btnDetilsExam = itemView.findViewById(R.id.detils_exam);
                 btnShowSample.setOnClickListener(this);
                 examName.setOnClickListener(this);
                 btExpand.setOnClickListener(this);
+                btnDetilsExam.setOnClickListener(this);
+                btnShowTalent.setOnClickListener(this);
+                checkPrivlige();
+            }
+
+            private void checkPrivlige() {
+
+                switch (LoginSharedPreferences.getUserType(getActivity())) {
+                    case Constants.USER_TYPE_ADMIN:
+                        btnShowSample.setVisibility(View.VISIBLE);
+                        btnShowTalent.setVisibility(View.VISIBLE);
+                        btnDetilsExam.setVisibility(View.VISIBLE);
+                        break;
+                    case Constants.USER_TYPE_EXAMINER:
+                        btnDetilsExam.setVisibility(View.VISIBLE);
+                        break;
+                    case Constants.USER_TYPE_RECRUITER:
+                        btnShowTalent.setVisibility(View.VISIBLE);
+                        break;
+                    case Constants.USER_TYPE_TALENT:
+
+                        break;
+                }
             }
 
 
@@ -291,36 +356,48 @@ public class ExamFragment extends Fragment {
                         boolean show = toggleLayoutExpand(!exam.expanded, btExpand, lyt_expand);
                         exam.expanded = show;
                         break;
+                    case R.id.detils_exam:
+                        Intent intent = new Intent(getActivity(), ExamModifyActivity.class);
+                        intent.putExtra(ExamFragment.EXAM_OBJECT, exam);
+                        startActivity(intent);
+                        break;
+
                 }
             }
 
             private void showQuestions() {
-
-                String mNumberOfQuestions = exam.getQuestionNumber() + "";
-                String mExamTime = exam.getExamTime() + "";
-                String mBodyMessage = getString(R.string.dialog_info_exam, mNumberOfQuestions, mExamTime);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                String mBodyMessage;
+                if (!LoginSharedPreferences.checkIsLogin(getActivity()))
+                    mBodyMessage = "You must login ";
+                else if (exam.getSamples().length == 0)
+                    mBodyMessage = "No Question yet";
+                else {
+                    String mNumberOfQuestions = exam.getQuestionNumber() + "";
+                    String mExamTime = exam.getExamTime() + "";
+                    mBodyMessage = getString(R.string.dialog_info_exam, mNumberOfQuestions, mExamTime);
+                    builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.TAKE_EXAM));
+
+                        }
+                    }).setNegativeButton("stop", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getActivity(), "you clicked no", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
                 builder.setTitle("Welcome to Exam?");
                 builder.setMessage(mBodyMessage);
-                builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Random random=new Random();
-                        startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.TAKE_EXAM));
-
-                    }
-                }).setNegativeButton("stop", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "you clicked no", Toast.LENGTH_SHORT).show();
-                    }
-                });
                 Dialog dialog = builder.create();
+
                 dialog.show();
             }
         }
     }
-
 
 
 }
