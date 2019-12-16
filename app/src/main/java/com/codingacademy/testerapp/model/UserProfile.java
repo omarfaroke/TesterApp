@@ -25,6 +25,8 @@ public class UserProfile {
     @SerializedName("image_url")
     private String imageUrl;
 
+    public transient boolean expanded=false;
+
     public UserProfile(Integer userId, Integer type, String firstName, String middleName, String lastName, String address, String phone, String imageUrl) {
         UserId = userId;
         this.type = type;

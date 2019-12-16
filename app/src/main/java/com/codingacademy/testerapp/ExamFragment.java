@@ -46,7 +46,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExamFragment extends Fragment implements FrgmentInerface {
+public class ExamFragment extends Fragment {
     public static final String TAG = "ExamFragment";
     public static final String EXAM_OBJECT = "EXAM_OBJECT";
 
@@ -57,10 +57,6 @@ public class ExamFragment extends Fragment implements FrgmentInerface {
     private ExamFragmentActionListener mListener;
     private FloatingActionButton btnAddExam;
 
-    @Override
-    public void refresh() {
-        upDateExam();
-    }
 
 
     interface ExamFragmentActionListener {

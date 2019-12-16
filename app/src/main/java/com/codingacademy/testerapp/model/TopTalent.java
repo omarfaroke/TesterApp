@@ -18,7 +18,7 @@ public class TopTalent {
     private Integer sampleId;
 
     @SerializedName("date")
-    private Integer date;
+    private String date;
 
     private Integer score;
 
@@ -28,7 +28,7 @@ public class TopTalent {
         this.score = score;
     }
 
-    public TopTalent(UserProfile userProfile, Integer categoryID, Integer examId, Integer sampleId, Integer date, Integer score) {
+    public TopTalent(UserProfile userProfile, Integer categoryID, Integer examId, Integer sampleId, String date, Integer score) {
         this.userProfile = userProfile;
         this.categoryID = categoryID;
         this.examId = examId;

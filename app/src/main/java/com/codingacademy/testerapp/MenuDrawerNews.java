@@ -57,7 +57,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     private Toolbar toolbar;
     private NavigationView nav_view;
     private FragmentManager fragmentManager;
-    FrgmentInerface frgmentInerface;
     private FragmentTransaction mFragmentTransaction;
 
     private RecyclerView recyclerPro;
@@ -233,6 +232,11 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                         break;
                     case R.id.nav_approve_test:
                         showExams(0);
+
+                        break;
+                    case R.id.nav_approve_examiner:
+                        Intent intent=new Intent(MenuDrawerNews.this,ExaminarActivity.class);
+                        startActivity(intent);
 
                         break;
                 }

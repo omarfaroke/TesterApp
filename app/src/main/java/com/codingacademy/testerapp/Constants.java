@@ -45,6 +45,7 @@ public class Constants {
     public static final String ADD_SAMPLE = BASE_URL + "/add_questions.php";
     public static final String ADD_EXAM = BASE_URL + "/add_exam.php";
     public static final String UPDATE_EXAM_STATE = BASE_URL + "/update_exam_state.php";
+    public static final String GET_EXAMINER = BASE_URL + "/get_all_examinar.php";
 
 
     public static String COOKIES;
