@@ -49,13 +49,11 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
 
     ProgressBar progressBar;
 
-    private int questionCounter;
-    private int questionCountTotal;
 
-    List<Choice> choices;
     Question questionArray[];
     private ViewPager pager;
     TextView tvTimer;
+    TextView tvConter;
     EditText etSampleName;
     Button btnFinish;
     Sample sample;
@@ -174,6 +172,7 @@ private int size=questionArray.length;
                 } else {
                     mCurrentSelectedPage = position;
                     progressBar.setProgress(mCurrentSelectedPage + 1);
+                    tvConter.setText(mCurrentSelectedPage+1+"/"+exam.getQuestionNumber());
                     if (position == size - 1) {
                         btnFinish.setVisibility(View.VISIBLE);
                         mNext.setVisibility(View.INVISIBLE);
@@ -367,8 +366,11 @@ private int size=questionArray.length;
     }
 
     public void init() {
+        etSampleName=findViewById(R.id.et_sample_name);
         btnFinish = findViewById(R.id.finish_exam);
         tvTimer = findViewById(R.id.time_text);
+        tvConter = findViewById(R.id.count_text);
+        tvConter.setText("1/"+exam.getQuestionNumber());
         pager = findViewById(R.id.pager);
         progressBar = findViewById(R.id.progress);
         mNext = findViewById(R.id.next);
@@ -417,6 +419,5 @@ private int size=questionArray.length;
     @Override
     public void setAnswer(boolean isRight, int index) {
         questionArray[index].gotCorrect = isRight;
-        // Toast.makeText(this, index + " is " + isRight, Toast.LENGTH_SHORT).show();
     }
 }
