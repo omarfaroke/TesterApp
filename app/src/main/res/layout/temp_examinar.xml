@@ -63,10 +63,20 @@
     android:layout_height="wrap_content"
     android:id="@+id/email"
     />
-        <Switch
+        <Button
+            android:text="Aprove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/aprove"
+            android:visibility="gone"
+            />
+        <Button
+            android:text="Dis Aprove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dis_aprove"
+            android:visibility="gone"
+
             />
 
 

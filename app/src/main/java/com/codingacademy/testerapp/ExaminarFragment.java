@@ -1,15 +1,21 @@
 package com.codingacademy.testerapp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -18,10 +24,12 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.model.Sample;
 import com.codingacademy.testerapp.model.UserProfile;
+import com.codingacademy.testerapp.requests.StatusCallback;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
@@ -85,7 +93,6 @@ public class ExaminarFragment extends Fragment {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-
 
     void getExaminar() {
         getExamaminar(new VolleyCallback() {
@@ -189,7 +196,55 @@ public class ExaminarFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             UserProfile user = mUsers[position];
             holder.mExaminarName.setText(user.getFirstName() + " " + user.getFirstName());
-            holder.teEmail.setText(user.getAddress());
+            holder.teEmail.setText(user.getEmail());
+            if (user.getStatus() == 0) {
+                holder.mExaminarName.setBackgroundColor(Color.GRAY);
+                holder.btnAprove.setVisibility(View.VISIBLE);
+                holder.btnDisAprove.setVisibility(View.GONE);
+
+            } else if (user.getStatus() == 1) {
+                holder.mExaminarName.setBackgroundColor(Color.WHITE);
+                holder.btnDisAprove.setVisibility(View.VISIBLE);
+                holder.btnAprove.setVisibility(View.GONE);
+
+
+            }
+
+            holder.btnAprove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Constants.upDateState(user.getUserId(), 1, getActivity(), new StatusCallback() {
+                        @Override
+                        public void response(String s) {
+                            if (s.equals("update user status")) {
+                                user.setStatus(1);
+                                notifyItemChanged(position);
+                            }
+                            else Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+            holder.btnDisAprove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Constants.upDateState(user.getUserId(), 0, getActivity(), new StatusCallback() {
+                        @Override
+                        public void response(String s) {
+                            if (s.equals("update user status")) {
+                                user.setStatus(0);
+                                notifyItemChanged(position);
+                            }
+                            else Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+            });
+
+
             holder.mBtnExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -286,19 +341,20 @@ public class ExaminarFragment extends Fragment {
             TextView mExaminarName;
             ImageView mBtnExpand;
             View layoutExpand;
-            Switch swAprove;
             TextView teEmail;
+            Button btnAprove;
+            Button btnDisAprove;
 
             public ViewHolder(View view) {
                 super(view);
                 mExaminarName = view.findViewById(R.id.examinar_name);
                 mBtnExpand = view.findViewById(R.id.btn_expand);
                 layoutExpand = view.findViewById(R.id.layoutt_expand);
-                swAprove = view.findViewById(R.id.aprove);
                 teEmail = view.findViewById(R.id.email);
-
-
+                btnAprove = view.findViewById(R.id.aprove);
+                btnDisAprove = view.findViewById(R.id.dis_aprove);
             }
+
         }
     }
 }
