@@ -85,6 +85,8 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
                 .placeholder(R.drawable.userphoto)
                 .error(R.drawable.userphoto))
                 .load(Constants.BASE_URL + "/" + userProfile.getImageUrl())
+                //.load("https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/L%C3%ADnea_J_%28Logo_Metro_de_Medell%C3%ADn%29.svg/1024px-L%C3%ADnea_J_%28Logo_Metro_de_Medell%C3%ADn%29.svg.png")
+                //.load("https://testerapp.rf.gd/Profiles/IMG_4435.jpg")
                 .into(mProfilePhotoCircleImageView);
 
 

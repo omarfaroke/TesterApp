@@ -30,10 +30,12 @@ public class UserProfile implements Serializable {
     @SerializedName("email")
     private String email;
 
+    @SerializedName("status")
+    private int status;
 
-    public UserProfile(){
+    public transient boolean expanded=false;
 
-    }
+
 
     public UserProfile(Integer userId, Integer type, String firstName, String middleName, String lastName, String address, String phone, String imageUrl) {
         UserId = userId;
@@ -44,6 +46,26 @@ public class UserProfile implements Serializable {
         this.address = address;
         this.phone = phone;
         this.imageUrl = imageUrl;
+    }
+
+    public UserProfile(){
+
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public Integer getUserId() {
@@ -108,14 +130,5 @@ public class UserProfile implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

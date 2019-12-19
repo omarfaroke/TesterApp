@@ -276,8 +276,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                         break;
                     case R.id.nav_approve_examiner:
-                        Intent intent=new Intent(MenuDrawerNews.this,ExaminarActivity.class);
-                        startActivity(intent);
+                        Intent intent2=new Intent(MenuDrawerNews.this,ExaminarActivity.class);
+                        startActivity(intent2);
 
                         break;
                 }
