@@ -42,6 +42,7 @@
         >
 
         <TextView
+            android:id="@+id/drawer_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_medium"
@@ -49,7 +50,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/drawer_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="codingacademy@mail.com"

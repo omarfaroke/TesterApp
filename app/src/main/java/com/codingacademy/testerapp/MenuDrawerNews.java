@@ -57,7 +57,6 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     private Toolbar toolbar;
     private NavigationView nav_view;
     private FragmentManager fragmentManager;
-    FrgmentInerface frgmentInerface;
     private FragmentTransaction mFragmentTransaction;
 
     private RecyclerView recyclerPro;
@@ -198,6 +197,12 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
             }
         };
         drawer.setDrawerListener(toggle);
+
+//        ((TextView )drawer.findViewById(R.id.drawer_email)).setText("omar");
+//        ((TextView )drawer.findViewById(R.id.drawer_email)).setText("omar");
+
+
+
         toggle.syncState();
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -213,6 +218,41 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                         showLoginActivity();
                         break;
 
+                    case R.id.nav_profile:
+
+
+                        UserProfile userProfile = new UserProfile();
+
+                        userProfile.setFirstName(LoginSharedPreferences.getUserFirstName(MenuDrawerNews.this));
+                        userProfile.setLastName(LoginSharedPreferences.getUserLastName(MenuDrawerNews.this));
+                        userProfile.setImageUrl(LoginSharedPreferences.getUserImageUrl(MenuDrawerNews.this));
+                        userProfile.setUserId(LoginSharedPreferences.getUserId(MenuDrawerNews.this));
+
+
+                        Intent intent = new Intent(MenuDrawerNews.this, ProfileInfoActivity.class);
+
+                        intent.putExtra("UserProfile", userProfile);
+                        intent.putExtra(Constants.USER_EMAIL, LoginSharedPreferences.getUserEmail(MenuDrawerNews.this));
+                        intent.putExtra(Constants.USER_STATUS, LoginSharedPreferences.getStatus(MenuDrawerNews.this));
+
+                        startActivity(intent);
+
+
+
+                        break;
+
+                    case R.id.nav_exam_talent:
+
+                        Context context = MenuDrawerNews.this;
+
+                        Intent intent1 = new Intent(context,InfoExamTalentActivity.class);
+
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR,InfoExamTalentActivity.EXAMINER_ID);
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE,LoginSharedPreferences.getUserId(context));
+
+                        startActivity(intent1);
+
+                        break;
                     case R.id.nav_logout:
                         LoginSharedPreferences.userLogOut(MenuDrawerNews.this);
 
@@ -265,7 +305,8 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
 
 
-                    Toast.makeText(this, "test no h", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(this, "تم تسجيل الدخول بنجاح ", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -373,6 +414,21 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                 image = v.findViewById(R.id.top_pro_photo);
                 name = v.findViewById(R.id.top_pro_name);
 
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TopTalent topTalent = items.get(getAdapterPosition());
+
+                        Intent intent = new Intent(MenuDrawerNews.this, ProfileInfoActivity.class);
+
+                        intent.putExtra("UserProfile", topTalent.getUserProfile());
+                        intent.putExtra(Constants.USER_STATUS, topTalent.getStatusUser());
+
+                        startActivity(intent);
+
+                    }
+                });
+
             }
 
 
@@ -408,7 +464,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                     }
                 });
-                ViewAnimation.animateFadeIn(view.itemView, position);
+                //  ViewAnimation.animateFadeIn(view.itemView, position);
             }
         }
 
@@ -463,6 +519,13 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         }
 
         backPressedTime = System.currentTimeMillis();
+    }
+
+
+    public void updateUiAfterLoginOrLogout() {
+        switch (LoginSharedPreferences.getUserType(MenuDrawerNews.this)) {
+
+        }
     }
 
 }

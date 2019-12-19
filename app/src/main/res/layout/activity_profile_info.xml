@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffff"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:id="@+id/root_view"
+    android:enabled="false"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginBottom="8dp"
+        >
+
+        <EditText
+            android:id="@+id/profile_full_name_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Julianna Carter"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/grey_90"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_photo_circleImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/userphoto"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:background="@color/grey_10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_xlarge"
+        android:layout_marginRight="@dimen/spacing_xlarge"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal">
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_email_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="user@gmail.com"
+                android:inputType="textEmailAddress"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey_60" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_xlarge"
+        android:layout_marginRight="@dimen/spacing_xlarge"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_phone_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="775295623"
+                android:inputType="phone"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey_60" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_location_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Yemen"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey_60" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_xlarge"
+        android:layout_marginRight="@dimen/spacing_xlarge"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_address_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="160th St, Fresh Meadows, NY, 11365"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey_60" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/edit_imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|end|right"
+        android:layout_margin="12dp"
+        android:clickable="true"
+        android:src="@drawable/ic_edit" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

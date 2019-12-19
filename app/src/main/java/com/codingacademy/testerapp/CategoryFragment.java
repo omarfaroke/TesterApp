@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
-import com.codingacademy.testerapp.fragment.ExampleDialog;
 import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
@@ -32,10 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,18 +113,9 @@ public class CategoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        getView().setOnKeyListener((v, keyCode, event) -> {
-//            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-//
-//                boolean flag = backCategory();
-//
-//                return flag;
-//
-//            }
-//            return false;
-//        });
-
+        updateUiAfterLoginOrLogout();
     }
+
 
 
     @Override
@@ -137,7 +124,7 @@ public class CategoryFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == DIALOG_ADD_CATEGORY_REQUEST_CODE) {
                 Category category = (Category) data
-                        .getSerializableExtra(ExampleDialog.NEW_CATEGORY);
+                        .getSerializableExtra(AddCategoryDialog.NEW_CATEGORY);
 
                 updateCategory(category);
             }
@@ -151,24 +138,17 @@ public class CategoryFragment extends Fragment {
         addCatBtn.setOnClickListener(view -> {
 
             FragmentManager manager = getFragmentManager();
-            ExampleDialog dialog = new ExampleDialog();
+            AddCategoryDialog dialog = new AddCategoryDialog();
             Bundle bundle = new Bundle();
             bundle.putInt("parentID", parents.get(parents.size() - 1));
             dialog.setArguments(bundle);
             dialog.setTargetFragment(CategoryFragment.this, DIALOG_ADD_CATEGORY_REQUEST_CODE);
 
-            dialog.show(manager, ExampleDialog.TAG);
+            dialog.show(manager, AddCategoryDialog.TAG);
 
 
         });
 
-
-        if (LoginSharedPreferences.userAsAdmin(getActivity())) {
-            addCatBtn.setVisibility(View.VISIBLE);
-
-        } else {
-            addCatBtn.setVisibility(View.GONE);
-        }
 
 
 
@@ -381,8 +361,17 @@ public class CategoryFragment extends Fragment {
     }
 
 
+    public void updateUiAfterLoginOrLogout(){
 
-    public List<Integer> getParents() {
-        return parents;
+        if (LoginSharedPreferences.userAsAdmin(getActivity())) {
+            addCatBtn.setVisibility(View.VISIBLE);
+
+        } else {
+            addCatBtn.setVisibility(View.GONE);
+        }
+
     }
+
+
+
 }

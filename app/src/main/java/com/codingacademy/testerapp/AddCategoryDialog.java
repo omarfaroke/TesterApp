@@ -1,4 +1,4 @@
-package com.codingacademy.testerapp.fragment;
+package com.codingacademy.testerapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,8 +24,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.codingacademy.testerapp.Constants;
-import com.codingacademy.testerapp.R;
 import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.gson.Gson;
@@ -41,8 +39,8 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ExampleDialog extends AppCompatDialogFragment {
-    public static final String TAG = "ExampleDialog";
+public class AddCategoryDialog extends AppCompatDialogFragment {
+    public static final String TAG = "AddCategoryDialog";
     public static final String NEW_CATEGORY = "info_new_category";
     private ImageView mAddCategoryImage;
     private Button mChangeIconBTN;
@@ -125,7 +123,7 @@ public class ExampleDialog extends AppCompatDialogFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(ExampleDialog.this.getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddCategoryDialog.this.getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
 
 
             }
@@ -199,6 +197,8 @@ public class ExampleDialog extends AppCompatDialogFragment {
 
         }
     }
+
+
 
     private void sendResult(int resultCode, Category category) {
         if (getTargetFragment() == null) {

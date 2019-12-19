@@ -3,6 +3,7 @@ package com.codingacademy.testerapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 
@@ -64,6 +65,13 @@ public class LoginSharedPreferences {
         return userId;
     }
 
+    public static int getStatus(Context mContext) {
+        SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
+        int userStatus = mSharedPreferences.getInt(Constants.USER_STATUS, -1);
+
+        return userStatus;
+    }
+
     public static String getUserEmail(Context mContext) {
         SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
         String userEmail = mSharedPreferences.getString(Constants.USER_EMAIL, "");
@@ -115,8 +123,6 @@ public class LoginSharedPreferences {
         mEditor.remove(Constants.USER_TYPE_PREFERENCES);
 
 
-
-
         mEditor.apply();
         mEditor.commit();
 
@@ -129,8 +135,9 @@ public class LoginSharedPreferences {
         return false;
     }
 
+
     public static void test(Context mContext){
-        SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
         mEditor.putString("12345","12345");

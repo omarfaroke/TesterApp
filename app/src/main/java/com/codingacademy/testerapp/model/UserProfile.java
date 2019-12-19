@@ -2,7 +2,9 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserProfile {
+import java.io.Serializable;
+
+public class UserProfile implements Serializable {
 
     @SerializedName("f_user_id")
     private Integer UserId;
@@ -24,6 +26,14 @@ public class UserProfile {
 
     @SerializedName("image_url")
     private String imageUrl;
+
+    @SerializedName("email")
+    private String email;
+
+
+    public UserProfile(){
+
+    }
 
     public UserProfile(Integer userId, Integer type, String firstName, String middleName, String lastName, String address, String phone, String imageUrl) {
         UserId = userId;
@@ -98,5 +108,14 @@ public class UserProfile {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -28,9 +28,10 @@
     <string name="or">or</string>
 
     <string-array name="type_array">
-        <item>Talent</item>
-        <item>Recuiter</item>
         <item>Examiner</item>
+        <item>Recuiter</item>
+        <item>Talent</item>
+
 
     </string-array>
 

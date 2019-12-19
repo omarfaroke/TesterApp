@@ -251,7 +251,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void register() {
-        UserProfile userProfile = new UserProfile(null, spinnerType.getSelectedItemPosition(), mFirstName.getText().toString(),
+        int userType = spinnerType.getSelectedItemPosition() + 1;
+
+
+        UserProfile userProfile = new UserProfile(null,userType, mFirstName.getText().toString(),
                 "", mLastName.getText().toString(), mAddressEditText.getText().toString(), mPhoneEditText.getText().toString(), "");
 
 
