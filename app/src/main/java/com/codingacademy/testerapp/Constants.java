@@ -6,6 +6,20 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.requests.StatusCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Constants {
 
@@ -45,6 +59,9 @@ public class Constants {
     public static final String ADD_SAMPLE = BASE_URL + "/add_questions.php";
     public static final String ADD_EXAM = BASE_URL + "/add_exam.php";
     public static final String UPDATE_EXAM_STATE = BASE_URL + "/update_exam_state.php";
+    public static final String GET_EXAMINER = BASE_URL + "/get_all_examinar.php";
+    public static final String UPDATE_USER_STATE = BASE_URL + "/update_user_state.php";
+
 
 
     public static String COOKIES;
@@ -95,6 +112,48 @@ public class Constants {
 
 
     }
+    public static void upDateState(int userId, int status,Context ctx, StatusCallback statusCallback) {
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.UPDATE_USER_STATE,
+                response -> {
+                    try {
+                        JSONObject jsonObject=new JSONObject(response);
+                        String s=jsonObject.getString("message");
+                        statusCallback.response(s);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                },
+                error -> {
+                    statusCallback.response("erorr");
+
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameter = new HashMap<>();
+
+                parameter.put("user_id", userId+"");
+                parameter.put("status", status+"");
+                return parameter;
+
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+        Volley.newRequestQueue(ctx).add(request);
+
+    }
+
 
 
 }

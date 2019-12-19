@@ -231,8 +231,10 @@ public class ExamFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             exam = examsArr[position];
-            if(LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())
+            if(LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID()) {
                 holder.btnShowSample.setVisibility(View.VISIBLE);
+                holder.btnShowTalent.setVisibility(View.VISIBLE);
+            }
             if (exam.getStatus() == 0) {
                 if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_ADMIN ||
                         LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())

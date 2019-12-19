@@ -6,6 +6,14 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class LoginSharedPreferences {
 
@@ -18,7 +26,7 @@ public class LoginSharedPreferences {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
           //      Toast.makeText(mContext, "onSharedPreferenceChanged", Toast.LENGTH_SHORT).show();
-               Toast.makeText(mContext, key, Toast.LENGTH_SHORT).show();
+           //    Toast.makeText(mContext, key, Toast.LENGTH_SHORT).show();
 
             }
         });

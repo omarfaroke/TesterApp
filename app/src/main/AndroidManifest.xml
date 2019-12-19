@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".QuesExamActvity" />
+        <activity android:name=".ExaminarActivity" />
         <activity android:name=".ExamEntryActivity" />
         <activity android:name=".ExamModifyActivity" />
         <activity
