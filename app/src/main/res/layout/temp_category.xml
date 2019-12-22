@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
 
-    app:cardBackgroundColor="@color/text"
     app:cardCornerRadius="3dp"
     app:cardElevation="2dp">
+
     <LinearLayout
 
+        android:background="@color/secondPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-android:gravity="center"
-        android:orientation="vertical"
-        >
+        android:gravity="center"
+        android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mImageCat"
@@ -21,19 +21,17 @@ android:gravity="center"
             android:layout_height="50dp"
 
 
-
             android:src="@drawable/p">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
         <TextView
-            android:text="Java"
             android:id="@+id/mTextCat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Java"
 
-android:textColor="@color/secondPage"
-
+            android:textColor="@color/text"
 
 
             android:textSize="16sp" />

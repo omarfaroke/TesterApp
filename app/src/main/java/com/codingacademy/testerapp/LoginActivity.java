@@ -2,6 +2,9 @@ package com.codingacademy.testerapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -31,6 +37,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int REQUEST_CODE_LOGIN = 11;
+    public static final int REQUEST_CODE_REGISTER = 12;
     /**
      * Email
      */
@@ -99,14 +106,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return parameter;
             }
 
-                @Override
-                public Map<String, String> getHeaders(){
+            @Override
+            public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-        	while (Constants.COOKIES == null);
-                map.put("Cookie", Constants.COOKIES);
+//        	while (Constants.COOKIES == null);
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
-            };
+        };
 
 
         VolleyController.getInstance(this).addToRequestQueue(stringRequest);
@@ -174,8 +181,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showRegisterActivity() {
         Intent intent = new Intent(this, RegisterActivity.class);
-       // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivityForResult(intent, REQUEST_CODE_REGISTER);
     }
 
 
@@ -236,5 +243,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return f == 3;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_REGISTER) {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        }
+    }
 
 }

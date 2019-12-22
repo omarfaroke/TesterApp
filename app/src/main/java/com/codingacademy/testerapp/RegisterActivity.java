@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -218,8 +219,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             mEtPassword.setError("Enter Password");
             return 0;
         }
+
         if (s.equals(mEtConfirmPassword.getText().toString()))
             return 1;
+
         else mEtConfirmPassword.setError("Password not match");
         return 0;
     }
@@ -233,6 +236,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     mFirstName.setError("Enter First Name");
                     i--;
                 }
+
                 if (mLastName.getText().toString().isEmpty()) {
                     mLastName.setError("Enter Last Name");
                     i--;
@@ -252,10 +256,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void register() {
         int userType = spinnerType.getSelectedItemPosition() + 1;
+        int status = 1;
 
+        if (userType  == Constants.USER_TYPE_EXAMINER || userType == Constants.USER_TYPE_RECRUITER){
+            status = 0;
+
+            alertMessage();
+        }
 
         UserProfile userProfile = new UserProfile(null,userType, mFirstName.getText().toString(),
-                "", mLastName.getText().toString(), mAddressEditText.getText().toString(), mPhoneEditText.getText().toString(), "");
+                 mLastName.getText().toString(), mAddressEditText.getText().toString(), mPhoneEditText.getText().toString(),status);
+
 
 
         registerNewAccount(mEmail.getText().toString(), mEtPassword.getText().toString(), userProfile, new VolleyCallback() {
@@ -272,7 +283,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             ,mLastName.getText().toString(),imageUrl);
 
 
-                    Toast.makeText(RegisterActivity.this, "successful ....", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(RegisterActivity.this, "تم تسجيل البيانات بنجاح ..", Toast.LENGTH_SHORT).show();
+
+                    setResult(Activity.RESULT_OK);
+
                     finish();
                 } else {
                     Toast.makeText(RegisterActivity.this, result.getString("message"), Toast.LENGTH_SHORT).show();
@@ -350,8 +365,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public Map<String, String> getHeaders(){
                 Map<String, String> map = new HashMap<>();
-        	while (Constants.COOKIES == null);
-                map.put("Cookie", Constants.COOKIES);
+//        	while (Constants.COOKIES == null);
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
             };

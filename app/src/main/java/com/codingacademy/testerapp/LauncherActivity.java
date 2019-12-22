@@ -49,12 +49,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class LauncherActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
+
 
     private static final String TAG = "LauncherActivity";
     private ActionBar actionBar;
     private Toolbar toolbar;
     private NavigationView nav_view;
+    private TextView mEmailHeaderDrawer;
+    private TextView mFullNameHeaderDrawer;
+    private CircleImageView mPhotoProfileHeaderDrawer;
+
+
     private FragmentManager fragmentManager;
     private FragmentTransaction mFragmentTransaction;
 
@@ -67,10 +75,10 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_drawer_news);
+        setContentView(R.layout.activity_launcher);
 
         //setup cookies
-        Constants.getCookiesFromUrl(LauncherActivity.this);
+        //Constants.getCookiesFromUrl(LauncherActivity.this);
 
 
         fragmentManager = getSupportFragmentManager();
@@ -131,8 +139,8 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
+//                while (Constants.COOKIES == null) ;
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
         };
@@ -161,18 +169,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         mProAdapter.notifyDataSetChanged();
     }
 
-    public void showCategory() {
 
-        CategoryFragment categoryFragment = new CategoryFragment();
-
-
-        mFragmentTransaction = fragmentManager.beginTransaction();
-        mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
-        mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.commit();
-
-
-    }
 
 
     private void initToolbar() {
@@ -185,10 +182,13 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     }
 
     private void initNavigationMenu() {
-//        recyclerPro = findViewById(R.id.recyclerPro);
-//        recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         nav_view = findViewById(R.id.nav_view);
+        mEmailHeaderDrawer = nav_view.getHeaderView(0).findViewById(R.id.header_email);
+        mFullNameHeaderDrawer = nav_view.getHeaderView(0).findViewById(R.id.header_full_name);
+        mPhotoProfileHeaderDrawer = nav_view.getHeaderView(0).findViewById(R.id.header_photo_profile_circleImageView);
+
+
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerOpened(View drawerView) {
@@ -196,9 +196,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             }
         };
         drawer.setDrawerListener(toggle);
-
-//        ((TextView )drawer.findViewById(R.id.drawer_email)).setText("omar");
-//        ((TextView )drawer.findViewById(R.id.drawer_email)).setText("omar");
 
 
 
@@ -279,9 +276,9 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                         startActivity(intent2);
 
                         break;
-                    case R.id.nav_my_exam:
-                       showExams(ExamFragment.MY_EXAM);
 
+                    case R.id.nav_exit:
+                        exitFromApp();
                         break;
                 }
 
@@ -309,10 +306,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         if (resultCode == RESULT_OK) {
             if (requestCode == LoginActivity.REQUEST_CODE_LOGIN) {
                 if (LoginSharedPreferences.checkIsLogin(this)) {
-                    nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
-                    nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
-
-
 
                     Toast.makeText(this, "تم تسجيل الدخول بنجاح ", Toast.LENGTH_SHORT).show();
                 }
@@ -367,7 +360,42 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         if (LoginSharedPreferences.checkIsLogin(this)) {
             nav_view.getMenu().findItem(R.id.nav_logout).setVisible(true);
             nav_view.getMenu().findItem(R.id.nav_login).setVisible(false);
+
+            String url = Constants.BASE_URL + "/" + LoginSharedPreferences.getUserImageUrl(this);
+
+            Glide.with(this).applyDefaultRequestOptions(new RequestOptions()
+                    .placeholder(R.drawable.userphoto)
+                    .error(R.drawable.userphoto))
+                    .load(url)
+                    .into(mPhotoProfileHeaderDrawer);
+
+            String mFullName = LoginSharedPreferences.getUserFirstName(this) + " " + LoginSharedPreferences.getUserLastName(this);
+            mFullNameHeaderDrawer.setText(mFullName);
+
+            String mEmail = LoginSharedPreferences.getUserEmail(this);
+            mEmailHeaderDrawer.setText(mEmail);
+
+        }else {
+            mPhotoProfileHeaderDrawer.setImageResource(R.drawable.userphoto);
+            mFullNameHeaderDrawer.setText("");
+            mEmailHeaderDrawer.setText("");
+
+
         }
+    }
+
+
+    public void showCategory() {
+
+        CategoryFragment categoryFragment = new CategoryFragment();
+
+
+        mFragmentTransaction = fragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.main_fram, categoryFragment, CategoryFragment.TAG);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+
+
     }
 
 
@@ -497,6 +525,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
             } else if (fragment instanceof ExamFragment) {
                 fragmentManager.popBackStack();
+
 
             } else if (fragment instanceof SampleFragment) {
                 fragmentManager.popBackStack();

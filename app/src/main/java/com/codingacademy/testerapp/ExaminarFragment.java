@@ -153,8 +153,8 @@ public class ExaminarFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
+//                while (Constants.COOKIES == null) ;
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
         };
@@ -165,16 +165,6 @@ public class ExaminarFragment extends Fragment {
     }
 
 
-    public void fillAdapter() {
-        mUsers = new UserProfile[6];
-        mUsers[0] = new UserProfile(null, null, " ExaminarA", null, null, null, null, null);
-        mUsers[1] = new UserProfile(null, null, " ExaminarB", null, null, null, null, null);
-        mUsers[2] = new UserProfile(null, null, " ExaminarC", null, null, null, null, null);
-        mUsers[3] = new UserProfile(null, null, " ExaminarD", null, null, null, null, null);
-        mUsers[4] = new UserProfile(null, null, " ExaminarE", null, null, null, null, null);
-        mUsers[5] = new UserProfile(null, null, " ExaminarF", null, null, null, null, null);
-
-    }
 
     public class ExaminarRecyclerViewAdapter extends RecyclerView.Adapter<ExaminarRecyclerViewAdapter.ViewHolder> {
         private UserProfile[] mUsers;

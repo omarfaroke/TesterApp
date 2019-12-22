@@ -14,8 +14,6 @@ public class UserProfile implements Serializable {
     @SerializedName("first_name")
     private String firstName;
 
-    @SerializedName("m_name")
-    private String middleName;
 
     @SerializedName("last_name")
     private String lastName;
@@ -37,15 +35,14 @@ public class UserProfile implements Serializable {
 
 
 
-    public UserProfile(Integer userId, Integer type, String firstName, String middleName, String lastName, String address, String phone, String imageUrl) {
+    public UserProfile(Integer userId, Integer type, String firstName, String lastName, String address, String phone, int status) {
         UserId = userId;
         this.type = type;
         this.firstName = firstName;
-        this.middleName = middleName;
         this.lastName = lastName;
         this.address = address;
         this.phone = phone;
-        this.imageUrl = imageUrl;
+        this.status = status ;
     }
 
     public UserProfile(){
@@ -92,14 +89,6 @@ public class UserProfile implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
     public String getLastName() {
         return lastName;
     }
@@ -131,4 +120,10 @@ public class UserProfile implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getFullName(){
+
+        return getFirstName() + " " + getLastName();
+    }
+
 }

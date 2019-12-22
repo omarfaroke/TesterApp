@@ -6,7 +6,6 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,9 +16,9 @@ import com.codingacademy.testerapp.requests.StatusCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Constants {
 
@@ -46,8 +45,8 @@ public class Constants {
 
 
     //web
-    // public static final String BASE_URL = "http://testerapp.aba.cx";
-    public static final String BASE_URL = "http://testerapp.rf.gd";
+    public static final String BASE_URL = "http://testerapp.aba.vg";
+//    public static final String BASE_URL = "http://testerapp.rf.gd";
     public static final String LOGIN = BASE_URL + "/login.php";
     public static final String REGISTER = BASE_URL + "/register.php";
     public static final String CATEGORY = BASE_URL + "/get_category.php";
@@ -107,12 +106,16 @@ public class Constants {
 
                 COOKIES = cookies;
 
+
+
             }
         });
-        webViewRequest.loadUrl(Constants.GET_TOP_TALET);
+        //webViewRequest.loadUrl(Constants.GET_TOP_TALET);
+        webViewRequest.loadUrl("http://testerapp.rf.gd/Profiles/IMG_4435.jpg");
 
 
     }
+
     public static void upDateState(int userId, int status,Context ctx, StatusCallback statusCallback) {
 
         StringRequest request = new StringRequest(Request.Method.POST,
@@ -146,8 +149,8 @@ public class Constants {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
+//                while (Constants.COOKIES == null) ;
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
         };

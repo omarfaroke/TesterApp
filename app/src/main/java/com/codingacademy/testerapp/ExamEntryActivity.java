@@ -215,8 +215,8 @@ public class ExamEntryActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
+//                while (Constants.COOKIES == null) ;
+//                map.put("Cookie", Constants.COOKIES);
                 return map;
             }
         };

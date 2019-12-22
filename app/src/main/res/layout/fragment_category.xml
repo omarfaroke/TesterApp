@@ -5,7 +5,7 @@
     android:id="@+id/parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/text_two"
+    android:background="@color/text"
     android:orientation="vertical"
 
     >
@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/white"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:weightSum="7">

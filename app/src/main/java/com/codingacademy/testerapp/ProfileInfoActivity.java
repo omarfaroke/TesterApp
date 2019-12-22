@@ -1,24 +1,17 @@
 package com.codingacademy.testerapp;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.codingacademy.testerapp.model.UserProfile;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -74,23 +67,26 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
         int mStatus = getIntent().getIntExtra(Constants.USER_STATUS, -1);
 
 
-        String mFullName = userProfile.getFirstName() + userProfile.getLastName();
+        String mFullName = userProfile.getFullName();
         mProfileFullNameEditText.setText(mFullName);
 
         mProfileEmailEditText.setText(userProfile.getEmail());
         mProfileAddressEditText.setText(userProfile.getAddress());
         mProfilePhoneEditText.setText(userProfile.getPhone());
 
+
+        String url = Constants.BASE_URL + "/" + userProfile.getImageUrl();
+
         Glide.with(ProfileInfoActivity.this).applyDefaultRequestOptions(new RequestOptions()
                 .placeholder(R.drawable.userphoto)
                 .error(R.drawable.userphoto))
-                .load(Constants.BASE_URL + "/" + userProfile.getImageUrl())
-                //.load("https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/L%C3%ADnea_J_%28Logo_Metro_de_Medell%C3%ADn%29.svg/1024px-L%C3%ADnea_J_%28Logo_Metro_de_Medell%C3%ADn%29.svg.png")
-                //.load("https://testerapp.rf.gd/Profiles/IMG_4435.jpg")
+                .load(url)
                 .into(mProfilePhotoCircleImageView);
 
 
-        if (LoginSharedPreferences.getUserId(ProfileInfoActivity.this) != userProfile.getUserId() ){
+
+
+        if (LoginSharedPreferences.getUserId(ProfileInfoActivity.this) != userProfile.getUserId()) {
             mEditImageView.setVisibility(View.GONE);
         }
 
@@ -105,14 +101,13 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    void enableAllEditText(){
+    void enableAllEditText() {
 
-        if (LoginSharedPreferences.getUserId(ProfileInfoActivity.this) == userProfile.getUserId() ){
+        if (LoginSharedPreferences.getUserId(ProfileInfoActivity.this) == userProfile.getUserId()) {
             mRootView.setEnabled(true);
         }
 
     }
-
 
 
     private void initView() {
@@ -128,7 +123,6 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
         mRootView = findViewById(R.id.root_view);
 
 
-
     }
 
     @Override
@@ -140,6 +134,7 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
 
                 break;
             case R.id.edit_imageView:
+
                 enableAllEditText();
                 break;
         }

@@ -4,7 +4,7 @@
     android:id="@+id/lyt_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/text"
+    android:background="@color/secondPage"
     android:clickable="true"
 
     android:orientation="vertical">
@@ -13,7 +13,6 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
         android:gravity="center_vertical"
         android:minHeight="?attr/actionBarSize"
         android:orientation="horizontal">
@@ -21,8 +20,6 @@
         <View
             android:layout_width="@dimen/spacing_large"
             android:layout_height="wrap_content" />
-
-
 
 
         <TextView
@@ -33,7 +30,7 @@
             android:hint="Examinar A"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/text" />
 
         <View
             android:layout_width="@dimen/spacing_large"
@@ -45,7 +42,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_expand_arrow"
-            android:tint="@color/secondPage" />
+            android:tint="@color/text" />
 
     </LinearLayout>
 
@@ -53,32 +50,31 @@
         android:id="@+id/layoutt_expand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_3"
-        android:orientation="vertical"
-        android:visibility="visible"
         android:gravity="center_horizontal"
-        >
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/email"
-    />
-        <Button
-            android:text="Aprove"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text" />
+
+        <Button
             android:id="@+id/aprove"
-            android:visibility="gone"
-            />
-        <Button
-            android:text="Dis Aprove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Aprove"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/dis_aprove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dis Aprove"
             android:visibility="gone"
 
             />
-
 
 
     </LinearLayout>
