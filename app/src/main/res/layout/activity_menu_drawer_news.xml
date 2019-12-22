@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/text"
     android:fitsSystemWindows="true"
-    tools:context=".MenuDrawerNews"
+    tools:context=".LauncherActivity"
     tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

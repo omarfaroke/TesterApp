@@ -28,7 +28,6 @@
         android:id="@+id/question_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this exam contain five Question"
         android:layout_margin="12dp"
         android:background="@color/secondPage"
         android:textColor="@android:color/white"

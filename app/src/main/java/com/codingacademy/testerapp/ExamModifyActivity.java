@@ -35,7 +35,7 @@ import java.util.Map;
 public class ExamModifyActivity extends AppCompatActivity {
 
 
-    private List<EditText> editTexts=new ArrayList<>();
+    private List<EditText> editTexts = new ArrayList<>();
     private Exam exam;
     Button btnSave;
     private View parent_view;
@@ -62,7 +62,7 @@ public class ExamModifyActivity extends AppCompatActivity {
             swAprove.setVisibility(View.VISIBLE);
 
         } else {
-            swAprove.setVisibility(View.VISIBLE);
+            swAprove.setVisibility(View.GONE);
         }
     }
 
@@ -81,84 +81,60 @@ public class ExamModifyActivity extends AppCompatActivity {
 
     private void initComponent() {
 
-        editTexts.add(0,(findViewById(R.id.et_title)));
+        TextView tvExaminerName = findViewById(R.id.tv_examiner);
+        tvExaminerName.setText("Examiner: "+exam.getExaminerName());
+
+        editTexts.add(0, (findViewById(R.id.et_title)));
         editTexts.get(0).setText(exam.getExamName());
 
-        editTexts.add(0,(findViewById(R.id.et_num_ques)));
-        editTexts.get(0).setText(exam.getQuestionNumber()+"");
+        editTexts.add(0, (findViewById(R.id.et_num_ques)));
+        editTexts.get(0).setText(exam.getQuestionNumber() + "");
 
-        editTexts.add(0,(findViewById(R.id.et_time_ques)));
-        editTexts.get(0).setText(exam.getExamTime()+"");
+        editTexts.add(0, (findViewById(R.id.et_time_ques)));
+        editTexts.get(0).setText(exam.getExamTime() + "");
 
-        editTexts.add((findViewById(R.id.et_full_mark)));
-        editTexts.get(0).setText(exam.getFullMarks()+"");
+        editTexts.add(0,(findViewById(R.id.et_full_mark)));
+        editTexts.get(0).setText(exam.getFullMarks() + "");
 
-        editTexts.add(0,(findViewById(R.id.et_pass_mark)));
-        editTexts.get(0).setText(exam.getExamPass()+"");
+        editTexts.add(0, (findViewById(R.id.et_pass_mark)));
+        editTexts.get(0).setText(exam.getExamPass() + "");
 
-        editTexts.add(0,(findViewById(R.id.et_note)));
+        editTexts.add(0, (findViewById(R.id.et_note)));
         editTexts.get(0).setText(exam.getExamNote());
 
-        editTexts.add(0,(findViewById(R.id.et_description)));
+        editTexts.add(0, (findViewById(R.id.et_description)));
         editTexts.get(0).setText(exam.getExamDescription());
 
 
-       // Toast.makeText(this, editTexts.size()+"", Toast.LENGTH_SHORT).show();
-        for(EditText e:editTexts)
+        // Toast.makeText(this, editTexts.size()+"", Toast.LENGTH_SHORT).show();
+        for (EditText e : editTexts)
             e.setEnabled(false);
 
-        btnSave=findViewById(R.id.bt_modify_exam);
+        btnSave = findViewById(R.id.bt_modify_exam);
         swAprove = findViewById(R.id.sw_aprove);
-       if(LoginSharedPreferences.getUserType(ExamModifyActivity.this)==Constants.USER_TYPE_ADMIN) {
-           swAprove.setVisibility(View.VISIBLE);
-           btnSave.setVisibility(View.VISIBLE);
-           abrove = exam.getStatus() == 1 ? true : false;
-           swAprove.setChecked(abrove);
-           swAprove.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if (LoginSharedPreferences.getUserType(ExamModifyActivity.this) == Constants.USER_TYPE_ADMIN) {
+            swAprove.setVisibility(View.VISIBLE);
+            btnSave.setVisibility(View.VISIBLE);
+            abrove = exam.getStatus() == 1 ? true : false;
+            swAprove.setChecked(abrove);
+            swAprove.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-               @Override
-               public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                   exam.setStatus(b ? 1 : 0);
-                   btnSave.setEnabled(true);
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    exam.setStatus(b ? 1 : 0);
+                    btnSave.setEnabled(true);
 
-               }
-           });
-           btnSave.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   upDateExam();
-               }
-           });
-       }
-
-
-
-
+                }
+            });
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    upDateExam();
+                }
+            });
+        }
         hideSoftKeyboard();
-
-
     }
-
-//    private void checkPrevlige() {
-//
-//        int type = LoginSharedPreferences.getUserType(ExamModifyActivity.this);
-//
-//        switch (type) {
-//            case Constants.USER_TYPE_ADMIN:
-//                break;
-//            case Constants.USER_TYPE_TALENT:
-//                break;
-//
-//            case Constants.USER_TYPE_EXAMINER:
-//                swAprove.setVisibility(View.VISIBLE);
-//                break;
-//            case Constants.USER_TYPE_RECRUITER:
-//                break;
-//
-//            default:
-//
-//        }
-//    }
 
     public void clickLabel(View v) {
         Toast.makeText(this, v.getId() + "", Toast.LENGTH_SHORT).show();
@@ -191,8 +167,8 @@ public class ExamModifyActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameter = new HashMap<>();
 
-                parameter.put("exam_id", exam.getExamId()+"");
-                parameter.put("status", exam.getStatus()+"");
+                parameter.put("exam_id", exam.getExamId() + "");
+                parameter.put("status", exam.getStatus() + "");
                 return parameter;
 
             }

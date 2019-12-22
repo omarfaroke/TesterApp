@@ -1,7 +1,6 @@
 package com.codingacademy.testerapp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,18 +19,26 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Choice;
 import com.codingacademy.testerapp.model.Question;
+import com.codingacademy.testerapp.requests.StatusCallback;
+import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class QuesEntryFragment extends Fragment  {
+public class QuesEntryFragment extends Fragment {
     private EditText etQues, etChoice;
     private Button btChoice;
     private Context context;
-    private Question ques;
+    private Question question;
     private RadioGroup radioGroup;
     private LinearLayout layAddChoice;
     private ArrayList<RadioButton> radioButtons;
@@ -44,9 +49,10 @@ public class QuesEntryFragment extends Fragment  {
     private QuesFragmentActionListener mListener;
     private static final String INDEX = "INDEX";
     private static final String QUES = "QUES";
-    private static final String IS_ENTER = "ENTER";
-    boolean editState = false;
+    private static final String STATE = "ENTER";
     private boolean isRight = false;
+    private int state;
+    private boolean editState=false;
 
 
     interface QuesFragmentActionListener {
@@ -56,12 +62,12 @@ public class QuesEntryFragment extends Fragment  {
     }
 
 
-    public static Fragment getInstence(int position, Question ques, boolean isEnter) {
+    public static Fragment getInstence(int position, Question ques, int state) {
         QuesEntryFragment quesEntryFragment = new QuesEntryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(INDEX, position);
         bundle.putSerializable(QUES, ques);
-        bundle.putBoolean(IS_ENTER, isEnter);
+        bundle.putInt(STATE, state);
         quesEntryFragment.setArguments(bundle);
         return quesEntryFragment;
     }
@@ -78,94 +84,162 @@ public class QuesEntryFragment extends Fragment  {
         layAddChoice = v.findViewById(R.id.add_choice);
         radioButtons = new ArrayList<>();
         cardView = v.findViewById(R.id.radio_cards);
+        radioGroup = v.findViewById(R.id.radio_choices);
+
         index = getArguments().getInt(INDEX);
-        ques = (Question) getArguments().getSerializable(QUES);
-        editState = getArguments().getBoolean(IS_ENTER);
-        radioGroup = new RadioGroup(context);
-        cardView.addView(radioGroup);
-        if (ques != null)
-            setQuestion();
+        state = getArguments().getInt(STATE);
 
-
-        if (editState) {
+        if (state == QuesExamActvity.ADD_SAMPLE) {
             editQuestion();
-
+        } else {
+            question = (Question) getArguments().getSerializable(QUES);
+            setQuestion();
+            if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER && state >= 0)
+                canEdit(v);
         }
+
 
         return v;
     }
 
+    private void canEdit(View v) {
+        Button btnEdit = v.findViewById(R.id.edit_Quiz);
+        btnEdit.setVisibility(View.VISIBLE);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (btnEdit.getText().equals("Edit")) {
+                    editQuestion();
+                    btnEdit.setText("Save");//Edit
+                } else {
+                    if (!notValidate()) {
+                        upDateQuestion(new StatusCallback(){
+
+                            @Override
+                            public void response(String s) {
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+
+                                for (RadioButton r : radioButtons)
+                                    r.setOnClickListener(null);
+                                layAddChoice.setVisibility(View.GONE);
+                                etQues.setEnabled(false);
+                                mListener.addQues(question, index);
+                                btnEdit.setText("Edit");//Save
+                                editState=false;
+                            }
+                        });
+
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    private void upDateQuestion(StatusCallback statusCallback) {
+        StringRequest request = new StringRequest(Request.Method.POST,
+                Constants.UPDATE_QUTETION,
+                response -> {
+statusCallback.response(response);
+                },
+                error -> {
+                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameter = new HashMap<>();
+                String quesString = new Gson().toJson(question);
+                parameter.put("question", quesString);
+                return parameter;
+
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                while (Constants.COOKIES == null) ;
+                map.put("Cookie", Constants.COOKIES);
+                return map;
+            }
+        };
+
+        VolleyController.getInstance(getActivity()).addToRequestQueue(request);
+    }
+
 
     private void editQuestion() {
-        {
+        editState=true;
+        View.OnLongClickListener deletChoice = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(R.string.dialog_delet_choice)
+                        .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                radioGroup.removeView(view);
+                                radioButtons.remove(view);
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                builder.create().show();
+                return false;
+            }
+        };
+        for (RadioButton r : radioButtons)
+            r.setOnLongClickListener(deletChoice);
+        layAddChoice.setVisibility(View.VISIBLE);
+        etQues.setEnabled(true);
+        btChoice.setOnClickListener(view -> {
+            String s = etChoice.getText().toString();
+            if (s.isEmpty())
+                Snackbar.make(getView(), "Please chose category", Snackbar.LENGTH_SHORT).show();
+            else {
+                RadioButton radioButton = addChoice(s);
+                etChoice.setText("");
+                radioButton.setOnLongClickListener(deletChoice);
+            }
+        });
 
-            layAddChoice.setVisibility(View.VISIBLE);
-            etQues.setEnabled(true);
-            btChoice.setOnClickListener(view -> {
-                String s = etChoice.getText().toString();
-                if (s.isEmpty())
-                    Snackbar.make(getView(), "Please chose category", Snackbar.LENGTH_SHORT).show();
-                else
-                    addChoice(s);
-            });
-        }
     }
 
 
     void setQuestion() {
-
-        etQues.setText(ques.getQuesText());
-        Choice[] choices = ques.getChoices();
+        editState=false;
+        etQues.setText(question.getQuesText());
+        Choice[] choices = question.getChoices();
         int radioNumber = choices.length;
         for (int choiceIndex = 0; choiceIndex < radioNumber; choiceIndex++) {
-            RadioButton radioButton = new RadioButton(getActivity());
-            radioButton.setText(choices[choiceIndex].getChoiceText());
+            RadioButton radioButton = addChoice(choices[choiceIndex].getChoiceText());
             int finalChoiceIndex = choiceIndex;
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     isRight = choices[finalChoiceIndex].getAnswer() == 1;
-                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                 }
             });
-            radioButton.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(R.string.dialog_delet_choice)
-                            .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    radioGroup.removeView(radioButton);
-                                }
-                            });
-                    // Create the AlertDialog object and return it
-                    builder.create().show();
-
-                    return false;
-                }
-            });
-            radioButtons.add(radioButton);
-
-            radioGroup.addView(radioButton);
-
         }
-
     }
 
 
-    void addChoice(String s) {
+    RadioButton addChoice(String s) {
         RadioButton radioButton = new RadioButton(getActivity());
         radioButton.setText(s);
+        radioButton.setLayoutParams(new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         radioButtons.add(radioButton);
         radioGroup.addView(radioButton);
-        etChoice.setText("");
+        return radioButton;
     }
 
     boolean notValidate() {
+
         if (!editState) {
             mListener.setAnswer(isRight, index);
             return false;
         }
+
         String s = etQues.getText().toString();
         int c = radioButtons.size();
         if (c < 2 || s.isEmpty()) {
@@ -185,8 +259,17 @@ public class QuesEntryFragment extends Fragment  {
                 return true;
             }
             Question question = new Question(s, choices);
-            mListener.addQues(question, index);
-            return false;
+            if (state == QuesExamActvity.ADD_SAMPLE) {
+                mListener.addQues(question, index);
+                return false;
+            }
+            else if(editState){
+                this.question.setChoices(choices);
+                this.question.setQuesText(s);
+                return false;
+            }
+            return true;
+
         }
     }
 

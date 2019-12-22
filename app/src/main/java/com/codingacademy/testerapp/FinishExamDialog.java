@@ -28,7 +28,7 @@ public class FinishExamDialog extends AppCompatDialogFragment {
                         getActivity().finish();
                     }
                 });
-
+builder.setCancelable(true);
         mTextQuestion = view.findViewById(R.id.question_number);
         mTextQuestion.setText(result);
         mTextQuestionTime = view.findViewById(R.id.question_time);

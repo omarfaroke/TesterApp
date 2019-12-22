@@ -61,6 +61,7 @@ public class Constants {
     public static final String UPDATE_EXAM_STATE = BASE_URL + "/update_exam_state.php";
     public static final String GET_EXAMINER = BASE_URL + "/get_all_examinar.php";
     public static final String UPDATE_USER_STATE = BASE_URL + "/update_user_state.php";
+    public static final String UPDATE_QUTETION = BASE_URL + "/update_question.php";
 
 
 

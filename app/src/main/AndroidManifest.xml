@@ -16,7 +16,7 @@
         <activity android:name=".InfoExamTalentActivity"></activity>
         <activity android:name=".ProfileInfoActivity" />
         <activity android:name=".MyExamsActivity" />
-        <activity android:name=".MenuDrawerNews" android:configChanges="uiMode">
+        <activity android:name=".LauncherActivity" android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

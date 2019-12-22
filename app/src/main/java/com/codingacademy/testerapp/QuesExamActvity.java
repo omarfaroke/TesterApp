@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.codingacademy.testerapp.model.Choice;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.model.Question;
 import com.codingacademy.testerapp.model.Sample;
@@ -37,9 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
@@ -98,24 +97,28 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
             int size = exam.getSamples().length;
             int r = new Random().nextInt(size);
             sample = exam.getSamples()[r];
-            getSamples(sample.getSampleId());
-        } else if (STATE == ADD_SAMPLE)
+            getSample(sample.getSampleId());
+        }
+
+        else if (STATE == ADD_SAMPLE)
             enterNewSample();
         else if (STATE >= 0) {
             sample = exam.getSamples()[STATE];
-            getSamples(sample.getSampleId());
+            getSample(sample.getSampleId());
         } else finish();
     }
+
+
 
     private void enterNewSample() {
 
         questionArray = new Question[exam.getQuestionNumber()];
         findViewById(R.id.et_sample_name).setVisibility(View.VISIBLE);
-        showQuesFragment(true);
+        showQuesFragment(STATE);
     }
 
-    private void getSamples(int sampleId) {
-        getSamples(sampleId, new VolleyCallback() {
+    private void getSample(int sampleId) {
+        getSample(sampleId, new VolleyCallback() {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
@@ -125,7 +128,7 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
                 Gson gson = new GsonBuilder().create();
                 questionArray = gson.fromJson(sampleJsonArray.toString(), Question[].class);
 
-                showQuesFragment(false);
+                showQuesFragment(STATE);
                 if (!(timeLeftInSeconds == null || timeLeftInSeconds == 0))
                     startCountDown();
 
@@ -142,14 +145,14 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         });
     }
 
-    private void showQuesFragment(boolean isEnter) {
+    private void showQuesFragment(int state) {
         int count = questionArray.length;
         progressBar.setMax(count);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                return QuesEntryFragment.getInstence(position, questionArray[position], isEnter);
+                return QuesEntryFragment.getInstence(position, questionArray[position], state);
             }
 
             @Override
@@ -190,7 +193,7 @@ private int size=questionArray.length;
         });
     }
 
-    private void getSamples(int sampleId, final VolleyCallback mCallback) {
+    private void getSample(int sampleId, final VolleyCallback mCallback) {
         String url = Constants.GET_SAMPLE;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -264,11 +267,12 @@ private int size=questionArray.length;
              result = "The Exam is finish You got " + getScore() + "/" + exam.getFullMarks();
             bundle.putString("RESULT", result);
             finishExamDialog.setArguments(bundle);
+            if(exam.getExaminerID()!=LoginSharedPreferences.getUserId(QuesExamActvity.this))
             uploadResult();
         }
         else if(STATE==ADD_SAMPLE){
             uploadSample();
-            result = "The Exam is finish You got ";
+            result = "You Added new sample ";
             bundle.putString("RESULT", result);
             finishExamDialog.setArguments(bundle);
 
@@ -284,6 +288,7 @@ private int size=questionArray.length;
                 Constants.ADD_SAMPLE,
                 response -> {
                     Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+
                 },
                 error -> {
                 }) {
@@ -321,7 +326,6 @@ private int size=questionArray.length;
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameter = new HashMap<>();
                 float score = getScore();
-
                 parameter.put("user_id", LoginSharedPreferences.getUserId(QuesExamActvity.this) + "");
                 parameter.put("sample_id", sample.getSample_id() + "");
                 parameter.put("date",  "2020");

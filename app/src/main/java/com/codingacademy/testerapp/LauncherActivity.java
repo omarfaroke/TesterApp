@@ -49,10 +49,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MenuDrawerNews extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
+public class LauncherActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentActionListener, ExamFragment.ExamFragmentActionListener {
 
-
-    private static final String TAG = "MenuDrawerNews";
+    private static final String TAG = "LauncherActivity";
     private ActionBar actionBar;
     private Toolbar toolbar;
     private NavigationView nav_view;
@@ -71,7 +70,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         setContentView(R.layout.activity_menu_drawer_news);
 
         //setup cookies
-        Constants.getCookiesFromUrl(MenuDrawerNews.this);
+        Constants.getCookiesFromUrl(LauncherActivity.this);
 
 
         fragmentManager = getSupportFragmentManager();
@@ -84,7 +83,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     void initTopTalent() {
         recyclerPro = findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
         getTalent(new VolleyCallback() {
 
             @Override
@@ -103,7 +102,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
             @Override
             public void onError(String result) throws Exception {
-                Toast.makeText(MenuDrawerNews.this, result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LauncherActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -139,7 +138,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
         };
 
 
-        VolleyController.getInstance(MenuDrawerNews.this).addToRequestQueue(stringRequest);
+        VolleyController.getInstance(LauncherActivity.this).addToRequestQueue(stringRequest);
     }
 
     void filterTalent(int cat) {
@@ -156,7 +155,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     private void upDateTop() {
         if (mProAdapter == null) {
-            mProAdapter = new ProAdapter(MenuDrawerNews.this, proArr);
+            mProAdapter = new ProAdapter(LauncherActivity.this, proArr);
             recyclerPro.setAdapter(mProAdapter);
         }
         mProAdapter.notifyDataSetChanged();
@@ -187,7 +186,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
     private void initNavigationMenu() {
 //        recyclerPro = findViewById(R.id.recyclerPro);
-//        recyclerPro.setLayoutManager(new LinearLayoutManager(MenuDrawerNews.this, LinearLayoutManager.HORIZONTAL, false));
+//        recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         nav_view = findViewById(R.id.nav_view);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -223,17 +222,17 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                         UserProfile userProfile = new UserProfile();
 
-                        userProfile.setFirstName(LoginSharedPreferences.getUserFirstName(MenuDrawerNews.this));
-                        userProfile.setLastName(LoginSharedPreferences.getUserLastName(MenuDrawerNews.this));
-                        userProfile.setImageUrl(LoginSharedPreferences.getUserImageUrl(MenuDrawerNews.this));
-                        userProfile.setUserId(LoginSharedPreferences.getUserId(MenuDrawerNews.this));
+                        userProfile.setFirstName(LoginSharedPreferences.getUserFirstName(LauncherActivity.this));
+                        userProfile.setLastName(LoginSharedPreferences.getUserLastName(LauncherActivity.this));
+                        userProfile.setImageUrl(LoginSharedPreferences.getUserImageUrl(LauncherActivity.this));
+                        userProfile.setUserId(LoginSharedPreferences.getUserId(LauncherActivity.this));
 
 
-                        Intent intent = new Intent(MenuDrawerNews.this, ProfileInfoActivity.class);
+                        Intent intent = new Intent(LauncherActivity.this, ProfileInfoActivity.class);
 
                         intent.putExtra("UserProfile", userProfile);
-                        intent.putExtra(Constants.USER_EMAIL, LoginSharedPreferences.getUserEmail(MenuDrawerNews.this));
-                        intent.putExtra(Constants.USER_STATUS, LoginSharedPreferences.getStatus(MenuDrawerNews.this));
+                        intent.putExtra(Constants.USER_EMAIL, LoginSharedPreferences.getUserEmail(LauncherActivity.this));
+                        intent.putExtra(Constants.USER_STATUS, LoginSharedPreferences.getStatus(LauncherActivity.this));
 
                         startActivity(intent);
 
@@ -243,7 +242,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                     case R.id.nav_exam_talent:
 
-                        Context context = MenuDrawerNews.this;
+                        Context context = LauncherActivity.this;
 
                         Intent intent1 = new Intent(context,InfoExamTalentActivity.class);
 
@@ -254,9 +253,9 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                         break;
                     case R.id.nav_logout:
-                        LoginSharedPreferences.userLogOut(MenuDrawerNews.this);
+                        LoginSharedPreferences.userLogOut(LauncherActivity.this);
 
-                        Toast.makeText(MenuDrawerNews.this, "Logout ...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LauncherActivity.this, "Logout ...", Toast.LENGTH_SHORT).show();
 
                         nav_view.getMenu().findItem(R.id.nav_logout).setVisible(false);
                         nav_view.getMenu().findItem(R.id.nav_login).setVisible(true);
@@ -265,10 +264,10 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                         showCategory();
                         break;
                     case R.id.nav_help:
-                        LoginSharedPreferences.checkIsLogin(MenuDrawerNews.this);
+                        LoginSharedPreferences.checkIsLogin(LauncherActivity.this);
                         break;
                     case R.id.nav_settings:
-                        LoginSharedPreferences.test(MenuDrawerNews.this);
+                        LoginSharedPreferences.test(LauncherActivity.this);
 
                         break;
                     case R.id.nav_approve_test:
@@ -276,8 +275,12 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
                         break;
                     case R.id.nav_approve_examiner:
-                        Intent intent2=new Intent(MenuDrawerNews.this,ExaminarActivity.class);
+                        Intent intent2=new Intent(LauncherActivity.this,ExaminarActivity.class);
                         startActivity(intent2);
+
+                        break;
+                    case R.id.nav_my_exam:
+                       showExams(ExamFragment.MY_EXAM);
 
                         break;
                 }
@@ -290,7 +293,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
     }
 
     private void showLoginActivity() {
-        Intent intent = new Intent(MenuDrawerNews.this, LoginActivity.class);
+        Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
         // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
@@ -319,7 +322,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
 
     private void setupItemsMenuNavDrawer() {
-        int type = LoginSharedPreferences.getUserType(MenuDrawerNews.this);
+        int type = LoginSharedPreferences.getUserType(LauncherActivity.this);
 
 
         switch (type) {
@@ -424,7 +427,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
                     public void onClick(View v) {
                         TopTalent topTalent = items.get(getAdapterPosition());
 
-                        Intent intent = new Intent(MenuDrawerNews.this, ProfileInfoActivity.class);
+                        Intent intent = new Intent(LauncherActivity.this, ProfileInfoActivity.class);
 
                         intent.putExtra("UserProfile", topTalent.getUserProfile());
                         intent.putExtra(Constants.USER_STATUS, topTalent.getStatusUser());
@@ -519,7 +522,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
             return;
         } else {
-            backToast = Toast.makeText(MenuDrawerNews.this, "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast = Toast.makeText(LauncherActivity.this, "Press back again to exit", Toast.LENGTH_SHORT);
             backToast.show();
         }
 
@@ -528,7 +531,7 @@ public class MenuDrawerNews extends AppCompatActivity implements CategoryFragmen
 
 
     public void updateUiAfterLoginOrLogout() {
-        switch (LoginSharedPreferences.getUserType(MenuDrawerNews.this)) {
+        switch (LoginSharedPreferences.getUserType(LauncherActivity.this)) {
 
         }
     }

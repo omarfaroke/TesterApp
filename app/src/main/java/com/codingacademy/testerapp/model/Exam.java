@@ -43,6 +43,9 @@ public class Exam implements Serializable {
     @SerializedName("examiner_id")
     private Integer examinerID;
 
+    @SerializedName("examiner_name")
+    private String examinerName;
+
     @SerializedName("sample")
    private Sample[] samples;
 
@@ -112,6 +115,9 @@ public class Exam implements Serializable {
         this.examDescription = examDescription;
     }
 
+    public String getExaminerName() {
+        return examinerName;
+    }
     public void setStatus(Integer status) {
         this.status = status;
     }

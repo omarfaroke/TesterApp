@@ -190,7 +190,7 @@ public class SampleFragment extends Fragment {
 
             TextView mSampleName;
             Button mBtnTalent;
-            Button mBtnModify;
+
             ImageView mBtnExpand;
             View layoutExpand;
 
@@ -201,7 +201,7 @@ public class SampleFragment extends Fragment {
                 mBtnExpand = view.findViewById(R.id.btn_expand);
                 layoutExpand = view.findViewById(R.id.layoutt_expand);
                 mBtnTalent = view.findViewById(R.id.btn_talent);
-                mBtnModify = view.findViewById(R.id.btn_modify);
+
             }
 
             @Override

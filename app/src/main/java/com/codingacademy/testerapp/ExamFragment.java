@@ -49,6 +49,9 @@ import java.util.Map;
 public class ExamFragment extends Fragment {
     public static final String TAG = "ExamFragment";
     public static final String EXAM_OBJECT = "EXAM_OBJECT";
+    public static final int ALL_EXAM = 0;
+    public static final int MY_EXAM = -101;
+
 
     private RecyclerView recyclerExam;
     private Exam[] examsArr;
@@ -163,9 +166,12 @@ public class ExamFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                if (cat_id != 0)
-                    par.put(CategoryFragment.CATEGORY_ID, "" + cat_id);
-                return par;
+                if(cat_id > 0)
+                    par.put("category_id", "" + cat_id);
+                else if(cat_id==MY_EXAM)
+                    par.put("examiner_id", "" + LoginSharedPreferences.getUserId(getActivity()));
+
+                    return par;
             }
 
             @Override
@@ -193,7 +199,12 @@ public class ExamFragment extends Fragment {
     private void initView(View v) {
 
         recyclerExam = v.findViewById(R.id.recyclerExam);
-        recyclerExam.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        if(currentCategory==ALL_EXAM||currentCategory==MY_EXAM) {
+            mLayoutManager.setReverseLayout(true);
+            mLayoutManager.setStackFromEnd(true);
+        }
+        recyclerExam.setLayoutManager(mLayoutManager);
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
         btnAddExam = v.findViewById(R.id.add_exam);
         if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER) {
