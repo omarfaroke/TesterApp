@@ -19,6 +19,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.model.Exam;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.snackbar.Snackbar;

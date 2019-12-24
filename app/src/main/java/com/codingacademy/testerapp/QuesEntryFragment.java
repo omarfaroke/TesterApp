@@ -25,9 +25,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.codingacademy.testerapp.model.Choice;
 import com.codingacademy.testerapp.model.Question;
 import com.codingacademy.testerapp.requests.StatusCallback;
+import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,19 +118,31 @@ public class QuesEntryFragment extends Fragment {
                     btnEdit.setText("Save");//Edit
                 } else {
                     if (!notValidate()) {
-                        upDateQuestion(new StatusCallback(){
+                        upDateQuestion(new VolleyCallback(){
 
                             @Override
-                            public void response(String s) {
-                                Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+                            public void onSuccess(JSONObject result) throws JSONException {
+                                Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
 
                                 for (RadioButton r : radioButtons)
-                                    r.setOnClickListener(null);
+                                    r.setOnLongClickListener(null);
                                 layAddChoice.setVisibility(View.GONE);
                                 etQues.setEnabled(false);
                                 mListener.addQues(question, index);
                                 btnEdit.setText("Edit");//Save
                                 editState=false;
+
+                            }
+
+                            @Override
+                            public void onSuccess(JSONArray result) throws JSONException {
+
+                            }
+
+                            @Override
+                            public void onError(String result) throws Exception {
+                                Toast.makeText(getActivity(), "Erorr connecting ", Toast.LENGTH_LONG).show();
+
                             }
                         });
 
@@ -137,14 +154,24 @@ public class QuesEntryFragment extends Fragment {
 
     }
 
-    private void upDateQuestion(StatusCallback statusCallback) {
+    private void upDateQuestion(VolleyCallback volleyCallback) {
         StringRequest request = new StringRequest(Request.Method.POST,
                 Constants.UPDATE_QUTETION,
                 response -> {
-statusCallback.response(response);
+                    try {
+                        JSONObject jsonObject=new JSONObject(response);
+                        volleyCallback.onSuccess(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 },
                 error -> {
-                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    try {
+                        volleyCallback.onError(error.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }) {
             @Override
@@ -160,8 +187,8 @@ statusCallback.response(response);
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                while (Constants.COOKIES == null) ;
-                map.put("Cookie", Constants.COOKIES);
+                //while (Constants.COOKIES == null) ;
+                //map.put("Cookie", Constants.COOKIES);
                 return map;
             }
         };

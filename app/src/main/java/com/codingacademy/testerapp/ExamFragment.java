@@ -54,6 +54,7 @@ public class ExamFragment extends Fragment {
 
 
     private RecyclerView recyclerExam;
+    private TextView textNoNet;
     private Exam[] examsArr;
     private ExamAdapter examAdapter;
     private int currentCategory;
@@ -121,6 +122,7 @@ public class ExamFragment extends Fragment {
                 //  examsArr = new Exam[examJsonArray.length()];
                 Gson gson = new GsonBuilder().create();
                 examsArr = gson.fromJson(examJsonArray.toString(), Exam[].class);
+                textNoNet.setVisibility(View.INVISIBLE);
 
                 upDateExam();
             }
@@ -132,7 +134,7 @@ public class ExamFragment extends Fragment {
 
             @Override
             public void onError(String result) throws Exception {
-                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+textNoNet.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -197,7 +199,7 @@ public class ExamFragment extends Fragment {
 
 
     private void initView(View v) {
-
+textNoNet=v.findViewById(R.id.no_net);
         recyclerExam = v.findViewById(R.id.recyclerExam);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         if(currentCategory==ALL_EXAM||currentCategory==MY_EXAM) {
@@ -207,7 +209,9 @@ public class ExamFragment extends Fragment {
         recyclerExam.setLayoutManager(mLayoutManager);
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
         btnAddExam = v.findViewById(R.id.add_exam);
-        if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER) {
+        if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER &&
+        LoginSharedPreferences.getStatus(getActivity())==1) {
+
             btnAddExam.setVisibility(View.VISIBLE);
             btnAddExam.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -249,7 +253,7 @@ public class ExamFragment extends Fragment {
             if (exam.getStatus() == 0) {
                 if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_ADMIN ||
                         LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())
-                    holder.examName.setBackgroundColor(Color.GRAY);
+                    holder.examName.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                 else {
                     holder.itemView.setVisibility(View.GONE);

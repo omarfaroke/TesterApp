@@ -188,12 +188,12 @@ public class ExaminarFragment extends Fragment {
             holder.mExaminarName.setText(user.getFirstName() + " " + user.getFirstName());
             holder.teEmail.setText(user.getEmail());
             if (user.getStatus() == 0) {
-                holder.mExaminarName.setBackgroundColor(Color.GRAY);
+                holder.mExaminarName.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 holder.btnAprove.setVisibility(View.VISIBLE);
                 holder.btnDisAprove.setVisibility(View.GONE);
 
             } else if (user.getStatus() == 1) {
-                holder.mExaminarName.setBackgroundColor(Color.WHITE);
+                holder.mExaminarName.setBackgroundColor(getResources().getColor(R.color.secondPage));
                 holder.btnDisAprove.setVisibility(View.VISIBLE);
                 holder.btnAprove.setVisibility(View.GONE);
 

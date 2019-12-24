@@ -126,4 +126,20 @@ public class TopTalent implements Serializable {
     public void setStatusUser(Integer statusUser) {
         mStatusUser = statusUser;
     }
+
+    public String getmEmail() {
+        return mEmail;
+    }
+
+    public Integer getmStatusUser() {
+        return mStatusUser;
+    }
+
+    public Sample getmSample() {
+        return mSample;
+    }
+
+    public Exam getmExam() {
+        return mExam;
+    }
 }

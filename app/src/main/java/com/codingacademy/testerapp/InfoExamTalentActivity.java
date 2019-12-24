@@ -1,6 +1,7 @@
 package com.codingacademy.testerapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -181,7 +182,7 @@ public class InfoExamTalentActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+            TopTalent currentTopTalent;
             private TextView mFullNameTextView;
             private CircularImageView mTalentPhotoCircularImageView;
             private TextView mExam;
@@ -217,7 +218,7 @@ public class InfoExamTalentActivity extends AppCompatActivity {
 
 
             void bindData(){
-                TopTalent currentTopTalent = mTalents.get(getAdapterPosition());
+                 currentTopTalent = mTalents.get(getAdapterPosition());
 
                 UserProfile userProfile = currentTopTalent.getUserProfile();
 
@@ -249,9 +250,15 @@ public class InfoExamTalentActivity extends AppCompatActivity {
                         break;
                     case R.id.mark:
                         break;
-                    case R.id.print:
+                    case R.id.print://showCertificate(currentTopTalent);
                         break;
                 }
+            }
+
+            private void showCertificate(TopTalent topTalent) {
+                Intent intent=new Intent(InfoExamTalentActivity.this,CertificateActivity.class);
+                intent.putExtra(CertificateActivity.CERTIFICATE,topTalent);
+                startActivity(intent);
             }
 
         }

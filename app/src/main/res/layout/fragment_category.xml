@@ -11,7 +11,7 @@
     >
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
@@ -19,7 +19,14 @@
         android:orientation="vertical"
         android:weightSum="7">
 
-
+        <TextView
+            android:gravity="center"
+            android:id="@+id/no_net"
+            android:visibility="invisible"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCat"
             android:layout_width="match_parent"
@@ -32,7 +39,7 @@
             tools:listitem="@layout/temp_category" />
 
 
-    </LinearLayout>
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_cat"

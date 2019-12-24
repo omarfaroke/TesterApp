@@ -45,6 +45,7 @@ public class CategoryFragment extends Fragment {
 
 
     private RecyclerView recyclerCategory;
+    private TextView textNoNet;
     private CategoryAdapter mAdapter;
     private FloatingActionButton addCatBtn;
     private List<Category> arrCategory, subCategory;
@@ -148,15 +149,20 @@ public class CategoryFragment extends Fragment {
 
 
         });
-
-
-
-
+        textNoNet=v.findViewById(R.id.no_net);
         recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));
         recyclerCategory.setHasFixedSize(true);
         recyclerCategory.setNestedScrollingEnabled(false);
+
+        recyclerCategory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if(recyclerView.canScrollVertically(-7))
+                    updateCategory();
+            }
+        });
         updateCategory();
 
     }
@@ -250,17 +256,17 @@ public class CategoryFragment extends Fragment {
                 for (int i = 0; i < size; i++) {
                     JSONObject jsonCat = result.getJSONObject(i);
                     arrCategory.add(new Category(jsonCat));
-
                 }
 
                 subCategory = new ArrayList<>();
+                textNoNet.setVisibility(View.INVISIBLE);
 
                 getSupCat(parents.get(parents.size() - 1));
             }
 
             @Override
             public void onError(String result) throws Exception {
-                Toast.makeText(getActivity(), "Can not connect", Toast.LENGTH_SHORT).show();
+                textNoNet.setVisibility(View.VISIBLE);
             }
         });
 

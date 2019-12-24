@@ -277,6 +277,7 @@ private int size=questionArray.length;
             finishExamDialog.setArguments(bundle);
 
         }
+        finishExamDialog.setCancelable(false);
         finishExamDialog.show(getSupportFragmentManager(), "Your result");
     }
 

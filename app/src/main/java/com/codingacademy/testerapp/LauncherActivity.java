@@ -277,6 +277,12 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
                         break;
 
+                    case R.id.nav_my_exam:
+                        showExams(ExamFragment.MY_EXAM);
+
+
+                        break;
+
                     case R.id.nav_exit:
                         exitFromApp();
                         break;
