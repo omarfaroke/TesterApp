@@ -118,7 +118,6 @@ public class CategoryFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -149,7 +148,7 @@ public class CategoryFragment extends Fragment {
 
 
         });
-        textNoNet=v.findViewById(R.id.no_net);
+        textNoNet = v.findViewById(R.id.no_net);
         recyclerCategory = v.findViewById(R.id.recyclerCat);
         recyclerCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerCategory.addItemDecoration(new SpacingItemDecoration(2, dpToPx(getActivity(), 8), true));
@@ -159,7 +158,7 @@ public class CategoryFragment extends Fragment {
         recyclerCategory.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if(recyclerView.canScrollVertically(-7))
+                if (recyclerView.canScrollVertically(-7))
                     updateCategory();
             }
         });
@@ -229,7 +228,7 @@ public class CategoryFragment extends Fragment {
                     }
                 }) {
             @Override
-            public Map<String, String> getHeaders(){
+            public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
 //        	    while (Constants.COOKIES == null);
 //                map.put("Cookie", Constants.COOKIES);
@@ -273,14 +272,13 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    private void updateCategory(Category category){
+    private void updateCategory(Category category) {
         arrCategory.add(category);
         subCategory.add(category);
-        mAdapter.notifyItemInserted(subCategory.size() );
+        mAdapter.notifyItemInserted(subCategory.size());
         //getSupCat(category.getParentId());
 
     }
-
 
 
     public static int dpToPx(Context c, int dp) {
@@ -347,7 +345,6 @@ public class CategoryFragment extends Fragment {
         }
 
 
-
         @Override
         public int getItemCount() {
             return items.size();
@@ -367,7 +364,7 @@ public class CategoryFragment extends Fragment {
     }
 
 
-    public void updateUiAfterLoginOrLogout(){
+    public void updateUiAfterLoginOrLogout() {
 
         if (LoginSharedPreferences.userAsAdmin(getActivity())) {
             addCatBtn.setVisibility(View.VISIBLE);
@@ -377,7 +374,6 @@ public class CategoryFragment extends Fragment {
         }
 
     }
-
 
 
 }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -60,7 +59,6 @@ public class ExamFragment extends Fragment {
     private int currentCategory;
     private ExamFragmentActionListener mListener;
     private FloatingActionButton btnAddExam;
-
 
 
     interface ExamFragmentActionListener {
@@ -134,7 +132,7 @@ public class ExamFragment extends Fragment {
 
             @Override
             public void onError(String result) throws Exception {
-textNoNet.setVisibility(View.VISIBLE);
+                textNoNet.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -168,12 +166,12 @@ textNoNet.setVisibility(View.VISIBLE);
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> par = new HashMap<>();
-                if(cat_id > 0)
+                if (cat_id > 0)
                     par.put("category_id", "" + cat_id);
-                else if(cat_id==MY_EXAM)
+                else if (cat_id == MY_EXAM)
                     par.put("examiner_id", "" + LoginSharedPreferences.getUserId(getActivity()));
 
-                    return par;
+                return par;
             }
 
             @Override
@@ -199,10 +197,10 @@ textNoNet.setVisibility(View.VISIBLE);
 
 
     private void initView(View v) {
-textNoNet=v.findViewById(R.id.no_net);
+        textNoNet = v.findViewById(R.id.no_net);
         recyclerExam = v.findViewById(R.id.recyclerExam);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        if(currentCategory==ALL_EXAM||currentCategory==MY_EXAM) {
+        if (currentCategory == ALL_EXAM || currentCategory == MY_EXAM) {
             mLayoutManager.setReverseLayout(true);
             mLayoutManager.setStackFromEnd(true);
         }
@@ -210,7 +208,7 @@ textNoNet=v.findViewById(R.id.no_net);
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
         btnAddExam = v.findViewById(R.id.add_exam);
         if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER &&
-        LoginSharedPreferences.getStatus(getActivity())==1) {
+                LoginSharedPreferences.getStatus(getActivity()) == 1) {
 
             btnAddExam.setVisibility(View.VISIBLE);
             btnAddExam.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +244,7 @@ textNoNet=v.findViewById(R.id.no_net);
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             exam = examsArr[position];
-            if(LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID()) {
+            if (LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID()) {
                 holder.btnShowSample.setVisibility(View.VISIBLE);
                 holder.btnShowTalent.setVisibility(View.VISIBLE);
             }

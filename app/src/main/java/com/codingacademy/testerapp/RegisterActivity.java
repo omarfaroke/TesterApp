@@ -442,11 +442,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(RegisterActivity.this, "you clicked Ok", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RegisterActivity.this, "you clicked Ok", Toast.LENGTH_SHORT).show();
             }
         });
 
         AlertDialog dialog=builder.create();
+        builder.setCancelable(false);
         dialog.show();
     }
 

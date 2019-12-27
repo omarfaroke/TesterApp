@@ -3,6 +3,7 @@ package com.codingacademy.testerapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -37,6 +38,9 @@ import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,11 +85,31 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         //Constants.getCookiesFromUrl(LauncherActivity.this);
 
 
+        setImageSlider();
         fragmentManager = getSupportFragmentManager();
         initTopTalent();
         initToolbar();
         initNavigationMenu();
         showCategory();
+
+    }
+
+    private void  setImageSlider(){
+
+        SliderView sliderView = findViewById(R.id.imageSlider);
+
+        SliderAdapterExample adapter = new SliderAdapterExample(this);
+
+        sliderView.setSliderAdapter(adapter);
+
+        sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+        sliderView.setIndicatorSelectedColor(Color.WHITE);
+        sliderView.setIndicatorUnselectedColor(Color.GRAY);
+        sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
+        sliderView.startAutoCycle();
+
 
     }
 
@@ -178,7 +202,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle("Drawer News");
+        actionBar.setTitle(R.string.app_name);
     }
 
     private void initNavigationMenu() {
@@ -203,8 +227,8 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(final MenuItem item) {
-                Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
-                actionBar.setTitle(item.getTitle());
+               // Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
+               // actionBar.setTitle(item.getTitle());
 
 
                 drawer.closeDrawers();
