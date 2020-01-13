@@ -23,28 +23,19 @@ public class CertificateActivity extends AppCompatActivity {
             TextView talent = findViewById(R.id.talent_name);
             TextView note = findViewById(R.id.exam_note);
             TextView date = findViewById(R.id.date);
-            String s="Company :";
-            if(topTalent.getmExam().getExaminerName()!=null)
-                s+=topTalent.getmExam().getExaminerName();
-            examiner.setText(s);
 
-            s="Note :";
-            if(topTalent.getmExam().getExamNote()!=null)
-                s+=topTalent.getmExam().getExaminerName();
-            note.setText(s);
+            examiner.setText(topTalent.getmExam().getExaminerName());
 
 
-            s="Name :";
-            if(topTalent.getUserProfile().getFullName()!=null)
-                s+=topTalent.getmExam().getExaminerName();
+            note.setText(topTalent.getmExam().getExamNote());
 
-            talent.setText(s);
 
-            s="Date :";
-            if(topTalent.getDate()!=null)
-                s+=topTalent.getmExam().getExaminerName();
 
-            date.setText(s);
+
+            talent.setText(topTalent.getmExam().getExaminerName());
+
+
+            date.setText(topTalent.getDate());
         }
     }
 }

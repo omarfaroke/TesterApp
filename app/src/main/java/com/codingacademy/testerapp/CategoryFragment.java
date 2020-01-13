@@ -383,7 +383,6 @@ public class CategoryFragment extends Fragment {
 
     }
 
-
     public boolean backCategory() {
         if (parents.size() > 1) {
             parents.remove(parents.size() - 1);

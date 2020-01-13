@@ -26,6 +26,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
@@ -48,6 +56,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +106,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
     }
 
-    private void setImageSlider() {
+    private void  setImageSlider(){
 
         SliderView sliderView = findViewById(R.id.imageSlider);
 
@@ -144,8 +153,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                 Toast.makeText(LauncherActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     void getTalent(final VolleyCallback mCallback) {
@@ -203,6 +210,8 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     }
 
 
+
+
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -229,12 +238,13 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         drawer.setDrawerListener(toggle);
 
 
+
         toggle.syncState();
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(final MenuItem item) {
-                // Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
-                // actionBar.setTitle(item.getTitle());
+               // Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
+               // actionBar.setTitle(item.getTitle());
 
 
                 drawer.closeDrawers();
@@ -264,16 +274,17 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                         startActivity(intent);
 
 
+
                         break;
 
                     case R.id.nav_exam_talent:
 
                         Context context = LauncherActivity.this;
 
-                        Intent intent1 = new Intent(context, InfoExamTalentActivity.class);
+                        Intent intent1 = new Intent(context,InfoExamTalentActivity.class);
 
-                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR, InfoExamTalentActivity.EXAMINER_ID);
-                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE, LoginSharedPreferences.getUserId(context));
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR,InfoExamTalentActivity.EXAMINER_ID);
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE,LoginSharedPreferences.getUserId(context));
 
                         startActivity(intent1);
 
@@ -301,7 +312,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
                         break;
                     case R.id.nav_approve_examiner:
-                        Intent intent2 = new Intent(LauncherActivity.this, ExaminarActivity.class);
+                        Intent intent2=new Intent(LauncherActivity.this,ExaminarActivity.class);
                         startActivity(intent2);
 
                         break;
@@ -410,7 +421,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             String mEmail = LoginSharedPreferences.getUserEmail(this);
             mEmailHeaderDrawer.setText(mEmail);
 
-        } else {
+        }else {
             mPhotoProfileHeaderDrawer.setImageResource(R.drawable.userphoto);
             mFullNameHeaderDrawer.setText("");
             mEmailHeaderDrawer.setText("");
@@ -507,7 +518,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         mFragmentTransaction.commit();
     }
 
-
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<TopTalent> items = new ArrayList<>();
@@ -554,15 +564,15 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_top_pro, parent, false);
-            vh = new OriginalViewHolder(v);
+            vh = new ProAdapter.OriginalViewHolder(v);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof OriginalViewHolder) {
-                OriginalViewHolder view = (OriginalViewHolder) holder;
+            if (holder instanceof ProAdapter.OriginalViewHolder) {
+                ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
 
                 UserProfile userProfile = items.get(position).getUserProfile();
                 view.name.setText(userProfile.getFirstName());
@@ -609,12 +619,15 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
 
             } else if (fragment instanceof SampleFragment) {
+                if (((SampleFragment) fragment).isAdd) {
+                    ExamFragment exam = (ExamFragment) fragmentManager.findFragmentByTag(ExamFragment.TAG);
+                    exam.getExam();
+                }
                 fragmentManager.popBackStack();
 
             }
 
         }
-
 
     }
 

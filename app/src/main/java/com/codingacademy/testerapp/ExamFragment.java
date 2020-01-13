@@ -80,8 +80,8 @@ public class ExamFragment extends Fragment {
 
     interface ExamFragmentActionListener {
         void showSample(Exam exam);
-    }
 
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -121,16 +121,15 @@ public class ExamFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_exam, container, false);
         initView(v);
 
-        getExam(currentCategory);
+        getExam();
 
         return v;
     }
 
-    void getExam(int catID) {
-
+    void getExam() {
         progressDialog.show();
 
-        getExam(catID, new VolleyCallback() {
+        getExam(currentCategory, new VolleyCallback() {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
@@ -160,7 +159,6 @@ public class ExamFragment extends Fragment {
 
     private void getExam(int cat_id, final VolleyCallback mCallback) {
         String url = Constants.GET_EXAM;
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response ->
@@ -206,70 +204,8 @@ public class ExamFragment extends Fragment {
         };
         VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
-
-//        CacheRequest cacheRequest = new CacheRequest(Request.Method.POST,url,
-//
-//                response ->                 {
-//                    try {
-//                        final String data = new String(response.data,
-//                                HttpHeaderParser.parseCharset(response.headers));
-//
-//                        JSONArray jsonArray = new JSONArray(data);
-//                        JSONObject jsonObject = new JSONObject();
-//                        jsonObject.put("JA", jsonArray);
-//                        mCallback.onSuccess(jsonObject);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                },
-//
-//
-//                error -> {
-//                    try {
-//                        mCallback.onError(error.getMessage());
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }   ){
-//
-//            Map<String, String> params = new HashMap<>();
-//
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//
-//                if (cat_id > 0)
-//                    params.put("category_id", "" + cat_id);
-//                else if (cat_id == MY_EXAM)
-//                    params.put("examiner_id", "" + LoginSharedPreferences.getUserId(getActivity()));
-//
-//                return params;
-//            }
-//
-////            @Override
-////            public Map<String, String> getHeaders() {
-////                Map<String, String> map = new HashMap<>();
-//////                while (Constants.COOKIES == null) ;
-//////                map.put("Cookie", Constants.COOKIES);
-////                return map;
-////            }
-//
-//            @Override
-//            public String getCacheKey() {
-//                return generateCacheKeyWithParam(super.getCacheKey(), params);
-//            }
-//        };
-//
-//
-//
-//
-//        VolleyController.getInstance(getActivity()).addToRequestQueue(cacheRequest);
-
-
     }
+
 
     private void upDateExam() {
 
@@ -343,33 +279,14 @@ public class ExamFragment extends Fragment {
     private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
         Exam exam;
 
-        final int EMPTY_RECYCLERVIEW=-1;
-
-
         @NonNull
         @Override
         public ExamVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
-
             return new ExamVH(LayoutInflater.from(getActivity()).inflate(R.layout.temp_exam, parent, false));
         }
 
         @Override
-        public int getItemViewType(int position) {
-
-
-            if (getItemCount() == 0){
-                return  EMPTY_RECYCLERVIEW;
-            }
-
-            return super.getItemViewType(position);
-        }
-
-        @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
-
-
             exam = examsArr[position];
             if (LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID()) {
                 holder.btnShowSample.setVisibility(View.VISIBLE);
@@ -442,9 +359,6 @@ public class ExamFragment extends Fragment {
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
-
-
-
                 examName = itemView.findViewById(R.id.exam_name);
                 examDesc = itemView.findViewById(R.id.exam_desc);
                 btExpand = itemView.findViewById(R.id.bt_expand);
@@ -459,7 +373,6 @@ public class ExamFragment extends Fragment {
                 btnShowTalent.setOnClickListener(this);
                 checkPrivlige();
             }
-
 
             private void checkPrivlige() {
 

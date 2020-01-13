@@ -250,7 +250,7 @@ public class InfoExamTalentActivity extends AppCompatActivity {
                         break;
                     case R.id.mark:
                         break;
-                    case R.id.print://showCertificate(currentTopTalent);
+                    case R.id.print:showCertificate(currentTopTalent);
                         break;
                 }
             }

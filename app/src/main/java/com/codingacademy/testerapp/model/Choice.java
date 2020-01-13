@@ -2,7 +2,9 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Choice {
+import java.io.Serializable;
+
+public class Choice implements Serializable {
     @SerializedName("Choice_id")
     private Integer choiceId;
 

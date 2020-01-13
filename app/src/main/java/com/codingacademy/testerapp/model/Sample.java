@@ -59,4 +59,8 @@ public class Sample implements Serializable {
     public Question[] getQuestions() {
         return questions;
     }
+
+    public void setSampleId(Integer sampleId) {
+        this.sampleId = sampleId;
+    }
 }
