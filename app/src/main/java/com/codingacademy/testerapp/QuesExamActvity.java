@@ -210,8 +210,6 @@ private int size=questionArray.length;
                     }
 
                 },
-
-
                 error -> {
                     try {
                         mCallback.onError(error.getMessage());
@@ -260,25 +258,42 @@ private int size=questionArray.length;
     }
 
     private void finishExam() {
-        FinishExamDialog finishExamDialog = new FinishExamDialog();
-        Bundle bundle = new Bundle();
-        String result;
+
         if(STATE==TAKE_EXAM||STATE>=0) {
-             result = "The Exam is finish You got " + getScore() + "/" + exam.getFullMarks();
-            bundle.putString("RESULT", result);
-            finishExamDialog.setArguments(bundle);
-            if(exam.getExaminerID()!=LoginSharedPreferences.getUserId(QuesExamActvity.this))
+
+
+            if(exam.getExaminerID()==LoginSharedPreferences.getUserId(QuesExamActvity.this))
+                exitExam("Right Answers => "+ getScore() + "/" + exam.getFullMarks());
+            else
             uploadResult();
         }
         else if(STATE==ADD_SAMPLE){
             uploadSample();
-            result = "You Added new sample ";
-            bundle.putString("RESULT", result);
-            finishExamDialog.setArguments(bundle);
+
+
 
         }
+
+    }
+
+    private void exitExam(String result){
+        FinishExamDialog finishExamDialog = new FinishExamDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("RESULT", result);
+        finishExamDialog.setArguments(bundle);
         finishExamDialog.setCancelable(false);
         finishExamDialog.show(getSupportFragmentManager(), "Your result");
+
+    }
+    private void exitExam(String result,Sample sample){
+        FinishExamDialog finishExamDialog = new FinishExamDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("RESULT", result);
+        bundle.putSerializable("Sample", sample);
+        finishExamDialog.setArguments(bundle);
+        finishExamDialog.setCancelable(false);
+        finishExamDialog.show(getSupportFragmentManager(), "Your result");
+
     }
 
     private void uploadSample() {
@@ -288,10 +303,21 @@ private int size=questionArray.length;
         StringRequest request = new StringRequest(Request.Method.POST,
                 Constants.ADD_SAMPLE,
                 response -> {
-                    Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                    try {
+                        JSONObject jsonObject=new JSONObject(response);
+                        sample.setSampleId(jsonObject.getInt("sample_id"));
+                        exitExam("You Added new sample ",sample);
+                        Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        btnFinish.setEnabled(true);
+                        e.printStackTrace();
+                    }
+
 
                 },
                 error -> {
+            btnFinish.setEnabled(true);
+                    Toast.makeText(QuesExamActvity.this,"Sorry no Connection pless try again",Toast.LENGTH_LONG).show();
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -320,8 +346,11 @@ private int size=questionArray.length;
         StringRequest request = new StringRequest(Request.Method.POST,
                 Constants.ADD_EXAM_HISTORY,
                 response -> {
+            exitExam("The Exam is finish You got " + getScore() + "/" + exam.getFullMarks());
                 },
                 error -> {
+            btnFinish.setEnabled(true);
+            Toast.makeText(QuesExamActvity.this,"Sorry no Connection plese try again",Toast.LENGTH_LONG).show();
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -382,8 +411,10 @@ private int size=questionArray.length;
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, questionArray.length-1)).notValidate())
+                if (!((QuesEntryFragment) pager.getAdapter().instantiateItem(pager, questionArray.length - 1)).notValidate())
+                {   view.setEnabled(false);
                 finishExam();
+            }
             }
         });
         mNext.setOnClickListener(new View.OnClickListener() {

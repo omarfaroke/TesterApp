@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -177,6 +178,7 @@ public class QuesEntryFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameter = new HashMap<>();
+
                 String quesString = new Gson().toJson(question);
                 parameter.put("question", quesString);
                 return parameter;
@@ -292,6 +294,7 @@ public class QuesEntryFragment extends Fragment {
             }
             else if(editState){
                 this.question.setChoices(choices);
+
                 this.question.setQuesText(s);
                 return false;
             }

@@ -458,6 +458,9 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         mFragmentTransaction.commit();
     }
 
+
+
+
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<TopTalent> items = new ArrayList<>();
@@ -558,7 +561,12 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
 
             } else if (fragment instanceof SampleFragment) {
+                if (((SampleFragment) fragment).isAdd) {
+                    ExamFragment exam = (ExamFragment) fragmentManager.findFragmentByTag(ExamFragment.TAG);
+                    exam.getExam();
+                }
                 fragmentManager.popBackStack();
+
 
             }
 

@@ -2,6 +2,8 @@ package com.codingacademy.testerapp.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 public class Exam implements Serializable {
@@ -122,9 +124,6 @@ public class Exam implements Serializable {
         this.status = status;
     }
 
-    public void setSamples(Sample[] samples) {
-        this.samples = samples;
-    }
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
@@ -177,6 +176,8 @@ public class Exam implements Serializable {
     public Sample[] getSamples() {
         return samples;
     }
+
+
 
     public boolean isExpanded() {
         return expanded;

@@ -1,6 +1,8 @@
 package com.codingacademy.testerapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -23,11 +25,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class SampleFragment extends Fragment {
-    public static final String TAG = "SampleFragment" ;
+    public static final String TAG = "SampleFragment";
     RecyclerView mRecyclerSample;
     Exam exam;
     Sample[] mSamples;
+    boolean isAdd=false;
+
+
     private FloatingActionButton btnAddSample;
 
     SampleRecyclerViewAdapter myAdapterSample;
@@ -48,10 +56,22 @@ public class SampleFragment extends Fragment {
         //fillAdapter();
         exam = (Exam) getArguments().getSerializable(SampleFragment.EXAM_OPJECT);
         mSamples = exam.getSamples();
+
         initView(v);
 
         return v;
     }
+
+    void update() {
+        if (myAdapterSample == null) {
+            myAdapterSample = new SampleRecyclerViewAdapter();
+            mRecyclerSample.setAdapter(myAdapterSample);
+        } else {
+            myAdapterSample.notifyDataSetChanged();
+
+        }
+    }
+
 
     private void initView(View v) {
         /// Exam exam = new Exam(1, null, null, null, 20, 7, null, null, null, null, null);
@@ -59,20 +79,34 @@ public class SampleFragment extends Fragment {
         mRecyclerSample = v.findViewById(R.id.recyclersample);
         mRecyclerSample.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerSample.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
+        update();
 
-        myAdapterSample = new SampleRecyclerViewAdapter();
-        mRecyclerSample.setAdapter(myAdapterSample);
-        if(LoginSharedPreferences.getUserId(getContext())==exam.getExaminerID()) {
+        if (LoginSharedPreferences.getUserId(getContext()) == exam.getExaminerID()) {
             btnAddSample = v.findViewById(R.id.add_sample);
             btnAddSample.setVisibility(View.VISIBLE);
             btnAddSample.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.ADD_SAMPLE));
+
+                    startActivityForResult(QuesExamActvity.getInstance(getActivity(), exam, QuesExamActvity.ADD_SAMPLE), -QuesExamActvity.ADD_SAMPLE);
+
+
                 }
             });
         }
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == -QuesExamActvity.ADD_SAMPLE) {
+                mSamples = Arrays.copyOf(mSamples, mSamples.length + 1);
+                mSamples[mSamples.length - 1] = (Sample) data.getSerializableExtra("Sample");
+                isAdd=true;
+                myAdapterSample.notifyItemInserted(mSamples.length - 1);
+            }
+        }
     }
 
     public int dpToPx(Context c, int dp) {
@@ -80,6 +114,11 @@ public class SampleFragment extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     public class SampleRecyclerViewAdapter extends RecyclerView.Adapter<SampleRecyclerViewAdapter.ViewHolder> {
 
@@ -206,9 +245,9 @@ public class SampleFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.sample_name:
-                        int whatPos=getAdapterPosition();
+                        int whatPos = getAdapterPosition();
                         startActivity(QuesExamActvity.getInstance(getActivity(), exam, whatPos));
                         break;
 

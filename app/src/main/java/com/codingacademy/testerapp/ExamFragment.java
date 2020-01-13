@@ -104,13 +104,13 @@ public class ExamFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_exam, container, false);
         initView(v);
 
-        getExam(currentCategory);
+        getExam();
 
         return v;
     }
 
-    void getExam(int catID) {
-        getExam(catID, new VolleyCallback() {
+    void getExam() {
+        getExam(currentCategory, new VolleyCallback() {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {

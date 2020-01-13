@@ -15,7 +15,7 @@
         android:layout_marginBottom="32dp"
         android:text="our_name"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent">
@@ -56,7 +56,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/examiner_name"
+        android:id="@+id/examinar_name"
         android:layout_width="131dp"
         android:layout_height="wrap_content"
         android:text="Company Name"
