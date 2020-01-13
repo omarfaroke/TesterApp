@@ -45,20 +45,24 @@
             android:layout_width="match_parent"
 
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="7"
+
+            >
 
             <androidx.cardview.widget.CardView
                 app:cardCornerRadius="6dp"
                 android:layout_margin="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
 
                 >
 
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/imageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="match_parent"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="back_and_forth"
                     app:sliderAutoCycleEnabled="true"
@@ -83,11 +87,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerPro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout_height="120dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
 
                 android:orientation="horizontal"
@@ -101,7 +104,11 @@
                 android:id="@+id/main_fram"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4" />
+                android:layout_weight="4"
+
+                />
+
+
 
 
         </LinearLayout>

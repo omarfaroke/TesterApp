@@ -1,5 +1,6 @@
 package com.codingacademy.testerapp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -32,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +53,15 @@ public class CategoryFragment extends Fragment {
     private List<Category> arrCategory, subCategory;
     private List<Integer> parents = new ArrayList<>();
     private int currentCategory = 0;
+    ProgressDialog progressDialog;
 
     private CategoryFragmentActionListener mListener;
 
 
     public interface CategoryFragmentActionListener {
         void showExams(int currentCategory);
+
+        void updateTopTalent(List<Integer> childrenCategory);
     }
 
 
@@ -115,6 +120,7 @@ public class CategoryFragment extends Fragment {
         super.onResume();
 
         updateUiAfterLoginOrLogout();
+
     }
 
 
@@ -134,6 +140,9 @@ public class CategoryFragment extends Fragment {
 
 
     private void intViews(View v) {
+
+        setUpProgressDialog();
+
         addCatBtn = v.findViewById(R.id.add_cat);
         addCatBtn.setOnClickListener(view -> {
 
@@ -158,11 +167,22 @@ public class CategoryFragment extends Fragment {
         recyclerCategory.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (recyclerView.canScrollVertically(-7))
-                    updateCategory();
+                if (recyclerView.canScrollVertically(-7)) {
+                }
+                // updateCategory();
             }
         });
+
         updateCategory();
+
+    }
+
+
+
+    void setUpProgressDialog(){
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading Category ...");
+        progressDialog.setCancelable(false);
 
     }
 
@@ -242,6 +262,9 @@ public class CategoryFragment extends Fragment {
 
 
     private void updateCategory() {
+
+        progressDialog.show();
+
         getCategory(new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
@@ -261,6 +284,8 @@ public class CategoryFragment extends Fragment {
                 textNoNet.setVisibility(View.INVISIBLE);
 
                 getSupCat(parents.get(parents.size() - 1));
+
+                progressDialog.dismiss();
             }
 
             @Override
@@ -286,7 +311,7 @@ public class CategoryFragment extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.OriginalViewHolder> {
 
         private List<Category> items;
 
@@ -297,12 +322,56 @@ public class CategoryFragment extends Fragment {
             ctx = context;
         }
 
-        public class OriginalViewHolder extends RecyclerView.ViewHolder {
-            public ImageView image;
-            public TextView title;
+
+        @Override
+        public CategoryAdapter.OriginalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            CategoryAdapter.OriginalViewHolder vh;
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_category, parent, false);
+            vh = new CategoryAdapter.OriginalViewHolder(v);
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(CategoryAdapter.OriginalViewHolder view, final int position) {
+
+            Category p = items.get(position);
+            view.title.setText(p.name);
+            view.itemView.setOnClickListener(view1 -> {
 
 
-            public OriginalViewHolder(View v) {
+//                    if (listChildrenCategory.size() == 1){
+//                        Toast.makeText(ctx, "لا يوجد اختبارات حالياً ضمن هذه الفئة ..", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+
+                parents.add(p.getCatId());
+
+                getSupCat(p.getCatId());
+
+                List<Integer> listChildrenCategory = getChildrenOfCurrentCategory(p.getCatId());
+                mListener.updateTopTalent(listChildrenCategory);
+
+            });
+
+            ViewAnimation.animateFadeIn(view.itemView, position);
+
+
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+
+        class OriginalViewHolder extends RecyclerView.ViewHolder {
+            ImageView image;
+            TextView title;
+
+
+            OriginalViewHolder(View v) {
                 super(v);
                 image = v.findViewById(R.id.mImageCat);
                 title = v.findViewById(R.id.mTextCat);
@@ -312,44 +381,6 @@ public class CategoryFragment extends Fragment {
 
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RecyclerView.ViewHolder vh;
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_category, parent, false);
-            vh = new CategoryAdapter.OriginalViewHolder(v);
-            return vh;
-        }
-
-        // Replace the contents of a view (invoked by the layout manager)
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof CategoryAdapter.OriginalViewHolder) {
-                CategoryAdapter.OriginalViewHolder view = (CategoryAdapter.OriginalViewHolder) holder;
-
-                Category p = items.get(position);
-                view.title.setText(p.name);
-                view.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        parents.add(p.getCatId());
-
-                        getSupCat(p.getCatId());
-
-                    }
-                });
-
-                ViewAnimation.animateFadeIn(holder.itemView, position);
-
-            }
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-
     }
 
 
@@ -357,10 +388,35 @@ public class CategoryFragment extends Fragment {
         if (parents.size() > 1) {
             parents.remove(parents.size() - 1);
             getSupCat(parents.get(parents.size() - 1));
+
+            int currentCategory = parents.get(parents.size() - 1);
+
+            mListener.updateTopTalent(getChildrenOfCurrentCategory(currentCategory));
             return true;
         }
 
         return false;
+    }
+
+
+    //----------------------------
+
+    private List<Integer> getChildrenOfCurrentCategory(int categoryId) {
+        List<Integer> list = new ArrayList<>();
+
+        for (Category category : arrCategory) {
+            if (categoryId == category.parentId || list.contains(category.parentId)) {
+
+                list.addAll(getChildrenOfCurrentCategory(category.catId));
+            }
+        }
+
+        if (list.size() == 0) {
+            list.add(categoryId);
+        }
+
+        return list;
+
     }
 
 

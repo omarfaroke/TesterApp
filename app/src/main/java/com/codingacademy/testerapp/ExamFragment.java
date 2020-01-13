@@ -3,6 +3,7 @@ package com.codingacademy.testerapp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,15 +20,25 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codingacademy.testerapp.model.Exam;
+import com.codingacademy.testerapp.requests.CacheRequest;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,7 +49,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -60,11 +73,15 @@ public class ExamFragment extends Fragment {
     private ExamFragmentActionListener mListener;
     private FloatingActionButton btnAddExam;
 
+    ProgressDialog progressDialog;
+
+
+
 
     interface ExamFragmentActionListener {
         void showSample(Exam exam);
-
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -110,6 +127,9 @@ public class ExamFragment extends Fragment {
     }
 
     void getExam(int catID) {
+
+        progressDialog.show();
+
         getExam(catID, new VolleyCallback() {
 
             @Override
@@ -123,6 +143,7 @@ public class ExamFragment extends Fragment {
                 textNoNet.setVisibility(View.INVISIBLE);
 
                 upDateExam();
+                progressDialog.dismiss();
             }
 
             @Override
@@ -139,6 +160,7 @@ public class ExamFragment extends Fragment {
 
     private void getExam(int cat_id, final VolleyCallback mCallback) {
         String url = Constants.GET_EXAM;
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response ->
@@ -184,10 +206,83 @@ public class ExamFragment extends Fragment {
         };
         VolleyController.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
+
+//        CacheRequest cacheRequest = new CacheRequest(Request.Method.POST,url,
+//
+//                response ->                 {
+//                    try {
+//                        final String data = new String(response.data,
+//                                HttpHeaderParser.parseCharset(response.headers));
+//
+//                        JSONArray jsonArray = new JSONArray(data);
+//                        JSONObject jsonObject = new JSONObject();
+//                        jsonObject.put("JA", jsonArray);
+//                        mCallback.onSuccess(jsonObject);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                },
+//
+//
+//                error -> {
+//                    try {
+//                        mCallback.onError(error.getMessage());
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }   ){
+//
+//            Map<String, String> params = new HashMap<>();
+//
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//
+//                if (cat_id > 0)
+//                    params.put("category_id", "" + cat_id);
+//                else if (cat_id == MY_EXAM)
+//                    params.put("examiner_id", "" + LoginSharedPreferences.getUserId(getActivity()));
+//
+//                return params;
+//            }
+//
+////            @Override
+////            public Map<String, String> getHeaders() {
+////                Map<String, String> map = new HashMap<>();
+//////                while (Constants.COOKIES == null) ;
+//////                map.put("Cookie", Constants.COOKIES);
+////                return map;
+////            }
+//
+//            @Override
+//            public String getCacheKey() {
+//                return generateCacheKeyWithParam(super.getCacheKey(), params);
+//            }
+//        };
+//
+//
+//
+//
+//        VolleyController.getInstance(getActivity()).addToRequestQueue(cacheRequest);
+
+
     }
 
-
     private void upDateExam() {
+
+        if (examsArr.length == 0 && getContext() != null) {
+               Toast.makeText(getContext(), "لا يوجد اختبارات حالياً ضمن هذه الفئة ..", Toast.LENGTH_SHORT).show();
+               //getFragmentManager().popBackStack();
+               //getActivity().onBackPressed();
+
+            return;
+        }
+
+
+
         if (examAdapter == null) {
             examAdapter = new ExamAdapter();
             recyclerExam.setAdapter(examAdapter);
@@ -197,6 +292,10 @@ public class ExamFragment extends Fragment {
 
 
     private void initView(View v) {
+
+        setUpProgressDialog();
+
+
         textNoNet = v.findViewById(R.id.no_net);
         recyclerExam = v.findViewById(R.id.recyclerExam);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -227,6 +326,15 @@ public class ExamFragment extends Fragment {
     }
 
 
+    void setUpProgressDialog(){
+        Context context;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading Exams ...");
+        progressDialog.setCancelable(false);
+
+    }
+
+
     public int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
@@ -235,14 +343,33 @@ public class ExamFragment extends Fragment {
     private class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamVH> {
         Exam exam;
 
+        final int EMPTY_RECYCLERVIEW=-1;
+
+
         @NonNull
         @Override
         public ExamVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
+
             return new ExamVH(LayoutInflater.from(getActivity()).inflate(R.layout.temp_exam, parent, false));
         }
 
         @Override
+        public int getItemViewType(int position) {
+
+
+            if (getItemCount() == 0){
+                return  EMPTY_RECYCLERVIEW;
+            }
+
+            return super.getItemViewType(position);
+        }
+
+        @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
+
+
             exam = examsArr[position];
             if (LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID()) {
                 holder.btnShowSample.setVisibility(View.VISIBLE);
@@ -315,6 +442,9 @@ public class ExamFragment extends Fragment {
 
             public ExamVH(@NonNull View itemView) {
                 super(itemView);
+
+
+
                 examName = itemView.findViewById(R.id.exam_name);
                 examDesc = itemView.findViewById(R.id.exam_desc);
                 btExpand = itemView.findViewById(R.id.bt_expand);
@@ -329,6 +459,7 @@ public class ExamFragment extends Fragment {
                 btnShowTalent.setOnClickListener(this);
                 checkPrivlige();
             }
+
 
             private void checkPrivlige() {
 

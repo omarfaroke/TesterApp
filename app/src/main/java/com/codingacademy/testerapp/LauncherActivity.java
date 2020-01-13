@@ -5,6 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Process;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -17,14 +25,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -48,7 +48,6 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,9 +70,13 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     private FragmentTransaction mFragmentTransaction;
 
     private RecyclerView recyclerPro;
-    private List<TopTalent> proArr;
+    private List<TopTalent> mCurrentTopTalent;
     private ProAdapter mProAdapter;
-    private TopTalent[] allProArray;
+    private TopTalent[] mAllTopTalent;
+    private final int MAX_TOP_TALENT = 4;
+    private List<List<Integer>> mLastChildrenCategory = new ArrayList<>();
+
+    private TextView mEmptyListView;
 
 
     @Override
@@ -94,7 +97,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
     }
 
-    private void  setImageSlider(){
+    private void setImageSlider() {
 
         SliderView sliderView = findViewById(R.id.imageSlider);
 
@@ -116,15 +119,19 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     void initTopTalent() {
         recyclerPro = findViewById(R.id.recyclerPro);
         recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerPro.setHasFixedSize(true);
+
         getTalent(new VolleyCallback() {
 
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
                 JSONArray examJsonArray = result.getJSONArray("JA");
                 Gson gson = new GsonBuilder().create();
-                allProArray = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
-                proArr = Arrays.asList(allProArray);
-                upDateTop();
+                mAllTopTalent = gson.fromJson(examJsonArray.toString(), TopTalent[].class);
+                mCurrentTopTalent = new ArrayList<>();
+                //Arrays.asList(mAllTopTalent);
+                updateTopTalent(null);
+
             }
 
             @Override
@@ -137,6 +144,8 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                 Toast.makeText(LauncherActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     void getTalent(final VolleyCallback mCallback) {
@@ -185,15 +194,13 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         setupItemsMenuNavDrawer();
     }
 
-    private void upDateTop() {
+    private void updateRecyclerTopTalent() {
         if (mProAdapter == null) {
-            mProAdapter = new ProAdapter(LauncherActivity.this, proArr);
+            mProAdapter = new ProAdapter(LauncherActivity.this, mCurrentTopTalent);
             recyclerPro.setAdapter(mProAdapter);
         }
         mProAdapter.notifyDataSetChanged();
     }
-
-
 
 
     private void initToolbar() {
@@ -222,13 +229,12 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         drawer.setDrawerListener(toggle);
 
 
-
         toggle.syncState();
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(final MenuItem item) {
-               // Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
-               // actionBar.setTitle(item.getTitle());
+                // Toast.makeText(getApplicationContext(), item.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
+                // actionBar.setTitle(item.getTitle());
 
 
                 drawer.closeDrawers();
@@ -258,17 +264,16 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                         startActivity(intent);
 
 
-
                         break;
 
                     case R.id.nav_exam_talent:
 
                         Context context = LauncherActivity.this;
 
-                        Intent intent1 = new Intent(context,InfoExamTalentActivity.class);
+                        Intent intent1 = new Intent(context, InfoExamTalentActivity.class);
 
-                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR,InfoExamTalentActivity.EXAMINER_ID);
-                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE,LoginSharedPreferences.getUserId(context));
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR, InfoExamTalentActivity.EXAMINER_ID);
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE, LoginSharedPreferences.getUserId(context));
 
                         startActivity(intent1);
 
@@ -296,7 +301,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
                         break;
                     case R.id.nav_approve_examiner:
-                        Intent intent2=new Intent(LauncherActivity.this,ExaminarActivity.class);
+                        Intent intent2 = new Intent(LauncherActivity.this, ExaminarActivity.class);
                         startActivity(intent2);
 
                         break;
@@ -405,7 +410,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             String mEmail = LoginSharedPreferences.getUserEmail(this);
             mEmailHeaderDrawer.setText(mEmail);
 
-        }else {
+        } else {
             mPhotoProfileHeaderDrawer.setImageResource(R.drawable.userphoto);
             mFullNameHeaderDrawer.setText("");
             mEmailHeaderDrawer.setText("");
@@ -444,6 +449,50 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         mFragmentTransaction.commit();
     }
 
+
+    @Override
+    public void updateTopTalent(List<Integer> childrenCategory) {
+
+        mCurrentTopTalent.clear();
+
+
+        for (int i = 0; i < mAllTopTalent.length && mCurrentTopTalent.size() < MAX_TOP_TALENT; i++) {
+
+            if (childrenCategory == null) {
+                if (isThisTalentExists(mAllTopTalent[i].getUserProfile().getUserId()))
+                    mCurrentTopTalent.add(mAllTopTalent[i]);
+                continue;
+            }
+
+            if (childrenCategory.contains(mAllTopTalent[i].getCategoryID()) && isThisTalentExists(mAllTopTalent[i].getUserProfile().getUserId())) {
+                mCurrentTopTalent.add(mAllTopTalent[i]);
+            }
+
+
+        }
+
+        updateRecyclerTopTalent();
+
+        if (mLastChildrenCategory.size() ==2) {
+            mLastChildrenCategory.remove(0);
+        }
+
+        mLastChildrenCategory.add(childrenCategory);
+    }
+
+
+    boolean isThisTalentExists(int talentId) {
+
+
+        for (int i = 0; i < mCurrentTopTalent.size(); i++) {
+            if (talentId == mCurrentTopTalent.get(i).getUserProfile().getUserId())
+                return false;
+        }
+
+        return true;
+    }
+
+
     @Override
     public void showSample(Exam exam) {
         SampleFragment sampleFragment = new SampleFragment();
@@ -457,6 +506,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
+
 
     private class ProAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -504,15 +554,15 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.temp_top_pro, parent, false);
-            vh = new ProAdapter.OriginalViewHolder(v);
+            vh = new OriginalViewHolder(v);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof ProAdapter.OriginalViewHolder) {
-                ProAdapter.OriginalViewHolder view = (ProAdapter.OriginalViewHolder) holder;
+            if (holder instanceof OriginalViewHolder) {
+                OriginalViewHolder view = (OriginalViewHolder) holder;
 
                 UserProfile userProfile = items.get(position).getUserProfile();
                 view.name.setText(userProfile.getFirstName());
@@ -530,13 +580,13 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
                     }
                 });
-                //  ViewAnimation.animateFadeIn(view.itemView, position);
+                ViewAnimation.animateFadeIn(view.itemView, position);
             }
         }
 
         @Override
         public int getItemCount() {
-            return proArr.size();//items.size();
+            return mCurrentTopTalent.size();//items.size();
         }
 
     }
@@ -555,6 +605,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
             } else if (fragment instanceof ExamFragment) {
                 fragmentManager.popBackStack();
+                updateTopTalent(mLastChildrenCategory.get(0));
 
 
             } else if (fragment instanceof SampleFragment) {
@@ -563,6 +614,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             }
 
         }
+
 
     }
 
@@ -576,7 +628,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
             //super.onBackPressed();
 
             moveTaskToBack(true);
-            android.os.Process.killProcess(android.os.Process.myPid());
+            Process.killProcess(Process.myPid());
             System.exit(1);
 
             return;

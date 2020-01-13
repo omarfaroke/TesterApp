@@ -21,7 +21,7 @@
             android:layout_height="50dp"
 
 
-            android:src="@drawable/p">
+            android:src="@drawable/ic_category">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
