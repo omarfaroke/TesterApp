@@ -67,7 +67,9 @@
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="19dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/c" />
+            android:src="@drawable/c"
+            android:visibility="gone"
+            />
 
     </RelativeLayout>
 

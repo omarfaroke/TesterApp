@@ -139,4 +139,20 @@ public class ProfileInfoActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
     }
+
+
+
+//    void clearCache(){
+//        Runnable target;
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Glide.get(ProfileInfoActivity.this).clearDiskCache();
+//            }
+//        });
+//
+//        thread.start();
+//
+//    }
+
 }

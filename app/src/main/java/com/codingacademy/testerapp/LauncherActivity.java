@@ -97,6 +97,8 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         //Constants.getCookiesFromUrl(LauncherActivity.this);
 
 
+
+
         setImageSlider();
         fragmentManager = getSupportFragmentManager();
         initTopTalent();
@@ -654,10 +656,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     }
 
 
-    public void updateUiAfterLoginOrLogout() {
-        switch (LoginSharedPreferences.getUserType(LauncherActivity.this)) {
 
-        }
-    }
+
 
 }

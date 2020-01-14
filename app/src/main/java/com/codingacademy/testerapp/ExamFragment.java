@@ -20,25 +20,17 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
+
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.codingacademy.testerapp.model.Exam;
-import com.codingacademy.testerapp.requests.CacheRequest;
+
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,9 +41,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 
@@ -153,6 +144,7 @@ public class ExamFragment extends Fragment {
             @Override
             public void onError(String result) throws Exception {
                 textNoNet.setVisibility(View.VISIBLE);
+                progressDialog.dismiss();
             }
         });
     }

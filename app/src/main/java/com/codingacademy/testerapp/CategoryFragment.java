@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -178,8 +179,7 @@ public class CategoryFragment extends Fragment {
     }
 
 
-
-    void setUpProgressDialog(){
+    void setUpProgressDialog() {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Loading Category ...");
         progressDialog.setCancelable(false);
@@ -235,6 +235,7 @@ public class CategoryFragment extends Fragment {
 
                             e.printStackTrace();
 
+
                             // Toast.makeText(getContext(),"catch  "+ e.getMessage(), Toast.LENGTH_LONG).show();
 
                         }
@@ -245,6 +246,7 @@ public class CategoryFragment extends Fragment {
                         mCallback.onError(error.getMessage());
                     } catch (Exception e) {
                         e.printStackTrace();
+
                     }
                 }) {
             @Override
@@ -291,6 +293,14 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onError(String result) throws Exception {
                 textNoNet.setVisibility(View.VISIBLE);
+
+                progressDialog.setCancelable(true);
+
+                progressDialog.setContentView(R.layout.dialog_problem);
+
+                //progressDialog.dismiss();
+
+                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
         });
 
