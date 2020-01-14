@@ -294,11 +294,11 @@ public class CategoryFragment extends Fragment {
             public void onError(String result) throws Exception {
                 textNoNet.setVisibility(View.VISIBLE);
 
-                progressDialog.setCancelable(true);
+                //progressDialog.setCancelable(true);
 
-                progressDialog.setContentView(R.layout.dialog_problem);
+               // progressDialog.setContentView(R.layout.dialog_problem);
 
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
 
                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
