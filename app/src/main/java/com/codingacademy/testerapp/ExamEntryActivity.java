@@ -50,7 +50,8 @@ public class ExamEntryActivity extends AppCompatActivity {
         spinnerCat = findViewById(R.id.sp_cat);
         if (getIntent() != null) {
             categoryID = getIntent().getIntExtra(CategoryFragment.CATEGORY_ID, 0);
-            exam = new Exam(1);
+           // exam = new Exam(1);
+            exam = new Exam(LoginSharedPreferences.getUserId(this));
             exam.setCategoryId(categoryID);
         }
         initSpinner();

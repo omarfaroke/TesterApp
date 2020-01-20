@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-
 import com.codingacademy.testerapp.model.Category;
 import com.codingacademy.testerapp.requests.VolleyCallback;
 import com.codingacademy.testerapp.requests.VolleyController;
@@ -34,7 +32,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -259,6 +256,7 @@ public class CategoryFragment extends Fragment {
         };
 
         VolleyController.getInstance(getActivity()).addToRequestQueue(request);
+
 
     }
 
