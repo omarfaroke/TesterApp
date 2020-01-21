@@ -220,7 +220,6 @@ public class ExamFragment extends Fragment {
     }
 
 
-    @SuppressLint("RestrictedApi")
     private void initView(View v) {
 
         setUpProgressDialog();
@@ -236,6 +235,7 @@ public class ExamFragment extends Fragment {
         recyclerExam.setLayoutManager(mLayoutManager);
         recyclerExam.addItemDecoration(new SpacingItemDecoration(1, dpToPx(getActivity(), 8), true));
         btnAddExam = v.findViewById(R.id.add_exam);
+
         if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_EXAMINER &&
                 LoginSharedPreferences.getStatus(getActivity()) == 1) {
 
@@ -279,6 +279,8 @@ public class ExamFragment extends Fragment {
             return new ExamVH(LayoutInflater.from(getActivity()).inflate(R.layout.temp_exam, parent, false));
         }
 
+
+
         @Override
         public void onBindViewHolder(@NonNull ExamVH holder, int position) {
             exam = examsArr[position];
@@ -286,6 +288,7 @@ public class ExamFragment extends Fragment {
                 holder.btnShowSample.setVisibility(View.VISIBLE);
                 holder.btnShowTalent.setVisibility(View.VISIBLE);
             }
+
             if (exam.getStatus() == 0) {
                 if (LoginSharedPreferences.getUserType(getActivity()) == Constants.USER_TYPE_ADMIN ||
                         LoginSharedPreferences.getUserId(getActivity()) == exam.getExaminerID())
@@ -303,7 +306,7 @@ public class ExamFragment extends Fragment {
             holder.examName.setText(exam.getExamName());
             holder.examDesc.setText(exam.getExamDescription());
 
-            ViewAnimation.animateFadeIn(holder.itemView, position);
+            //ViewAnimation.animateFadeIn(holder.itemView, position);
 
 
             if (exam.expanded) {
@@ -410,10 +413,20 @@ public class ExamFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), ExamModifyActivity.class);
                         intent.putExtra(ExamFragment.EXAM_OBJECT, exam);
                         startActivity(intent);
-
-
                         break;
 
+                    case R.id.show_talent :
+
+                        Context context = getContext();
+
+                        Intent intent1 = new Intent(context,InfoExamTalentActivity.class);
+
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_FOR,InfoExamTalentActivity.EXAM_ID);
+                        intent1.putExtra(InfoExamTalentActivity.TOP_TALENT_VALUE,exam.getExamId());
+
+                        startActivity(intent1);
+
+                        break;
                 }
             }
 
@@ -461,6 +474,5 @@ public class ExamFragment extends Fragment {
             }
         }
     }
-
 
 }

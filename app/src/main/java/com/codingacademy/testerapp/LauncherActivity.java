@@ -326,7 +326,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
                         break;
 
                     case R.id.nav_exit:
-                        exitFromApp();
+                        exit();
                         break;
                 }
 
@@ -642,11 +642,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
             backToast.cancel();
             //super.onBackPressed();
-
-            moveTaskToBack(true);
-            Process.killProcess(Process.myPid());
-            System.exit(1);
-
+            exit();
             return;
         } else {
             backToast = Toast.makeText(LauncherActivity.this, "Press back again to exit", Toast.LENGTH_SHORT);
@@ -656,6 +652,12 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         backPressedTime = System.currentTimeMillis();
     }
 
+
+    private void exit(){
+        moveTaskToBack(true);
+        Process.killProcess(Process.myPid());
+        System.exit(1);
+    }
 
 
 
