@@ -272,7 +272,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         registerNewAccount(mEmail.getText().toString(), mEtPassword.getText().toString(), userProfile, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
-                if (result.getString("status") == "0") {
+                if (result.getString("status") =="0") {
                     int userId = result.getInt("user_id");
                     String imageUrl = result.getString("image_url");
 
@@ -284,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-                    Toast.makeText(RegisterActivity.this, "تم تسجيل البيانات بنجاح ..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Successful Registeration.", Toast.LENGTH_SHORT).show();
 
                     setResult(Activity.RESULT_OK);
 
@@ -437,12 +437,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void alertMessage(){
         AlertDialog.Builder builder=new  AlertDialog.Builder(RegisterActivity.this);
         builder.setTitle("Welcome");
-        builder.setMessage("Thank you for sending your request to the Admin we wiil take your application and contact with you soon ");
+        builder.setMessage("Thank you for sending your request to the Admin we will take your application and contact with you soon ");
         builder.setIcon(R.drawable.image_1);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(RegisterActivity.this, "you clicked Ok", Toast.LENGTH_SHORT).show();
+                Intent in=new Intent(RegisterActivity.this,LauncherActivity.class);
+                startActivity(in);
             }
         });
 
