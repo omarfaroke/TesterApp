@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="#131A56"
+    android:background="#6f79a8"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="50dp">

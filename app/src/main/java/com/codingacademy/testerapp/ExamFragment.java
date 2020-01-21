@@ -1,6 +1,7 @@
 package com.codingacademy.testerapp;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -219,6 +220,7 @@ public class ExamFragment extends Fragment {
     }
 
 
+    @SuppressLint("RestrictedApi")
     private void initView(View v) {
 
         setUpProgressDialog();
@@ -417,9 +419,20 @@ public class ExamFragment extends Fragment {
 
             private void showQuestions() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setPositiveButton("login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
                 String mBodyMessage;
                 if (!LoginSharedPreferences.checkIsLogin(getActivity()))
                     mBodyMessage = "You must login ";
+
+
                 else if (exam.getSamples().length == 0)
                     mBodyMessage = "No Question yet";
                 else {

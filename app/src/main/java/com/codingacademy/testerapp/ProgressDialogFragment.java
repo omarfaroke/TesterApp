@@ -3,6 +3,7 @@ package com.codingacademy.testerapp;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
@@ -22,6 +23,8 @@ public class ProgressDialogFragment extends DialogFragment {
         dialog.setMessage("Loding ...");
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
+
+
 
         // Disable the back button
         DialogInterface.OnKeyListener keyListener = (dialog1, keyCode, event) -> {

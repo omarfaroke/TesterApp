@@ -8,6 +8,7 @@
     <Switch
         android:layout_width="match_parent"
         android:visibility="gone"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
