@@ -365,6 +365,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     private void setupItemsMenuNavDrawer() {
         int type = LoginSharedPreferences.getUserType(LauncherActivity.this);
 
+        nav_view.getMenu().findItem(R.id.nav_profile).setVisible(true);
 
         switch (type) {
             case Constants.USER_TYPE_ADMIN:
@@ -397,6 +398,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
             default:
                 nav_view.getMenu().setGroupVisible(R.id.group_items_talent, false);
+                nav_view.getMenu().findItem(R.id.nav_profile).setVisible(false);
 
                 nav_view.getMenu().setGroupVisible(R.id.group_items_examiner, false);
                 nav_view.getMenu().setGroupVisible(R.id.group_items_admin, false);
@@ -632,7 +634,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
         }
 
     }
-
 
     private long backPressedTime;
     private Toast backToast;

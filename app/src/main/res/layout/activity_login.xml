@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#6f79a8"
+    android:background="#131A56"
     android:gravity="center_vertical"
     android:padding="50dp"
     android:orientation="vertical"
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="#d1d9ff"
+        android:background="#00838F"
         android:text="@string/login"
         android:textColor="@android:color/white" />
     <TextView
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="#d1d9ff"
-        android:text="@string/Register"
+        android:text="@string/Sign_up"
         android:textColor="@android:color/white" />
 
 </LinearLayout>

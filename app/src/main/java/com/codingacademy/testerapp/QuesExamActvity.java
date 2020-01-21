@@ -96,7 +96,11 @@ public class QuesExamActvity extends AppCompatActivity implements QuesEntryFragm
         if (STATE == TAKE_EXAM) {
             int size = exam.getSamples().length;
             int r = new Random().nextInt(size);
+
+
             sample = exam.getSamples()[r];
+
+
             getSample(sample.getSampleId());
         }
 
