@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +85,7 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
     private List<TopTalent> mCurrentTopTalent;
     private ProAdapter mProAdapter;
     private TopTalent[] mAllTopTalent;
-    private final int MAX_TOP_TALENT = 4;
+    private  int MAX_TOP_TALENT = 4;
     private List<List<Integer>> mLastChildrenCategory = new ArrayList<>();
 
     private TextView mEmptyListView;
@@ -129,8 +132,40 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
     void initTopTalent() {
         recyclerPro = findViewById(R.id.recyclerPro);
-        recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        //recyclerPro.setLayoutManager(new LinearLayoutManager(LauncherActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+        GridLayoutManager mLayoutManager = new GridLayoutManager(this, MAX_TOP_TALENT);
+
+       // mLayoutManager.setInitialPrefetchItemCount(4);
+
+
+
+
+
+
+
+        recyclerPro.getViewTreeObserver()
+                .addOnGlobalLayoutListener(
+                        new ViewTreeObserver
+                                .OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                int numberOfColumns = 1;
+                                int width = recyclerPro.getWidth();
+                                int widthOfSingleElement = 240;
+                                if (width > widthOfSingleElement) {
+                                    numberOfColumns = width / widthOfSingleElement;
+                                }
+                                MAX_TOP_TALENT = numberOfColumns;
+                                mLayoutManager.setSpanCount(MAX_TOP_TALENT);
+                                //  Log.i(TAG, "numberOfColumns:" + numberOfColumns);
+                            }
+                        }
+                );
+
+        recyclerPro.setLayoutManager(mLayoutManager);
         recyclerPro.setHasFixedSize(true);
+
 
         getTalent(new VolleyCallback() {
 
