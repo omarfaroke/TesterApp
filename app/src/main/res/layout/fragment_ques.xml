@@ -19,7 +19,7 @@
         android:id="@+id/text1"
         android:layout_width="match_parent"
         android:text="@string/question1"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp"
         android:layout_height="wrap_content"/>
    </androidx.cardview.widget.CardView>

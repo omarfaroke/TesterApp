@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6f79a8"
+    android:background="@color/colorPrimaryDark"
     android:gravity="center_vertical"
     android:padding="50dp"
     >
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="#d1d9ff"
+        android:background="@color/colorPrimary"
         android:text="REGISTER"
         android:textColor="@android:color/white" />
 

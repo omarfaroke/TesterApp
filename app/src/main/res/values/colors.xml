@@ -2,13 +2,13 @@
 <resources>
 
 
-    <color name="colorPrimary">#d1d9ff</color>
-    <color name="colorPrimaryDark">#131A56</color>
+    <color name="colorPrimary">#84AEDB</color>#123264
+    <color name="colorPrimaryDark">#123264</color>
     <color name="colorText">#131A56</color>
 
-    <color name="secondPage">#6f79a8</color>
+    <color name="secondPage">#123264</color>
 
-    <color name="colorAccent">#d1d9ff</color>
+    <color name="colorAccent">#123264</color>
     <color name="text">#ffffff</color>
     <color name="text_two">#94ffffff</color>
     <color name="green">#940ce61f</color>

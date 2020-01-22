@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="#6f79a8"
+    android:background="@color/colorPrimaryDark"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="50dp">
@@ -104,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:text="@string/Next"
         android:textColor="@android:color/white" />
 
