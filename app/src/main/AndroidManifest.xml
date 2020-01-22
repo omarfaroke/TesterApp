@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,12 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CertificateActivity"></activity>
-        <activity android:name=".InfoExamTalentActivity" />
-        <activity android:name=".ProfileInfoActivity" />
-        <activity android:name=".MyExamsActivity" />
+        <activity android:name=".CertificateActivity"  android:screenOrientation = "portrait"></activity>
+        <activity android:name=".InfoExamTalentActivity" android:screenOrientation = "portrait" />
+        <activity android:name=".ProfileInfoActivity" android:screenOrientation = "portrait" />
+        <activity android:name=".MyExamsActivity"  android:screenOrientation = "portrait"/>
         <activity
-            android:name=".LauncherActivity"
+            android:name=".LauncherActivity" android:screenOrientation = "portrait"
             android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,11 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QuesExamActvity" />
-        <activity android:name=".ExaminarActivity" />
-        <activity android:name=".ExamEntryActivity" />
-        <activity android:name=".ExamModifyActivity" />
-        <activity
+        <activity android:name=".QuesExamActvity" android:screenOrientation = "portrait" />
+        <activity android:name=".ExaminarActivity" android:screenOrientation = "portrait" />
+        <activity android:name=".ExamEntryActivity"  android:screenOrientation = "portrait"/>
+        <activity android:name=".ExamModifyActivity"  android:screenOrientation = "portrait"/>
+        <activity android:screenOrientation = "portrait"
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
         <activity
