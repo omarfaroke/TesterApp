@@ -633,7 +633,6 @@ public class LauncherActivity extends AppCompatActivity implements CategoryFragm
 
     }
 
-
     private long backPressedTime;
     private Toast backToast;
 
